@@ -1,0 +1,13 @@
+Django==2.0.1
+django-appconf==1.0.2
+django-bootstrap3==9.1.0
+django-select2==6.0.3
+gunicorn==19.8.1
+Pillow==5.2.0
+pkg-resources==0.0.0
+psycopg2==2.7.4
+psycopg2-binary==2.7.4
+python-dateutil==2.6.1
+pytz==2018.4
+six==1.11.0
+whitenoise==3.3.1
