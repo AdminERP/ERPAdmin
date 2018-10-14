@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\MMV Lab\Desktop\Proyecto-SI\ERPAdmin-1\venv"
+VIRTUAL_ENV="C:\Users\caror\Desktop\ERPAdmin\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
