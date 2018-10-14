@@ -31,16 +31,18 @@ def registrar_cargo(request, id=None):
 def consultar_cargo(request):
     return render(request, 'consulta_cargos.html', {'lista_cargos': Job.objects.all()})
 
+
 def desactivar_cargo(request, id):
     cargo = get_object_or_404(Job, id=id)
     cargo.estado = False
     cargo.save()
-    messages.success("El cargo ha sido desactivado correctamente del sistema")
-    return redirect("consultar_cargo")
+    messages.success(request, "El cargo ha sido desactivado correctamente del sistema")
+    return redirect('consultar_cargo')
+
 
 def activar_cargo(request, id):
     cargo = get_object_or_404(Job, id=id)
     cargo.estado = True
     cargo.save()
-    messages.success("El cargo ha sido activado correctamente en el sistema")
-    return redirect("consultar_cargo")
+    messages.success(request, "El cargo ha sido activado correctamente en el sistema")
+    return redirect('consultar_cargo')
