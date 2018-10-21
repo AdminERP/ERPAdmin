@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+
+{% block titulo %}
+    Registrar pregunta
+{% endblock %}
+
+{% block titulo_pagina %}
+    Registro de preguntas
+{% endblock %}
+
+{% block descripcion_pagina %}
+    Ingresar preguntas de evaluación de desempeño de la empresa
+{% endblock descripcion_pagina %}
+
+{% block miga_pan %}
+    <li><a href="#"><i class="fa fa-dashboard"></i> Preguntas</a></li>
+    <li class="active">Registro de preguntas</li>
+{% endblock miga_pan %}
+
+{% block contenido %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Registro de preguntas</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form method="POST">{% csrf_token %}
+            <div class="box-body">
+
+                {% bootstrap_form form %}
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Registrar pregunta</button>
+            </div>
+        </form>
+    </div>
+
+
+
+{% endblock %}

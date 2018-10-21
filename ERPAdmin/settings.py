@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_select2',
     'bootstrap3',
     'apps.prueba2',
+    'apps.evaluaciones',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block titulo %}
+    Listado de preguntas
+{% endblock %}
+
+{% block titulo_pagina %}
+    Listado de preguntas
+{% endblock %}
+
+{% block descripcion_pagina %}
+    Listado de preguntas activas en la empresa
+{% endblock descripcion_pagina %}
+
+{% block miga_pan %}
+    <li><a href="#"><i class="fa fa-dashboard"></i> Preguntas</a></li>
+    <li class="active">Listado</li>
+{% endblock miga_pan %}
+
+
+{% block contenido %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listado de preguntas</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <div class="box-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Enunciado de la pregunta</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for pregunta in lista_preguntas %}
+                    <tr>
+                        <td>{{ pregunta.question_statement }}</td>
+                        {% if pregunta.estado %}
+                            <td>ACTIVO</td>
+                        {% else %}
+                            <td>INACTIVO</td>
+                        {% endif %}
+                        <td>
+                            <div class="btn-group">
+
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Acciones
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                    <div class="ripple-container"></div>
+
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{% url 'modificar_pregunta' pregunta.id %}">Consultar/Modificar</a></li>
+
+                                    <li class="divider"></li>
+                                    {% if pregunta.estado %}
+                                        <li><a class="delete-pregunta" href="#" data-toggle="modal" data-target="#deactivate-modal"
+                                               data-url="{% url 'desactivar_pregunta' pregunta.id %}">Desactivar</a></li>
+                                    {% else %}
+                                        <li><a class="activate-pregunta" href="#" data-toggle="modal" data-target="#activate-modal"
+                                               data-url="{% url 'activar_pregunta' pregunta.id %}">Activar</a></li>
+                                    {% endif %}
+
+                                </ul>
+                            </div>
+
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    <div class="modal fade" id="deactivate-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Eliminar pregunta</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea desactivar esta pregunta?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" onclick="deactivateStatus()">Eliminar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="activate-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Activar pregunta</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea activar esta pregunta?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" onclick="activateStatus()">Activar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+
+    var deactivate_url = "";
+    var activate_url = "";
+
+    $(document).ready(function () {
+        $('.delete-pregunta').click(function () {
+            deactivate_url = $(this).attr('data-url');
+        });
+
+        $('.activate-pregunta').click(function(){
+            activate_url = $(this).attr('data-url');
+        });
+    });
+
+    function deactivateStatus(){
+
+        $.ajax({
+            url: deactivate_url,
+            data: {},
+            dataType: 'html',
+            success: function (data) {
+                location.reload(true);
+            }
+        });
+
+        $("#deactivate-modal").hide();
+    }
+
+    function activateStatus(){
+
+        $.ajax({
+            url: activate_url,
+            data: {},
+            dataType: 'html',
+            success: function (data) {
+                location.reload(true);
+            }
+        });
+
+        $("#activate-modal").hide();
+    }
+
+
+    </script>
+
+{% endblock %}

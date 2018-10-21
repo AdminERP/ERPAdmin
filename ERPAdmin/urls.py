@@ -22,6 +22,7 @@ urlpatterns = [
 ]
 '''
 
-urlpatterns = [
+urlpatterns = (
     path('', include('apps.prueba2.urls')),
-]
+    path('', include('apps.evaluaciones.urls')),
+)
