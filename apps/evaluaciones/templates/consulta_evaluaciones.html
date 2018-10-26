@@ -3,19 +3,19 @@
 {% load bootstrap3 %}
 
 {% block titulo %}
-    Listado de cargos
+    Listado de preguntas
 {% endblock %}
 
 {% block titulo_pagina %}
-    Listado de cargos
+    Listado de preguntas
 {% endblock %}
 
 {% block descripcion_pagina %}
-    Listado de cargos activos en la empresa
+    Listado de preguntas activas en la empresa
 {% endblock descripcion_pagina %}
 
 {% block miga_pan %}
-    <li><a href="#"><i class="fa fa-dashboard"></i> Cargos</a></li>
+    <li><a href="#"><i class="fa fa-dashboard"></i> Preguntas</a></li>
     <li class="active">Listado</li>
 {% endblock miga_pan %}
 
@@ -23,7 +23,7 @@
 {% block contenido %}
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Listado de cargos</h3>
+            <h3 class="box-title">Listado de preguntas</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
@@ -31,24 +31,20 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Nombre del cargo</th>
-                    <th>Descripcion</th>
+                    <th>Enunciado de la pregunta</th>
                     <th>Estado</th>
-                    <th>Hay vacantes?</th>
                     <th>Opciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for cargo in lista_cargos %}
+                {% for pregunta in lista_preguntas %}
                     <tr>
-                        <td>{{ cargo.name }}</td>
-                        <td>{{ cargo.description }}</td>
-                        {% if cargo.estado %}
+                        <td>{{ pregunta.question_statement }}</td>
+                        {% if pregunta.estado %}
                             <td>ACTIVO</td>
                         {% else %}
                             <td>INACTIVO</td>
                         {% endif %}
-                        <td>{{ cargo.has_vacants|yesno:"Si,No" }}</td>
                         <td>
                             <div class="btn-group">
 
@@ -61,25 +57,22 @@
 
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{% url 'crear_evaluacion' cargo.id %}">Evaluar</a></li>
-                                    <li><a href="{% url 'modificar_cargo' cargo.id %}">Consultar/Modificar</a></li>
+                                    <li><a href="{% url 'modificar_pregunta' pregunta.id %}">Consultar/Modificar</a></li>
 
                                     <li class="divider"></li>
-                                    {% if cargo.estado %}
-                                        <li><a class="delete-cargo" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                               data-url="{% url 'desactivar_cargo' cargo.id %}">Desactivar</a></li>
+                                    {% if pregunta.estado %}
+                                        <li><a class="delete-pregunta" href="#" data-toggle="modal" data-target="#deactivate-modal"
+                                               data-url="{% url 'desactivar_pregunta' pregunta.id %}">Desactivar</a></li>
                                     {% else %}
-                                        <li><a class="activate-cargo" href="#" data-toggle="modal" data-target="#activate-modal"
-                                               data-url="{% url 'activar_cargo' cargo.id %}">Activar</a></li>
+                                        <li><a class="activate-pregunta" href="#" data-toggle="modal" data-target="#activate-modal"
+                                               data-url="{% url 'activar_pregunta' pregunta.id %}">Activar</a></li>
                                     {% endif %}
 
                                 </ul>
                             </div>
 
                         </td>
-                        <!--
-                <td><a href="{% url 'modificar_cargo' cargo.id %}">Modificar</a></td>
-            -->
+
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -95,10 +88,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Eliminar cargo</h4>
+                    <h4 class="modal-title">Eliminar pregunta</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea desactivar este cargo?</p>
+                    <p>¿Está seguro que desea desactivar esta pregunta?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
@@ -117,10 +110,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Activar cargo</h4>
+                    <h4 class="modal-title">Activar pregunta</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea activar este cargo?</p>
+                    <p>¿Está seguro que desea activar esta pregunta?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
@@ -143,11 +136,11 @@
     var activate_url = "";
 
     $(document).ready(function () {
-        $('.delete-cargo').click(function () {
+        $('.delete-pregunta').click(function () {
             deactivate_url = $(this).attr('data-url');
         });
 
-        $('.activate-cargo').click(function(){
+        $('.activate-pregunta').click(function(){
             activate_url = $(this).attr('data-url');
         });
     });
