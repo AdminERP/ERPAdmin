@@ -30,8 +30,11 @@
         <!-- form start -->
         <form method="POST">{% csrf_token %}
             <div class="box-body">
-                {{ evaluacion.date }}
-                {{ evaluacion.employee }}
+                <br>Fecha de evaluación: {{ evaluacion.date }}
+                <br>
+                <br>Colaborador: {{ evaluacion.employee | upper}}
+                <br> Preguntas:
+                <br>
                 {% for formulario in formset %}
                     {% with pregunta_evaluacion=preguntas|index:forloop.counter0 %}
                         {{ pregunta_evaluacion.questionId.question_statement }}

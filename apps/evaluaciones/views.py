@@ -84,7 +84,7 @@ def creacion_evaluacion(request, id):
 
 
 def consultar_evaluacion(request):
-    return render(request, 'consulta_evaluaciones.html', {'lista_evaluaciones': Question.objects.all()})
+    return render(request, 'consulta_evaluaciones.html', {'lista_evaluaciones': EmployeeEvaluation.objects.all()})
 
 
 def desactivar_evaluacion(request, id):

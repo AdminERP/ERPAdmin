@@ -31,49 +31,47 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Enunciado de la pregunta</th>
-                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Colaborador</th>
                     <th>Opciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for pregunta in lista_preguntas %}
-                    <tr>
-                        <td>{{ pregunta.question_statement }}</td>
-                        {% if pregunta.estado %}
-                            <td>ACTIVO</td>
-                        {% else %}
-                            <td>INACTIVO</td>
-                        {% endif %}
-                        <td>
-                            <div class="btn-group">
+                {% for evaluacion in lista_evaluaciones %}
+                    {% if evaluacion.estado %}
+                        <tr>
+                            <td>{{ evaluacion.date }}</td>
+                            <td>{{ evaluacion.employee }}</td>
+                            <td>
+                                <div class="btn-group">
 
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                        aria-expanded="false">
-                                    Acciones
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    <div class="ripple-container"></div>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-expanded="false">
+                                        Acciones
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                        <div class="ripple-container"></div>
 
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{% url 'modificar_pregunta' pregunta.id %}">Consultar/Modificar</a></li>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="{% url 'modificar_evaluacion' evaluacion.id %}">Consultar/Modificar</a></li>
 
-                                    <li class="divider"></li>
-                                    {% if pregunta.estado %}
-                                        <li><a class="delete-pregunta" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                               data-url="{% url 'desactivar_pregunta' pregunta.id %}">Desactivar</a></li>
-                                    {% else %}
-                                        <li><a class="activate-pregunta" href="#" data-toggle="modal" data-target="#activate-modal"
-                                               data-url="{% url 'activar_pregunta' pregunta.id %}">Activar</a></li>
-                                    {% endif %}
+                                        <li class="divider"></li>
+                                        {% if evaluacion.estado %}
+                                            <li><a class="delete-pregunta" href="#" data-toggle="modal" data-target="#deactivate-modal"
+                                                   data-url="{% url 'desactivar_evaluacion' evaluacion.id %}">Desactivar</a></li>
+                                        {% else %}
+                                            <li><a class="activate-pregunta" href="#" data-toggle="modal" data-target="#activate-modal"
+                                                   data-url="{% url 'activar_evaluacion' evaluacion.id %}">Activar</a></li>
+                                        {% endif %}
 
-                                </ul>
-                            </div>
+                                    </ul>
+                                </div>
 
-                        </td>
+                            </td>
 
-                    </tr>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
 
@@ -88,10 +86,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Eliminar pregunta</h4>
+                    <h4 class="modal-title">Eliminar evaluación</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea desactivar esta pregunta?</p>
+                    <p>¿Está seguro que desea desactivar la evaluación?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
@@ -113,7 +111,7 @@
                     <h4 class="modal-title">Activar pregunta</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea activar esta pregunta?</p>
+                    <p>¿Está seguro que desea activar la evaluación?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
