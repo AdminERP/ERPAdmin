@@ -2,6 +2,8 @@ from os import name
 
 from django.urls import path
 from .views import *
+from django.conf.urls import include, url
+
 
 urlpatterns = [
     path('', inicio, name='inicio'),
