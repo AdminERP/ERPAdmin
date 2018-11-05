@@ -51,10 +51,8 @@ def activar_pregunta(request, id):
 
 # Evaluations
 
-def registrar_evaluacion(request, id):
+def registrar_evaluacion(request, id=None):
     evaluacion = get_object_or_404(EmployeeEvaluation, id=id)
-    # preguntas = get_object_or_404(EmployeeEvaluationQuestions, id=id)
-
     preguntas_evaluacion = evaluacion.employee_evaluation_questions.all()
     cantidad_preguntas_evaluacion = preguntas_evaluacion.count()
     question_formset = modelformset_factory(EmployeeEvaluationQuestions, form=RegistrarPreguntasEnEvaluacionForm,
