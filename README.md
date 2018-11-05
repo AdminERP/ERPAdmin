@@ -20,6 +20,14 @@ O instalar el archivo requirements.txt
     pip install -r requirements.txt
 
 
+Ademas de **psql (PostgreSQL) 9.5.14**
+
+[Descargar settings.py](https://drive.google.com/open?id=1jwOzGao3aqZjwQTXcE27pduBF1OxbywJ)
+
+**Por favor no subir la carpeta del ambiente al repositorio**
+
+
+
 ## Organización de carpetas
 
 **apps**: Donde deberian ir las apps relacionadas con los módulos de cada grupo.
