@@ -21,7 +21,7 @@ class TestRegistrar_cargo(TestCase):
         self.assertTrue("El cargo ha sido guardado correctamente." in message.message)
 
 
-    def test_create_questions_empty_name(self):
+    def test_create_jobs_empty_name(self):
         client = Client()
         """
         Register a question in database.
@@ -35,7 +35,7 @@ class TestRegistrar_cargo(TestCase):
         self.assertEqual(message.tags, "error")
         self.assertTrue("Por favor verificar los campos en rojo." in message.message)
 
-    def test_create_questions_empty_description(self):
+    def test_create_jobs_empty_description(self):
         client = Client()
         """
         Register a question in database.
@@ -49,7 +49,7 @@ class TestRegistrar_cargo(TestCase):
         self.assertEqual(message.tags, "error")
         self.assertTrue("Por favor verificar los campos en rojo." in message.message)
 
-    def test_create_questions_empty_functions(self):
+    def test_create_jobs_empty_functions(self):
         client = Client()
         """
         Register a question in database.

@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from apps.evaluaciones.forms import *
 from apps.evaluaciones.models import *
+from apps.prueba2.models import Employee
 
 
 def inicio(request):
@@ -72,9 +73,9 @@ def registrar_evaluacion(request, id=None):
 
 
 def creacion_evaluacion(request, id):
-    job = get_object_or_404(Job, id=id)
+    employee = get_object_or_404(Employee, id=id)
     evaluacion = EmployeeEvaluation.objects.create(date=datetime.date.today(),
-                                                   employee=job)
+                                                   employee=employee)
     for pregunta in Question.objects.filter(estado=True):
         EmployeeEvaluationQuestions.objects.create(employeeEvaluationId=evaluacion, questionId=pregunta, score=0,
                                                    observation='')

@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'apps.prueba2',
     'apps.evaluaciones',
 ]
+dependencies = [
+    ('ook', '__first__'),
+
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
