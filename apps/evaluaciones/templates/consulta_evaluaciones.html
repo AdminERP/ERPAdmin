@@ -3,19 +3,19 @@
 {% load bootstrap3 %}
 
 {% block titulo %}
-    Listado de cargos
+    Listado de preguntas
 {% endblock %}
 
 {% block titulo_pagina %}
-    Listado de cargos
+    Listado de preguntas
 {% endblock %}
 
 {% block descripcion_pagina %}
-    Listado de cargos activos en la empresa
+    Listado de preguntas activas en la empresa
 {% endblock descripcion_pagina %}
 
 {% block miga_pan %}
-    <li><a href="#"><i class="fa fa-dashboard"></i> Cargos</a></li>
+    <li><a href="#"><i class="fa fa-dashboard"></i> Preguntas</a></li>
     <li class="active">Listado</li>
 {% endblock miga_pan %}
 
@@ -23,7 +23,7 @@
 {% block contenido %}
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Listado de cargos</h3>
+            <h3 class="box-title">Listado de preguntas</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
@@ -31,56 +31,47 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Nombre del cargo</th>
-                    <th>Descripcion</th>
-                    <th>Estado</th>
-                    <th>Hay vacantes?</th>
+                    <th>Fecha</th>
+                    <th>Colaborador</th>
                     <th>Opciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for cargo in lista_cargos %}
-                    <tr>
-                        <td>{{ cargo.name }}</td>
-                        <td>{{ cargo.description }}</td>
-                        {% if cargo.estado %}
-                            <td>ACTIVO</td>
-                        {% else %}
-                            <td>INACTIVO</td>
-                        {% endif %}
-                        <td>{{ cargo.has_vacants|yesno:"Si,No" }}</td>
-                        <td>
-                            <div class="btn-group">
+                {% for evaluacion in lista_evaluaciones %}
+                    {% if evaluacion.estado %}
+                        <tr>
+                            <td>{{ evaluacion.date }}</td>
+                            <td>{{ evaluacion.employee }}</td>
+                            <td>
+                                <div class="btn-group">
 
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                        aria-expanded="false">
-                                    Acciones
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    <div class="ripple-container"></div>
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-expanded="false">
+                                        Acciones
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                        <div class="ripple-container"></div>
 
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{% url 'crear_evaluacion' cargo.id %}">Evaluar</a></li>
-                                    <li><a href="{% url 'modificar_cargo' cargo.id %}">Consultar/Modificar</a></li>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="{% url 'modificar_evaluacion' evaluacion.id %}">Consultar/Modificar</a></li>
 
-                                    <li class="divider"></li>
-                                    {% if cargo.estado %}
-                                        <li><a class="delete-cargo" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                               data-url="{% url 'desactivar_cargo' cargo.id %}">Desactivar</a></li>
-                                    {% else %}
-                                        <li><a class="activate-cargo" href="#" data-toggle="modal" data-target="#activate-modal"
-                                               data-url="{% url 'activar_cargo' cargo.id %}">Activar</a></li>
-                                    {% endif %}
+                                        <li class="divider"></li>
+                                        {% if evaluacion.estado %}
+                                            <li><a class="delete-pregunta" href="#" data-toggle="modal" data-target="#deactivate-modal"
+                                                   data-url="{% url 'desactivar_evaluacion' evaluacion.id %}">Desactivar</a></li>
+                                        {% else %}
+                                            <li><a class="activate-pregunta" href="#" data-toggle="modal" data-target="#activate-modal"
+                                                   data-url="{% url 'activar_evaluacion' evaluacion.id %}">Activar</a></li>
+                                        {% endif %}
 
-                                </ul>
-                            </div>
+                                    </ul>
+                                </div>
 
-                        </td>
-                        <!--
-                <td><a href="{% url 'modificar_cargo' cargo.id %}">Modificar</a></td>
-            -->
-                    </tr>
+                            </td>
+
+                        </tr>
+                    {% endif %}
                 {% endfor %}
                 </tbody>
 
@@ -95,10 +86,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Eliminar cargo</h4>
+                    <h4 class="modal-title">Eliminar evaluación</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea desactivar este cargo?</p>
+                    <p>¿Está seguro que desea desactivar la evaluación?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
@@ -117,10 +108,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Activar cargo</h4>
+                    <h4 class="modal-title">Activar pregunta</h4>
                 </div>
                 <div class="modal-body">
-                    <p>¿Está seguro que desea activar este cargo?</p>
+                    <p>¿Está seguro que desea activar la evaluación?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
@@ -143,11 +134,11 @@
     var activate_url = "";
 
     $(document).ready(function () {
-        $('.delete-cargo').click(function () {
+        $('.delete-pregunta').click(function () {
             deactivate_url = $(this).attr('data-url');
         });
 
-        $('.activate-cargo').click(function(){
+        $('.activate-pregunta').click(function(){
             activate_url = $(this).attr('data-url');
         });
     });
