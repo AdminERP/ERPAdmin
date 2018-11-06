@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+
+{% block titulo %}
+    Listado de empleados
+{% endblock %}
+
+{% block titulo_pagina %}
+    Listado de empleados
+{% endblock %}
+
+{% block descripcion_pagina %}
+    Listado de empleados en la empresa
+{% endblock descripcion_pagina %}
+
+{% block miga_pan %}
+    <li><a href="#"><i class="fa fa-dashboard"></i> Empleados</a></li>
+    <li class="active">Listado</li>
+{% endblock miga_pan %}
+
+
+{% block contenido %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listado de empleados</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <div class="box-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo de Documento</th>
+                    <th>Identificacion</th>
+                    <th>Direccion</th>
+                    <th>Telefono</th>
+                    <th>EPS</th>
+                    <th>Fondo de pensiones</th>
+                    <th>Fondo de cesantias</th>
+                    <th>Banco</th>
+                    <th>Numero de Cuenta</th>
+                    <th>Salario</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for empleado in lista_empleados %}
+                    <tr>
+                        <td>{{ empleado.name }}</td>
+                        <td>{{ empleado.id_type }}</td>
+                        <td>{{ empleado.identification }}</td>
+                        <td>{{ empleado.address }}</td>
+                        <td>{{ empleado.telephone }}</td>
+                        <td>{{ empleado.eps }}</td>
+                        <td>{{ empleado.pension_fund }}</td>
+                        <td>{{ empleado.severance_fund }}</td>
+                        <td>{{ empleado.bank }}</td>
+                        <td>{{ empleado.account_number }}</td>
+                        <td>{{ empleado.salary }}</td>
+                        {% if empleado.status %}
+                            <td>ACTIVO</td>
+                        {% else %}
+                            <td>INACTIVO</td>
+                        {% endif %}
+                        <td>
+                            <div class="btn-group">
+
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Acciones
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                    <div class="ripple-container"></div>
+
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{% url 'modificar_empleado' empleado.id %}">Consultar/Modificar</a></li>
+
+                                    <li class="divider"></li>
+                                    {% if empleado.status %}
+                                        <li><a class="delete-empleado" href="#" data-toggle="modal" data-target="#deactivate-modal"
+                                               data-url="{% url 'desactivar_empleado' empleado.id %}">Desactivar</a></li>
+                                    {% else %}
+                                        <li><a class="activate-empleado" href="#" data-toggle="modal" data-target="#activate-modal"
+                                               data-url="{% url 'activar_empleado' empleado.id %}">Activar</a></li>
+                                    {% endif %}
+
+                                </ul>
+                            </div>
+
+                        </td>
+                        <!--
+                <td><a href="{% url 'modificar_empleado' empleado.id %}">Modificar</a></td>
+            -->
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+
+    <div class="modal fade" id="deactivate-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Eliminar empleado</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea desactivar este empleado?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" onclick="deactivateStatus()">Eliminar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="activate-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Activar cargo</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea activar este empleado?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" onclick="activateStatus()">Activar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+
+    var deactivate_url = "";
+    var activate_url = "";
+
+    $(document).ready(function () {
+        $('.delete-empleado').click(function () {
+            deactivate_url = $(this).attr('data-url');
+        });
+
+        $('.activate-empleado').click(function(){
+            activate_url = $(this).attr('data-url');
+        });
+    });
+
+    function deactivateStatus(){
+
+        $.ajax({
+            url: deactivate_url,
+            data: {},
+            dataType: 'html',
+            success: function (data) {
+                location.reload(true);
+            }
+        });
+
+        $("#deactivate-modal").hide();
+    }
+
+    function activateStatus(){
+
+        $.ajax({
+            url: activate_url,
+            data: {},
+            dataType: 'html',
+            success: function (data) {
+                location.reload(true);
+            }
+        });
+
+        $("#activate-modal").hide();
+    }
+
+
+    </script>
+
+{% endblock %}
