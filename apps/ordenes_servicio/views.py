@@ -36,11 +36,12 @@ def operadores_autocomplete(request):
     json = []
     if request.GET.get('q'):
         q = request.GET['q']
-        data = User.objects.filter(models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q)).values_list('cedula', 'first_name', 'last_name')[:10]
+        data = User.objects.filter(models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q)).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
         arr = list(data)
         for tupla in arr:
             cedula = tupla[0]
             nombre = tupla[1]
             apellidos = tupla[2]
-            json.append(cedula + ' - ' + nombre + ' ' + apellidos)
+            id = tupla[3]
+            json.append({'id': id, 'text':cedula + ' - ' + nombre + ' ' + apellidos})
     return JsonResponse(json, safe=False)

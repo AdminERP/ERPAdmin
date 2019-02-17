@@ -26,13 +26,20 @@
                 {% bootstrap_field form.servicio_vendido%}
               </div>
               <div class="col-sm-6">
-                  {% bootstrap_field form.encargado class="basicAutoComplete form-control" %}
-              </div>
-              <div class="col-sm-6">
                 {% bootstrap_field form.cliente%}
               </div>
               <div class="col-sm-6">
                 {% bootstrap_field form.comentarios%}
+              </div>
+              <div class="col-sm-6">
+                {% bootstrap_field form.encargado_select %}
+              </div>
+              <div class="col-sm-6">
+                  <label class="control-label">Encargado seleccionado:</label>
+                  <input type="text" id="id_encargado_seleccionado_texto" class="form-control" disabled>
+              </div>
+              <div class="col-sm-12">
+                  <input type="text" name="encargado" id="id_encargado" class="form-control hidden">
               </div>
           </div>
           <button type="submit" class="btn btn-success">Registrar</button>
@@ -47,10 +54,15 @@
 {% block js %}
 <script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/3de7ad37/dist/latest/bootstrap-autocomplete.js"></script>
 <script>
-    $('.basicAutoComplete').autoComplete(
+    $('.basicAutoSelect').autoComplete(
         {minLength: 1}
     );
-    $('.dropdown-menu').css({'top': 'auto', 'left': 'auto'})
+    $('.basicAutoSelect').on('autocomplete.select', function (evt, item) {
+      //doc: https://gitcdn.link/cdn/xcash/bootstrap-autocomplete/4192ba1848802880b288985fc4332478f9a8699a/dist/latest/index.html
+      document.getElementById("id_encargado").value = item["id"];
+      document.getElementById("id_encargado_seleccionado_texto").value = item["text"];
+      document.getElementById("id_encargado_select").value = "";
+    });
 
 </script>
 {% endblock js %}

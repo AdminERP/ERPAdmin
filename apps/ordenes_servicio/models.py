@@ -3,8 +3,8 @@ from apps.usuarios.models import User
 
 class OrdenServicio(models.Model):
     servicio_vendido = models.CharField(max_length=100) # Datos Mestros
-    encargado = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    cliente = models.CharField(max_length=100) # Datos Maestros
+    encargado = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='encargado_set')
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='cliente_set')# Datos Maestros
     comentarios = models.CharField(max_length=255)
 
     # Constantes para OrdenServicio

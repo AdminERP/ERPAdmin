@@ -2,12 +2,13 @@ from django import forms
 from apps.ordenes_servicio.models import *
 
 class OrdenServicioForm(forms.ModelForm):
-    encargado = forms.CharField(required=True, widget=forms.TextInput(
+    encargado_select = forms.CharField(label = "Encargado:",required=False, widget=forms.TextInput(
         attrs={
-            'style': 'width: 400px',
-            'class': 'basicAutoComplete',
-            'data-url': "operadores-autocomplete"
+            'class': 'basicAutoSelect',
+            'data-url': "operadores-autocomplete",
+            'placeholder' : "Buscar un operario",
+            "data-noresults-text" : "No hay resultados",
         }))
     class Meta:
         model = OrdenServicio
-        fields = ('servicio_vendido', 'cliente', 'comentarios')
+        fields = ('servicio_vendido', 'encargado', 'cliente', 'comentarios')
