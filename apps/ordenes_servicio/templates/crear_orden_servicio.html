@@ -26,7 +26,7 @@
                 {% bootstrap_field form.servicio_vendido%}
               </div>
               <div class="col-sm-6">
-                {% bootstrap_field form.encargado%}
+                  {% bootstrap_field form.encargado class="basicAutoComplete form-control" %}
               </div>
               <div class="col-sm-6">
                 {% bootstrap_field form.cliente%}
@@ -45,4 +45,12 @@
 {% endblock contenido %}
 
 {% block js %}
+<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/3de7ad37/dist/latest/bootstrap-autocomplete.js"></script>
+<script>
+    $('.basicAutoComplete').autoComplete(
+        {minLength: 1}
+    );
+    $('.dropdown-menu').css({'top': 'auto', 'left': 'auto'})
+
+</script>
 {% endblock js %}

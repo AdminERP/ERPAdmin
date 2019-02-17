@@ -1,8 +1,9 @@
 from django.db import models
+from apps.usuarios.models import User
 
 class OrdenServicio(models.Model):
     servicio_vendido = models.CharField(max_length=100) # Datos Mestros
-    encargado = models.CharField(max_length=100) # Datos Maestros
+    encargado = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     cliente = models.CharField(max_length=100) # Datos Maestros
     comentarios = models.CharField(max_length=255)
 
