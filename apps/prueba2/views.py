@@ -71,7 +71,7 @@ def register_employee(request, id=None):
 
 
 def consultar_empleado(request):
-    return render(request, 'consulta_empleados.html', {'lista_empleados': Employee.objects.all()})
+    return render(request, 'consulta_empleados.html', {'lista_empleados': Employee.objects.all(), 'action': 'list'})
 
 
 def desactivar_empleado(request, id):

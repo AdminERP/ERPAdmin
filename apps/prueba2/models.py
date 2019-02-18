@@ -40,6 +40,7 @@ class Employee(models.Model):
     id_type = models.CharField(max_length=2, choices=IDENTIFICATION_TYPE)
     identification = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
     telephone = models.CharField(max_length=200)
     eps = models.CharField(max_length=200)
     pension_fund = models.CharField(max_length=200)

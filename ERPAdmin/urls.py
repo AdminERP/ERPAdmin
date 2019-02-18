@@ -25,4 +25,5 @@ urlpatterns = [
 urlpatterns = (
     path('', include('apps.prueba2.urls')),
     path('', include('apps.evaluaciones.urls')),
+    path('', include('apps.nomina.urls')),
 )
