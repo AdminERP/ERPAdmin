@@ -22,7 +22,9 @@ def crear_orden_servicio(request):
                 messages.success(request, 'Orden de servicio creada exitosamente')
                 form = OrdenServicioForm()
             else:
-                messages.error(request, 'Por favor corrige los errores')
+                messages.error(request, 'El formulario NO es valido, Por favor corrige los errores')
+                for error in form.errors:
+                    messages.error(request, "Hay un problema con " + error)
         else:
             form = OrdenServicioForm()
         return render(request, 'crear_orden_servicio.html', {'form': form})
