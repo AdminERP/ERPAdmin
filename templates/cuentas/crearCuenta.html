@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Crear Cuenta{% endblock titulo %}
+
+{% block css %}
+
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+
+{% endblock css %}
+
+{% block titulo_pagina %} Crear Nueva Cuenta {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Pagar</a></li>
+<li class="active">Crear Cuenta</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Datos de Factura</small>{% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Columna Izquierda -->
+        <div class="col-md-5">
+            <form role="form">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label>Orden de compra</label>
+                        <select class="form-control select2" style="width: 100%;">
+                            <option selected="selected">001</option>
+                            <option>001</option>
+                            <option>002</option>
+                            <option>003</option>
+                            <option>004</option>
+                            <option>005</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Factura</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="datepicker">
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                        <label>Cobro Total</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <td>
+                        <button type="button" class="btn btn-block btn-info"> Registrar</button>
+                    </td>
+                </div>
+            </form>
+        </div>        
+        <!-- Columna Derecha -->
+        <div class="col-md-5 col-md-offset-1">
+            <!-- Editable table -->
+            <div class="card">
+                <div style="margin-top: 3rem; margin-bottom: 3rem">
+                    <h4 class="card-tittle text-muted text-center py-4">Detalle de Cobros</h4>
+                    <div class="col-md-4 col-md-offset-8">
+                        <span class="table-add float-left mb-5 mr-2"><a href="#!" class="text-success"><i class="fa fa-plus " aria-hidden="false"></i> Agregar Item </a></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="table">
+                        <table class="table table-bordered table-responsive-md text-center">
+                            <tr>
+                                <th class="text-center">Item</th>
+                                <th class="text-center">Valor</th>
+                                <th class="text-center">Eliminar</th>
+                            </tr>
+                            <tr>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="table-remove">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-0 ">Borrar </button>
+                                        
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="table-remove">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-0">Borrar
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="table-remove">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-0">Borrar
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- This is our clonable table line -->
+                            <tr class="hide">
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td class="pt-3-half">
+                                    <div class="form-group">
+                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="table-remove">
+                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-5">Borrar
+                                        </button>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--Fin Editable table -->
+        </div>
+    </div>
+</div>
+
+{% endblock contenido_panel %}
+
+{% block js %}
+<!--Editable Table-->
+<script src="{% static 'dist/js/editable-table.js' %}"></script>
+<!-- Date Picker-->
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<script>
+    $(function() {
+        //Date picker
+        $('#datepicker').datepicker({
+            autoclose: true
+        })
+    })
+
+</script>
+{% endblock js %}
