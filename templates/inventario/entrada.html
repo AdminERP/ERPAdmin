@@ -9,14 +9,14 @@
 <table id="tabla_escuelas" cellspacing="0" width="100%" style="width: 100%;" aria-describedby="demo-dt-basic_info" class="table table-striped table-bordered dataTable no-footer dtr-inline">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Articulo</th>
-              <th>Cantidad</th>
-              <th>Precio</th>
-                <th>Proeevedor</th>
-                <th>Total</th>
-                <th>Fecha de llegada :V</th>
-                <th>Accion</th>
+              <th class="text-center">ID</th>
+              <th class="text-center">Articulo</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-center">Precio</th>
+                <th class="text-center">Proeevedor</th>
+                <th class="text-center">Total</th>
+                <th class="text-center">Fecha de llegada</th>
+                <th class="text-center">Accion</th>
             </tr>
           </thead>
           <tbody>
@@ -24,14 +24,14 @@
           {% for orden in ordenes %}
 
           <tr role="row" class="even">
-              <td class="sorting_1" tabindex="0">{{ orden.id }}</td>
-              <td class="sorting_1" tabindex="0">{{ orden.articulo }}</td>
-              <td class="sorting_1" tabindex="0">{{ orden.cantidad }}</td>
-              <td class="sorting_1" tabindex="0">{{ orden.precio }}</td>
-              <td class="sorting_1" tabindex="0">{{ orden.proveedores }}</td>
-              <td class="sorting_1" tabindex="0">{{ orden.total }}</td>
-              <td class="sorting_1" tabindex="0">{{ orden.tiempo }}</td>
-              <td class="sorting_1" tabindex="0"> <a class="btn btn-info" href="#">Generar Entrada</a></td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.id }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.articulo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cantidad }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.precio }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.proveedores }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.total }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.tiempo }}</td>
+              <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="#">Generar Entrada</a></td>
 
     {% endfor %}
                     </tbody>

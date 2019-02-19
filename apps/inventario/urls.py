@@ -6,5 +6,7 @@ from django.urls import path
 from apps.inventario.views import *
 
 urlpatterns = [
-    path('', index, name='landingProgramas'),
+    path('', index, name='landingInventario'),
+    path('entradas', entradas, name='entradas')
+
 ]

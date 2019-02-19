@@ -5,6 +5,10 @@ from apps.inventario.models import *
 
 
 def index (request):
+
+    return render(request, 'inventario/landing.html')
+
+def entradas (request):
     ordenes = OrdenCompra.listar()
 
-    return render(request, 'inventario/entrada.html', {'ordenes':ordenes})
+    return render(request, 'inventario/entrada.html', {'ordenes': ordenes})
