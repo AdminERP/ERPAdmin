@@ -1,6 +1,6 @@
 from django.db import models
 import datetime
-from ..prueba2.models import Employee
+from ..employees_and_jobs.models import Employee
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.

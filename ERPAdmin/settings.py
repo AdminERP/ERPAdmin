@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_select2',
     'bootstrap3',
-    'apps.prueba2',
+    'apps.employees_and_jobs',
     'apps.evaluaciones',
     'apps.nomina'
 ]

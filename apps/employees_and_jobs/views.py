@@ -2,10 +2,10 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from apps.prueba2.forms import RegistrarCargoForm
-from apps.prueba2.forms import RegisterEmployeeForm
-from apps.prueba2.models import Job
-from apps.prueba2.models import Employee
+from apps.employees_and_jobs.forms import RegistrarCargoForm
+from apps.employees_and_jobs.forms import RegisterEmployeeForm
+from apps.employees_and_jobs.models import Job
+from apps.employees_and_jobs.models import Employee
 
 def inicio(request):
     return render(request, 'base.html', {})

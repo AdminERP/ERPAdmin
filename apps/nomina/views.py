@@ -2,9 +2,9 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from apps.prueba2.forms import RegistrarCargoForm
-from apps.prueba2.forms import RegisterEmployeeForm
-from apps.prueba2.models import Job, Employee
+from apps.employees_and_jobs.forms import RegistrarCargoForm
+from apps.employees_and_jobs.forms import RegisterEmployeeForm
+from apps.employees_and_jobs.models import Job, Employee
 from apps.nomina.models import EmployeeRoster
 
 from django.core.mail import send_mail

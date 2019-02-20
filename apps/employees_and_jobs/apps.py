@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class Prueba2Config(AppConfig):
-    name = 'prueba2'
+    name = 'employees_and_jobs'

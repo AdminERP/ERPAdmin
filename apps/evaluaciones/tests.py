@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.test import Client
 from django.urls import reverse_lazy
 
-from apps.prueba2.models import Job, Employee
+from apps.employees_and_jobs.models import Job, Employee
 from apps.evaluaciones.models import Question
 
 # Create your tests here.

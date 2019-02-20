@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from apps.evaluaciones.forms import *
 from apps.evaluaciones.models import *
-from apps.prueba2.models import Employee
+from apps.employees_and_jobs.models import Employee
 
 
 def inicio(request):

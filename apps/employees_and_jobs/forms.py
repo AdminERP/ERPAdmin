@@ -1,7 +1,7 @@
 from django import forms
 
-from apps.prueba2.models import Job
-from apps.prueba2.models import Employee
+from apps.employees_and_jobs.models import Job
+from apps.employees_and_jobs.models import Employee
 
 
 class RegistrarCargoForm(forms.ModelForm):
