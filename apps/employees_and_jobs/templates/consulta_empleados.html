@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% load bootstrap3 %}
 
 {% block titulo %}
@@ -44,7 +46,7 @@
                     <th>Salario</th>
                     <th>Estado</th>
                     {% if action == 'list' %}
-                    <th>Opciones</th>
+                        <th>Opciones</th>
                     {% endif %}
                 </tr>
                 </thead>
@@ -81,14 +83,18 @@
 
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="{% url 'modificar_empleado' empleado.id %}">Consultar/Modificar</a></li>
+                                        <li><a href="{% url 'modificar_empleado' empleado.id %}">Consultar/Modificar</a>
+                                        </li>
 
                                         <li class="divider"></li>
                                         {% if empleado.status %}
-                                            <li><a class="delete-empleado" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                                   data-url="{% url 'desactivar_empleado' empleado.id %}">Desactivar</a></li>
+                                            <li><a class="delete-empleado" href="#" data-toggle="modal"
+                                                   data-target="#deactivate-modal"
+                                                   data-url="{% url 'desactivar_empleado' empleado.id %}">Desactivar</a>
+                                            </li>
                                         {% else %}
-                                            <li><a class="activate-empleado" href="#" data-toggle="modal" data-target="#activate-modal"
+                                            <li><a class="activate-empleado" href="#" data-toggle="modal"
+                                                   data-target="#activate-modal"
                                                    data-url="{% url 'activar_empleado' empleado.id %}">Activar</a></li>
                                         {% endif %}
 
@@ -111,9 +117,10 @@
     </div>
 
     {% if action == 'roster' %}
-        <div class="roster" data-url="{% url 'creacion_nomina'%}" >
+        <div class="roster" data-url="{% url 'creacion_nomina' %}">
             <button type="button" class="btn btn-block btn-success btn-lg"
-            data-toggle="modal" data-target="#roster-modal" href="#">GENERAR NOMINA</button>
+                    data-toggle="modal" data-target="#roster-modal" href="#">GENERAR NOMINA
+            </button>
         </div>
     {% endif %}
 
@@ -175,7 +182,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" onclick="payRoster()">Generar</button>
+                    <button id="generate-roster" type="button" class="btn btn-primary" onclick="payRoster()">Generar
+                    </button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -190,67 +198,79 @@
 
 
 {% block js %}
+    <script src='{% static 'plugins/blockUI/blockUI.js' %}'></script>
     <script type="text/javascript">
 
-    var deactivate_url = "";
-    var activate_url = "";
-    var roster_url = "";
+        var deactivate_url = "";
+        var activate_url = "";
+        var roster_url = "";
 
-    $(document).ready(function () {
-        $('.delete-empleado').click(function () {
-            deactivate_url = $(this).attr('data-url');
+        $(document).ready(function () {
+            $('.delete-empleado').click(function () {
+                deactivate_url = $(this).attr('data-url');
+            });
+
+            $('.activate-empleado').click(function () {
+                activate_url = $(this).attr('data-url');
+            });
+            $('.roster').click(function () {
+                roster_url = $(this).attr('data-url');
+            });
         });
 
-        $('.activate-empleado').click(function(){
-            activate_url = $(this).attr('data-url');
-        });
-        $('.roster').click(function(){
-            roster_url = $(this).attr('data-url');
-        });
-    });
+        function deactivateStatus() {
 
-    function deactivateStatus(){
+            $.ajax({
+                url: deactivate_url,
+                data: {},
+                dataType: 'html',
+                success: function (data) {
+                    location.reload(true);
+                }
+            });
 
-        $.ajax({
-            url: deactivate_url,
-            data: {},
-            dataType: 'html',
-            success: function (data) {
-                location.reload(true);
-            }
-        });
+            $("#deactivate-modal").hide();
+        }
 
-        $("#deactivate-modal").hide();
-    }
+        function activateStatus() {
 
-    function activateStatus(){
+            $.ajax({
+                url: activate_url,
+                data: {},
+                dataType: 'html',
+                success: function (data) {
+                    location.reload(true);
+                }
+            });
 
-        $.ajax({
-            url: activate_url,
-            data: {},
-            dataType: 'html',
-            success: function (data) {
-                location.reload(true);
-            }
-        });
-
-        $("#activate-modal").hide();
-    }
+            $("#activate-modal").hide();
+        }
 
 
-    function payRoster(){
-        console.log(roster_url);
-        $.ajax({
-            url: roster_url,
-            data: {},
-            dataType: 'html',
-            success: function (data) {
-                location.reload(true);
-            }
-        });
+        function payRoster() {
+            $.blockUI({
+                message: '<h4><i class="fa fa-spinner fa-spin"></i> Generando nómina</h4>',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#0d8aee',
+                    opacity: 1,
+                    color: '#ffffff',
+                    font: 'Roboto,Helvetica,Arial,sans-serif'
+                }
+            });
+            $.ajax({
+                url: roster_url,
+                data: {},
+                dataType: 'json'
+            }).done(function (data) {
+                toastr["" + data.type]("" + data.message)
+            }).always(function () {
+                $.unblockUI();
+            });
 
-        $("#roster-modal").hide();
-    }
+            $("#roster-modal").hide();
+        }
 
 
     </script>

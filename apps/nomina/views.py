@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
@@ -19,7 +20,6 @@ def roster_module(request, id=None):
 
 
 def create_roster(request):
-    print("hola")
     active_employees = Employee.objects.filter(status=True)
     roster_registry = Roster.objects.create()
     roster_registry.save()
@@ -39,11 +39,17 @@ def create_roster(request):
             sum_roster = sum_roster + employee.salary
 
     if total_error_not_payment == 0:
-        messages.success(request, "La nomina ha sido registrada correctamente para cada colaborador.")
+        send_data = {
+            'message': "La nomina ha sido registrada correctamente para cada colaborador.",
+            'type': 'success'
+        }
     else:
-        messages.error(request, "Hubo un error al enviar "+ total_error_not_payment + "de " + str(len(active_employees)))
+        send_data = {
+            'message': "Hubo un error al enviar "+ total_error_not_payment + "de " + str(len(active_employees)),
+            'type': 'error'
+        }
 
-    return render(request, 'consulta_empleados.html', {'lista_empleados': Employee.objects.all(), 'action': 'roster'})
+    return JsonResponse(send_data)
 
 
 def register_roster_individual(employee,roster_registry):

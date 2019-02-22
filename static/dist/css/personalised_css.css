@@ -1,0 +1,4 @@
+.fa-spin {
+  -webkit-animation: fa-spin 6s infinite linear;
+  animation: fa-spin 1s infinite linear;
+}
