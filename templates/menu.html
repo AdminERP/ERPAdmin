@@ -26,8 +26,8 @@
         <a href="#"><i class="fa fa-dollar"></i> <span>Cuentas por Pagar</span>
         <ul class="treeview-menu">
 
-          <li><a href="#">Crear Cuenta</a></li>
-          <li><a href="#">Ver Cuentas</a></li>
+          <li><a href="{% url 'crearCuenta'%}">Crear Cuenta</a></li>
+          <li><a href="{% url 'listarPagar'%}">Ver Cuentas</a></li>
         </ul>
       </li>
       
@@ -38,7 +38,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a href="#">Ver Cuentas</a></li>
+          <li><a href="{% url 'listarCobrar'%}">Ver Cuentas</a></li>
         </ul>
       </li>      
 

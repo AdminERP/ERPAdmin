@@ -6,6 +6,9 @@ from django.urls import path
 from apps.cuentas.views import *
 
 urlpatterns = [
-    path('', index, name='cuentas'),
+    path('', index, name='crearCuenta'),
+    path('listarPagar/', listarPagar,  name='listarPagar'),
+    path('listarCobrar/', listarCobrar, name='listarCobrar'),
+    path('detalles/', listarDetalles, name='detalles'),
 
     ]
