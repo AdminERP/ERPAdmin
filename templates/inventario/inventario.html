@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block titulo %} Inventario{% endblock titulo %}
+{% block titulo_pagina %}Inventario{% endblock titulo_pagina %}
+
+{% block contenido_panel %}
+
+<table id="tabla_escuelas" cellspacing="0" width="100%" style="width: 100%;" aria-describedby="demo-dt-basic_info" class="table table-striped table-bordered dataTable no-footer dtr-inline">
+          <thead>
+            <tr>
+              <th class="text-center">ID</th>
+              <th class="text-center">Articulo</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-center">Dependecia</th>
+              <th class="text-center">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for articulo in inventario %}
+
+          <tr role="row" class="even">
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.id }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.articulo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.cantidad }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.dependencia}}</td>
+              <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="#">Generar Salida</a></td>
+
+    {% endfor %}
+                    </tbody>
+
+        </table>
+{% endblock contenido_panel %}
+
+{% block pie_panel %}
+
+{% endblock pie_panel %}

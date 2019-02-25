@@ -7,6 +7,7 @@ from apps.inventario.views import *
 
 urlpatterns = [
     path('', index, name='landingInventario'),
-    path('entradas', entradas, name='entradas')
+    path('entradas', entradas, name='entradas'),
+    path('list', inventario, name= 'inventario')
 
 ]
