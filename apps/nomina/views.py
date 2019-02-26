@@ -32,11 +32,15 @@ def create_payroll(request):
             print("Hubo un error con registro de nomina de " + employee.name)
             total_error_not_payment = total_error_not_payment + 1
         else:
-            email(email_to=email_to, name=employee.name, id_type=employee.id_type, id_number=employee.identification,
-                  gross_salary=gross_salary, tax=tax, net_salary=net_salary, bank=employee.bank, eps=employee.eps,
-                  pension_fund=employee.pension_fund, severance_fund=employee.severance_fund,
-                  date_payment=payroll_registry.date)
-            sum_payroll = sum_payroll + employee.salary
+            try:
+                email(email_to=email_to, name=employee.name, id_type=employee.id_type, id_number=employee.identification,
+                      gross_salary=gross_salary, tax=tax, net_salary=net_salary, bank=employee.bank, eps=employee.eps,
+                      pension_fund=employee.pension_fund, severance_fund=employee.severance_fund,
+                      date_payment=payroll_registry.date)
+                sum_payroll = sum_payroll + employee.salary
+            except OSError as e:
+                print("Hubo un error al conectar con la red para enviar correo")
+                total_error_not_payment = total_error_not_payment + 1
 
     if total_error_not_payment == 0:
         send_data = {
@@ -45,7 +49,7 @@ def create_payroll(request):
         }
     else:
         send_data = {
-            'message': "Hubo un error al enviar "+ total_error_not_payment + "de " + str(len(active_employees)),
+            'message': "Hubo un error al enviar "+ str(total_error_not_payment) + " de " + str(len(active_employees)),
             'type': 'error'
         }
 
@@ -61,6 +65,25 @@ def register_payroll_individual(employee,payroll_registry):
     #employee_payroll.save()
     return employee.email, employee_payroll.gross_salary, employee_payroll.tax, employee_payroll.net_salary
 
+
+def deactivate_payroll(request, id):
+    employee_payroll = get_object_or_404(EmployeePayroll, id=id)
+    employee_payroll.estado = False
+    employee_payroll.save()
+    messages.success(request, "La nomina del empleado ha sido desactivada correctamente del sistema")
+    return redirect('consultar_nomina')
+
+
+def activate_payroll(request, id):
+    employee_payroll = get_object_or_404(EmployeePayroll, id=id)
+    employee_payroll.estado = True
+    employee_payroll.save()
+    messages.success(request, "La nomina del empleado ha sido activada correctamente en el sistema")
+    return redirect('consultar_nomina')
+
+
+def payroll_consult(request):
+    return render(request, 'consult_payroll.html', {'lista_nomina': EmployeePayroll.objects.all()})
 
 
 def email(email_to, name, id_type, id_number, gross_salary, tax, net_salary, bank, eps, pension_fund, severance_fund, date_payment):
