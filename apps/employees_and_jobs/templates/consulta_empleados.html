@@ -116,10 +116,10 @@
         <!-- /.box-body -->
     </div>
 
-    {% if action == 'roster' %}
-        <div class="roster" data-url="{% url 'creacion_nomina' %}">
+    {% if action == 'payroll' %}
+        <div class="payroll" data-url="{% url 'creacion_nomina' %}">
             <button type="button" class="btn btn-block btn-success btn-lg"
-                    data-toggle="modal" data-target="#roster-modal" href="#">GENERAR NOMINA
+                    data-toggle="modal" data-target="#payroll-modal" href="#">GENERAR NOMINA
             </button>
         </div>
     {% endif %}
@@ -169,7 +169,7 @@
     <!-- /.modal -->
 
 
-    <div class="modal fade" id="roster-modal">
+    <div class="modal fade" id="payroll-modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -182,7 +182,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-                    <button id="generate-roster" type="button" class="btn btn-primary" onclick="payRoster()">Generar
+                    <button id="generate-payroll" type="button" class="btn btn-primary" onclick="payPayroll()">Generar
                     </button>
                 </div>
             </div>
@@ -203,7 +203,7 @@
 
         var deactivate_url = "";
         var activate_url = "";
-        var roster_url = "";
+        var payroll_url = "";
 
         $(document).ready(function () {
             $('.delete-empleado').click(function () {
@@ -213,8 +213,8 @@
             $('.activate-empleado').click(function () {
                 activate_url = $(this).attr('data-url');
             });
-            $('.roster').click(function () {
-                roster_url = $(this).attr('data-url');
+            $('.payroll').click(function () {
+                payroll_url = $(this).attr('data-url');
             });
         });
 
@@ -247,7 +247,7 @@
         }
 
 
-        function payRoster() {
+        function payPayroll() {
             $.blockUI({
                 message: '<h4><i class="fa fa-spinner fa-spin"></i> Generando nómina</h4>',
                 css: {
@@ -260,7 +260,7 @@
                 }
             });
             $.ajax({
-                url: roster_url,
+                url: payroll_url,
                 data: {},
                 dataType: 'json'
             }).done(function (data) {
@@ -269,7 +269,7 @@
                 $.unblockUI();
             });
 
-            $("#roster-modal").hide();
+            $("#payroll-modal").hide();
         }
 
 
