@@ -5,12 +5,12 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 
-class Roster(models.Model):
+class Payroll(models.Model):
     date = models.DateField(default=datetime.date.today)
     estado = models.BooleanField(default=True)
 
-class EmployeeRoster(models.Model):
-    roster = models.ForeignKey(Roster, on_delete=models.CASCADE)
+class EmployeePayroll(models.Model):
+    payroll = models.ForeignKey(Payroll, on_delete=models.CASCADE)
     # Until merge Employees
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     gross_salary = models.FloatField(default=0.0)

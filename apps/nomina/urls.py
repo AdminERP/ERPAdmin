@@ -5,8 +5,8 @@ from .views import *
 
 urlpatterns = [
     path('', inicio, name='inicio'),
-    path('modulo-nomina', roster_module, name='modulo_nomina'),
-    path('creacion_nomina', create_roster, name='creacion_nomina'),
+    path('modulo-nomina', payroll_module, name='modulo_nomina'),
+    path('creacion_nomina', create_payroll, name='creacion_nomina'),
 
 
 
