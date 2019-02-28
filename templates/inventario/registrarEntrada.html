@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+
+{% block titulo %} Registro de entrada{% endblock titulo %}
+{% block titulo_pagina %}Registro de entrada{% endblock titulo_pagina %}
+
+{% block contenido_panel %}
+
+ <form method="post">
+    {% csrf_token %}
+      <div class="col-md-6">
+          {% bootstrap_field form.condicion %}
+      </div>
+      <div class="col-md-6">
+          {% bootstrap_field form.fecha %}
+      </div>
+      <div class="col-md-6">
+          {% bootstrap_field form.razon_devolucion %}
+      </div>
+      <div class="col-md-6">
+          {% bootstrap_field form.ordenCompra %}
+      </div>
+      
+      <div class="col-md-6">
+          <button type="submit" class="btn btn-success">Registrar</button>
+      </div>
+</form>
+
+{% endblock contenido_panel %}
+
+{% block pie_panel %}
+
+{% endblock pie_panel %}

@@ -31,7 +31,7 @@
               <td class="sorting_1 text-center" tabindex="0">{{ orden.proveedores }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.total }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.tiempo }}</td>
-              <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="#">Generar Entrada</a></td>
+              <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="{% url 'registroEntrada' orden.id %}">Generar Entrada</a></td>
 
     {% endfor %}
                     </tbody>
