@@ -1,9 +1,9 @@
-ERPAdmin/settings.py
+# ERPAdmin/settings.py
 apps/*/migrations/
 **/__pycache__/
 *.log
 *.pot
 *.pyc
-media
+media/
 .idea
-db.sqlite3
+#db.sqlite3
