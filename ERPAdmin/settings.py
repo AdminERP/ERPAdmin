@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     # Django implementations of UI tools
     'django_select2',
     'bootstrap3',
-    
+    'compras',
 ]
 
 MIDDLEWARE = [

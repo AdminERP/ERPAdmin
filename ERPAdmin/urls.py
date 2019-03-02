@@ -19,6 +19,6 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', TemplateView.as_view(template_name='base.html')),
-
+    path('test/', TemplateView.as_view(template_name='base.html')), #para renderizar la plantilla base
+    path('compras/',include(('usuarios.urls','compras'),namespace='compras')),
 ]
