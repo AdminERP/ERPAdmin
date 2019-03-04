@@ -13,7 +13,12 @@
           {% bootstrap_field form.condicion %}
       </div>
       <div class="col-md-6">
+        <div class="input-group date">
+            <div class="input-group-addon">
+              <i class="fa fa-calendar"></i>
+              </div>
           {% bootstrap_field form.fecha %}
+      </div>
       </div>
       <div class="col-md-6">
           {% bootstrap_field form.razon_devolucion %}
@@ -21,7 +26,6 @@
       <div class="col-md-6">
           {% bootstrap_field form.ordenCompra %}
       </div>
-      
       <div class="col-md-6">
           <button type="submit" class="btn btn-success">Registrar</button>
       </div>
@@ -32,3 +36,14 @@
 {% block pie_panel %}
 
 {% endblock pie_panel %}
+
+{% block js %}
+<script>
+
+  //Date picker
+  $('.datepicker').datepicker({
+    autoclose: true
+  })
+
+  </script>
+  {% endblock js %}

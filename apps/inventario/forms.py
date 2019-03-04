@@ -12,6 +12,9 @@ class RegistroEntrada(forms.ModelForm):
             'fecha': 'Fecha de entrada',
             'ordenCompra': 'Orden de compra',
         }
+		widgets = {
+			'fecha': forms.DateInput(attrs={'class':'datepicker'}),
+		}
 	def __init__(self, *args, **kwargs):
 		super(RegistroEntrada, self).__init__(*args, **kwargs)
 		self.fields['ordenCompra'].widget.attrs['disabled'] = True

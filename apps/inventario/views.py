@@ -21,20 +21,22 @@ def inventario (request):
     return render(request, 'inventario/inventario.html', {'inventario': inventario})
 
 def registroEntrada(request, idOrden):
-	orden = OrdenCompra.objects.get(id = idOrden)
-	form = RegistroEntrada(initial={'ordenCompra': orden})
-	if request.method == 'POST':
-		POST = request.POST.copy()
-		POST['ordenCompra'] = orden.id
-		form = RegistroEntrada(POST, instance=orden)
+    orden = OrdenCompra.objects.get(id = idOrden)
+    form = RegistroEntrada(initial={'ordenCompra': orden})
+    print(form)
 
-		if form.is_valid():
-			form.save()
-			messages.success(request, 'Entrada registrada exitosamente')
-			return redirect('entradas')
-		else:
-			messages.error(request, 'Por favor corrige los errores')
-			form = RegistroEntrada(initial={'ordenCompra': orden})
-			return render(request, 'inventario/registrarEntrada.html', {'form': form})
+    if request.method == 'POST':
+        POST = request.POST.copy()
+        POST['ordenCompra'] = orden.id
+        form = RegistroEntrada(POST, instance=orden)
 
-	return render(request, 'inventario/registrarEntrada.html', {'form': form})	
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Entrada registrada exitosamente')
+            return redirect('entradas')
+        else:
+            messages.error(request, 'Por favor corrige los errores')
+            form = RegistroEntrada(initial={'ordenCompra': orden})
+            return render(request, 'inventario/registrarEntrada.html', {'form': form})
+
+    return render(request, 'inventario/registrarEntrada.html', {'form': form})

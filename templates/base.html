@@ -21,6 +21,11 @@
     <!-- AdminLTE Skin -->
     <link rel="stylesheet" href="{% static 'dist/css/skins/all-md-skins.min.css' %}">
 
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+    <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+
     <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Google Font -->
     <link rel="stylesheet"
@@ -132,6 +137,14 @@
 <script>
     $.material.init();
 </script>
+<!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<!-- bootstrap datepicker -->
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js' %}"></script>
+
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>

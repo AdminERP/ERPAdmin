@@ -6,7 +6,7 @@
 
 {% block contenido_panel %}
 
-<table id="tabla_escuelas" cellspacing="0" width="100%" style="width: 100%;" aria-describedby="demo-dt-basic_info" class="table table-striped table-bordered dataTable no-footer dtr-inline">
+<table id="tabla" cellspacing="0" width="100%" style="width: 100%;" aria-describedby="demo-dt-basic_info" class="table table-striped table-bordered dataTable no-footer dtr-inline">
           <thead>
             <tr>
               <th class="text-center">ID</th>
@@ -42,3 +42,17 @@
 {% block pie_panel %}
 
 {% endblock pie_panel %}
+{% block js %}
+<script>
+  $(function () {
+    $('#tabla').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true
+    })
+  })
+</script>
+{% endblock js %}
