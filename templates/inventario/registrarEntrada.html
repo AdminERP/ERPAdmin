@@ -5,14 +5,31 @@
 {% block titulo %} Registro de entrada{% endblock titulo %}
 {% block titulo_pagina %}Registro de entrada{% endblock titulo_pagina %}
 
+{% block css %}
+<style>
+ .form-group .checkbox label, .form-group .radio label, .form-group label {color: black;}
+
+</style>
+
+{% endblock css %}
+
+
+{% block miga_pan %}
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+  <li><a href="/inventario/entradas"><i class="fa fa-dashboard"></i> Ordenes de Compra</a></li>
+  <li class="active">Registrar Entrada</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}Orden de Compra #{{ orden }}{% endblock titulo_panel %}
+
 {% block contenido_panel %}
 
  <form method="post">
     {% csrf_token %}
-      <div class="col-md-6">
+      <div class="col-md-12">
           {% bootstrap_field form.condicion %}
       </div>
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="input-group date">
             <div class="input-group-addon">
               <i class="fa fa-calendar"></i>
@@ -20,13 +37,13 @@
           {% bootstrap_field form.fecha %}
       </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-12">
           {% bootstrap_field form.razon_devolucion %}
       </div>
-      <div class="col-md-6">
-          {% bootstrap_field form.ordenCompra %}
-      </div>
-      <div class="col-md-6">
+
+      <input type="hidden" id="ordenCompra" name="ordenCompra" value="{{ orden }}"> 
+
+      <div class="col-md-12">
           <button type="submit" class="btn btn-success">Registrar</button>
       </div>
 </form>
@@ -42,7 +59,9 @@
 
   //Date picker
   $('.datepicker').datepicker({
-    autoclose: true
+    autoclose: true,
+    format: 'dd/mm/yyyy'
+
   })
 
   </script>

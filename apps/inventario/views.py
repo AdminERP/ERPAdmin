@@ -22,13 +22,10 @@ def inventario (request):
 
 def registroEntrada(request, idOrden):
     orden = OrdenCompra.objects.get(id = idOrden)
-    form = RegistroEntrada(initial={'ordenCompra': orden})
-    print(form)
+    form = RegistroEntrada()
 
     if request.method == 'POST':
-        POST = request.POST.copy()
-        POST['ordenCompra'] = orden.id
-        form = RegistroEntrada(POST, instance=orden)
+        form = RegistroEntrada(request.POST)
 
         if form.is_valid():
             form.save()
@@ -36,7 +33,7 @@ def registroEntrada(request, idOrden):
             return redirect('entradas')
         else:
             messages.error(request, 'Por favor corrige los errores')
-            form = RegistroEntrada(initial={'ordenCompra': orden})
-            return render(request, 'inventario/registrarEntrada.html', {'form': form})
+            form = RegistroEntrada()
+            return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden.id})
 
-    return render(request, 'inventario/registrarEntrada.html', {'form': form})
+    return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden.id})
