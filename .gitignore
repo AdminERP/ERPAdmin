@@ -7,3 +7,5 @@ apps/*/migrations/
 media/
 .idea
 #db.sqlite3
+venv/
+.vscode/
