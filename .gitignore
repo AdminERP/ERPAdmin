@@ -8,4 +8,6 @@ media/
 .idea
 #db.sqlite3
 venv/
+myenv/
 .vscode/
+
