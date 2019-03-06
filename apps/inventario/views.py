@@ -7,17 +7,14 @@ from apps.inventario.forms import *
 
 
 def index (request):
-
     return render(request, 'inventario/landing.html')
 
 def entradas (request):
     ordenes = OrdenCompra.listar()
-
     return render(request, 'inventario/entrada.html', {'ordenes': ordenes})
 
 def inventario (request):
     inventario = Inventario.listar()
-
     return render(request, 'inventario/inventario.html', {'inventario': inventario})
 
 def registroEntrada(request, idOrden):
@@ -34,6 +31,6 @@ def registroEntrada(request, idOrden):
         else:
             messages.error(request, 'Por favor corrige los errores')
             form = RegistroEntrada()
-            return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden.id})
+            return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden})
 
-    return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden.id})
+    return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden})

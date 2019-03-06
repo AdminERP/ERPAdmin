@@ -1,8 +1,21 @@
 {% extends 'base.html' %}
 
+{% block css %}
+<style>
+ .btn {border:1px solid transparent; margin: 0px; border-color:#00acd6; padding: 5px;}
+</style>
+
+{% endblock css %}
 
 {% block titulo %} Entradas{% endblock titulo %}
 {% block titulo_pagina %}Entradas{% endblock titulo_pagina %}
+
+{% block miga_pan %}
+
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+  <li class="active">Entradas</li>
+
+{% endblock miga_pan %}
 
 {% block contenido_panel %}
 
