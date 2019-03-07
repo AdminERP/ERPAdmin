@@ -25,7 +25,7 @@
 
 {% block contenido_panel %}
 
-<div class="col-md-4">
+<div class="col-md-8">
 <div class="box-body table-responsive no-padding">
               <table class="table table-bordered table-striped">
                 <tbody><tr>
@@ -53,22 +53,15 @@
       <div class="col-md-12">
           {% bootstrap_field form.condicion %}
       </div>
-      <div class="col-md-2">
-        <div class="input-group date">
-            <div class="input-group-addon">
-              <i class="fa fa-calendar"></i>
-              </div>
-          {% bootstrap_field form.fecha %}
-      </div>
-      </div>
       <div class="col-md-12">
           {% bootstrap_field form.razon_devolucion %}
       </div>
 
-      <input type="hidden" id="ordenCompra" name="ordenCompra" value="{{ orden.id }}"> 
+      <input type="hidden" id="ordenCompra" name="ordenCompra" value="{{ orden.id }}">
 
       <div class="col-md-12">
           <button type="submit" class="btn btn-success">Registrar</button>
+          <a href="{% url 'entradas' %}" type="button" class="btn btn-danger">Cancelar</a>
       </div>
 </form>
 
@@ -77,17 +70,3 @@
 {% block pie_panel %}
 
 {% endblock pie_panel %}
-
-{% block js %}
-
-  <script>
-
-  //Date picker
-  $('.datepicker').datepicker({
-    autoclose: true,
-    format: 'dd/mm/yyyy'
-  })
-
-  </script>
-
-{% endblock js %}
