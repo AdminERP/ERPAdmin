@@ -2,7 +2,7 @@
 
 from django.db import models
 
-from usuarios import User
+# from usuarios import User
 
 class Articulo(models.Model):
     # ¿realmente es necesario una entidad articulo?
@@ -11,15 +11,15 @@ class Articulo(models.Model):
 
 class SolicitudCompra(models.Model):
     
-    articulo = models.ForeignKey(Articulo)
+    articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     justificacion = models.CharField(max_length=1000)
     fecha_realizada = models.DateField(auto_now_add=True)
     fecha_esperada = models.DateField()
-    solicitante = models.ForeignKey(User, null=True)
+    # solicitante = models.ForeignKey(User, null=True)
     aprobacion_departamento = models.BooleanField(default=False)
-    jefe_aprobo = models.ForeignKey(User, null=True)
+    # jefe_aprobo = models.ForeignKey(User, null=True)
     aprobacion_gerencia = models.BooleanField(default=False)
-    gerente_aprobo = models.ForeignKey(User, null=True)
+    # gerente_aprobo = models.ForeignKey(User, null=True)
     
     
 class Proveedor(models.Model):
@@ -29,20 +29,20 @@ class Proveedor(models.Model):
     
 class Cotizacion(models.Model):
     
-    articulo = models.ForeignKey(Articulo)
+    articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     cantidad = models.SmallIntegerField()
 
     fecha_realizada = models.DateField(auto_now_add=True)
     fecha_esperada = models.DateField()
 
-    proveedor = models.ForeignKey(Proveedor)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
 
 class OrdenCompra(models.Model):
 
-    cotizacion = ForeignKey(Cotizacion)
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)
 
     fecha_realizada = models.DateField(auto_now_add=True)
     #fecha_esperada = models.DateField()
 
     aprobacion_gerencia = models.BooleanField(default=False)
-    gerente_aprobo = models.ForeignKey(User, null=True)
+    # gerente_aprobo = models.ForeignKey(User, null=True)

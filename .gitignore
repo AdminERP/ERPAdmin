@@ -6,6 +6,8 @@ apps/*/migrations/
 *.pyc
 media/
 .idea
-#db.sqlite3
-/venv
-.vscode/settings.json
+db.sqlite3
+venv/
+myenv/
+.vscode/
+
