@@ -1,0 +1,42 @@
+{% extends 'ordenes_servicio/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block miga_pan %}
+{% endblock miga_pan %}
+
+{% block titulo %}Ordenes de Servicio{% endblock titulo %}
+
+{% block titulo_pagina %}Bienvenido! {{ request.user.get_full_name}}{% endblock titulo_pagina %}
+
+{% block css %}
+    <style media="screen">
+    </style>
+{% endblock css %}
+
+{% block contenido %}
+
+    <div class="row">
+        {% for box in boxes %}
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box {{ box.color }}">
+                    <div class="inner">
+                        <h3>{{ box.value }}</h3>
+
+                        <p>{{ box.title }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion {{ box.icon }}"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock contenido %}
+
+{% block js %}
+
+{% endblock js %}
