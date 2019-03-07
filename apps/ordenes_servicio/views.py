@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+#from django.http import HttpResponse
 from django.contrib import messages
 from .forms import *
 from django.db import models
@@ -7,7 +7,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 #autocomplete
-from apps.usuarios.models import User
+from apps.usuarios.models import *
+from apps.usuarios.forms import *
 from django.http import HttpResponseRedirect, JsonResponse
 
 def to_login(request):
@@ -37,8 +38,8 @@ def manage_options(request, context):
     ]
     if request.user.is_superuser:
         context["options"] += [
-            {"name": "Crear Cliente", "href": "#"},
-            {"name": "Consultar Clientes", "href": "#"}
+            {"name": "Crear Cliente", "href": "/ordenes_servicio/crear_cliente/"},
+            {"name": "Consultar Clientes", "href": "/ordenes_servicio/consultar_clientes/"}
         ]
         context["boxes"] = [
             {"title": "Clientes Registrados", "value": 0, "color": "bg-aqua", "icon": "ion-person-add"},
@@ -70,7 +71,7 @@ def gtfo(request):
     logout(request)
     return redirect("/ordenes_servicio/login/")
 
-
+@login_required(login_url="/ordenes_servicio/login/")
 def crear_orden_servicio(request):
     # user = request.user
     # Validar que el usuario sea un coordinador de servicios
@@ -110,3 +111,17 @@ def operadores_autocomplete(request):
             id = tupla[3]
             json.append({'id': id, 'text':cedula + ' - ' + nombre + ' ' + apellidos})
     return JsonResponse(json, safe=False)
+
+@login_required(login_url="/ordenes_servicio/login/")
+def crear_cliente(request):
+    if request.user.is_superuser:
+        context = {"form": CrearClienteForm}
+        manage_options(request,context)
+        return render(request,"usuarios/crear_cliente.html",context)
+
+@login_required(login_url="/ordenes_servicio/login/")
+def consultar_clientes(request):
+    if request.user.is_superuser:
+        context = {"clientes": Cliente.objects.all()}
+        manage_options(request,context)
+        return render(request,"usuarios/consultar_clientes.html",context)

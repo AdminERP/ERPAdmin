@@ -1,0 +1,81 @@
+{% extends 'ordenes_servicio/base.html' %}
+
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title %}
+    Consultar Clientes
+{% endblock title %}
+
+{% block titulo_pagina %}
+    Listado de Clientes
+{% endblock %}
+
+{% block descripcion_pagina %}
+{% endblock %}
+
+{% block miga_pan %}
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Clientes </a></li>
+        <li class="active">Listado</li>
+    </ol>
+{% endblock %}
+
+
+{% block contenido %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="box box-primary">
+                <!-- /.box-header -->
+                <!-- form start -->
+                <div class="box-body">
+                    <table class="table table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Cedula</th>
+                            <th>Correo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cliente in clientes %}
+                            <tr>
+                                <td>{{ cliente.nombres }}</td>
+                                <td>{{ cliente.apellidos }}</td>
+                                <td>{{ cliente.cedula }}</td>
+                                <td>{{ cliente.email }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-block bg-aqua-active dropdown-toggle" data-toggle="dropdown"
+                                                aria-expanded="false">
+                                            Acciones
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                            <div class="ripple-container"></div>
+
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="{#  url 'admin/modificar_usuario' usuario.id #}">Modificar</a></li>
+
+                                            <li class="divider"></li>
+                                            <li><a href="{#  url 'admin/modificar_usuario' usuario.id #}">Eliminar</a></li>
+                                        </ul>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    {{ block.super }}
+{% endblock %}

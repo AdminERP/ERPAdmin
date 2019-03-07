@@ -28,3 +28,7 @@ class EditarUsuarioForm(forms.ModelForm):
         for fieldname in ['is_active']:
             self.fields[fieldname].help_text = None
 
+class CrearClienteForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = '__all__'
