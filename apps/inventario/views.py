@@ -29,9 +29,15 @@ def registroEntrada(request, idOrden):
         form = RegistroEntrada(request.POST)
 
         if form.is_valid():
-            form.save()
+            nuevaEntrada = form.save()
 
-            #Espacio para crear objeto en inventario
+            objeto = Inventario.objects.create(
+            articulo = orden.articulo, cantidad = orden.cantidad ,
+            dependencia = orden.articulo, entrada = nuevaEntrada
+            )
+            objeto.save()
+
+            print (objeto)
 
             messages.success(request, 'Entrada registrada exitosamente')
             return redirect('entradas')

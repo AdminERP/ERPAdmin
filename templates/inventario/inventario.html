@@ -17,7 +17,9 @@
   <li class="active">Inventario</li>
 
 {% endblock miga_pan %}
-
+{% block titulo_panel %}
+<a href="{% url 'entradasRegistradas' %}" type="button" class="btn bg-purple margin">Salidas Registradas<div class="ripple-container"></div></a>
+ {% endblock titulo_panel %}
 
 {% block contenido_panel %}
 
@@ -28,6 +30,7 @@
               <th class="text-center">Articulo</th>
               <th class="text-center">Cantidad</th>
               <th class="text-center">Dependecia</th>
+              <th class="text-center">Codigo Entrada</th>
               <th class="text-center">Accion</th>
             </tr>
           </thead>
@@ -40,6 +43,7 @@
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.articulo }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.cantidad }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.dependencia}}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.entrada.id}}</td>
               <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="#">Generar Salida</a></td>
 
     {% endfor %}

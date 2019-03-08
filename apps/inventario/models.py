@@ -51,8 +51,8 @@ class Entrada(models.Model):
 class Inventario(models.Model):
     articulo = models.CharField(max_length=100)
     cantidad = models.PositiveSmallIntegerField(null=True)
-    dependencia= models.CharField(max_length=100)
     entrada = models.ForeignKey(Entrada, null=False, blank=False, on_delete=models.CASCADE)
+    #estado = models.BooleanField(default = True)
 
     def __str__(self):
         return self.articulo
