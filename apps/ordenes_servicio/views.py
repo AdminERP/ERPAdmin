@@ -98,11 +98,12 @@ def crear_orden_servicio(request):
 
 def operadores_autocomplete(request):
     # user = request.user
-    # Validar que el usuario sea un coordinador de servicios
     json = []
     if request.GET.get('q'):
         q = request.GET['q']
-        data = User.objects.filter(models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q)).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
+        criterio_uno = (models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q))
+        criterio_dos = models.Q(cargo="C") 
+        data = User.objects.filter(criterio_uno & criterio_dos).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
         arr = list(data)
         for tupla in arr:
             cedula = tupla[0]
