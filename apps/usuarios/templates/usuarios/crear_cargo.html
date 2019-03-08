@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo_pagina %}Crear Cargo{% endblock titulo_pagina %}
+{% block titulo %}Gestión de Cargos{% endblock titulo %}
+{% block descripcion_pagina %} Gestiona los Cargos de ERPAdmin {% endblock descripcion_pagina %}
+{% block miga_pan %}
+<li><a href="{% url 'usuarios:home'%}"><i class="fa fa-dashboard"></i> DASHBOARD</a></li>
+<li class="active">GESTIONAR CARGOS</li>
+{% endblock miga_pan %}
+
+{% block contenido_panel %}
+
+<form method="post" role="form">
+    {% csrf_token %}
+    {% for field in form %}
+        <p>{% bootstrap_field field %}<p>
+        {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+        {% endfor %}
+    {% endfor %}
+{% endblock contenido_panel %}
+{% block pie_panel %}
+    <button type="submit" class="btn btn-raised btn-success">Crear Cargo</button>
+</form>
+{% endblock pie_panel %}

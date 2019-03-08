@@ -7,6 +7,11 @@ app_name = 'usuarios'
 urlpatterns = [
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='usuarios/login.html'),
          name='login'),
-    path('home', home, name='home')
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('home', home, name='home'),
+    path('crear-usuario', crear_usuario, name='crear_usuario'),
+    path('editar-usuario/<int:id_usuario>', editar_usuario, name='editar_usuario'),
+    path('crear-cargo', crear_cargo, name='crear_cargo'),
+    path('editar-cargo/<int:id_cargo>', editar_cargo, name='editar_cargo'),
 
 ]
