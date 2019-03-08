@@ -14,8 +14,63 @@
 
 <form method="post" role="form">
     {% csrf_token %}
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.first_name %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.last_name %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.cedula %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.username %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.password1 %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.password2 %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.cargo %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.email %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.fecha_nacimiento %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.telefono %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.direccion %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.estado_civil %}
+        </div>
+    </div>
+
+        <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.is_active %}
+        </div>
+    </div>
+
+
     {% for field in form %}
-        <p>{% bootstrap_field field %}<p>
         {% for error in field.errors %}
             <p style="color: red">{{ error }}</p>
         {% endfor %}

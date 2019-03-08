@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser, Group
 
 
 class Cargo(Group):
-    descripcion = models.CharField(max_length=40)
+    descripcion = models.CharField(max_length=50)
 
 
 class Usuario(AbstractUser):
@@ -18,9 +18,3 @@ class Usuario(AbstractUser):
     estado_civil = models.CharField(choices=ESTADOS, max_length=15, blank=True)
     fecha_nacimiento = models.DateField(null=True)
     telefono = models.CharField(max_length=11)
-
-    class Meta:
-        permissions = (
-            ('crear_usuario', 'Puede crear un usuario'),
-        )
-
