@@ -15,6 +15,7 @@ class Prueba(CreateView): ##esta sirve solo para hacer pruebas
 
 
 ######---CREATES---######
+######################### prueba commit
 class CotizacionCreate(CreateView): 
     model = Cotizacion 
     form_class = CotizacionForm
@@ -71,7 +72,7 @@ class OrdenUpdate(UpdateView):
 ######---DELETES---######
 class CotizacionDelete(DeleteView): 
     model = Cotizacion 
-    #template_name = 
+    #template_name 	= 
     success_url = '/'   
 
 class SolicitudDelete(DeleteView): 
