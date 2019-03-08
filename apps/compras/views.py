@@ -15,7 +15,6 @@ class Prueba(CreateView): ##esta sirve solo para hacer pruebas
 
 
 ######---CREATES---######
-######################### prueba commit
 class CotizacionCreate(CreateView): 
     model = Cotizacion 
     form_class = CotizacionForm
