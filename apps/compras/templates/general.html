@@ -6,157 +6,99 @@
 <li class="active">Solicitudes de Compra</li>
 {% endblock miga_pan %}
 
+{% block titulo_pagina %}
+  Solicitudes de Compra
+{% endblock titulo_pagina %} 
+
 {% block contenido %}
-  <!--------------------Content Wrapper. Contains page content-------------------->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Solicitudes de Compra             
-      </h1>
-
-
-
-
-    </section>
-
+  <div class="content-wrapper">       
     <!-- Main content -->
     <section class="box">          
-        <div class="col-md-12">
-          <!-- general form elements -->
-          <div class="box box-primary">            
-            <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form">
-              <div class="box-body">
-                <!-- Panel colapsable --> 
-                 {% if solicitudes  %}
-                <div class="container col-md-12">                  
-                  <div class="panel-group" id="accordion">                                       
-                    <div class="panel panel-default">                                                                      
-                      <div class="panel-heading">
-                        <h3 class="panel-title">
-                          <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">Solucitud #1</a>
-                          <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
-                        </h3>                  
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">                      
+          <!-- form start -->
+          <form role="form">
+            <div class="box-body">
+              <!-- Panel colapsable --> 
+              {% if solicitudes %}
+              <div class="container col-md-12">  
+                {% for solicitud in solicitudes %}                
+                <div class="panel-group" id="accordion">                                       
+                  <div class="panel panel-default">   
+
+                    <div class="panel-heading">
+                      <h3 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">Solucitud #1</a>
+                        <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
+                      </h3>                  
+                    </div>
+
+                    <div id="collapse1" class="panel-collapse collapse">
+
+                      <div class="form-group row">
+                        <div class="col-xs-6">
+                          <label for="inputNombre">Nombre Solicitante</label>
+                          <input type="text" class="form-control" id="inputNombre" placeholder="Alfredo" disabled>
+                        </div>
+
+                        <div class="col-xs-3">
+                          <label for="inputId">Identificacion</label>
+                          <input type="text" class="form-control" id="inputId" placeholder="1234" disabled>
+                        </div>                        
                       </div>
-                      <div id="collapse1" class="panel-collapse collapse">
-                        <div class="form-group row">
-                          <div class="col-xs-6">
-                            <label for="inputNombre">Nombre Solicitante</label>
-                            <input type="text" class="form-control" id="inputNombre" placeholder="Alfredo" disabled>
-                          </div>
-                          <div class="col-xs-3">
-                            <label for="inputId">Identificacion</label>
-                            <input type="text" class="form-control" id="inputId" placeholder="1234" disabled>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="inputElemento">Elemento requerido</label>
-                          <input type="text" class="form-control" id="inputElemento" placeholder="Impresora" disabled>
-                        </div>
-                        <div class="form-group">
-                          <label for="inputCantidad">Cantidad</label>
-                          <input type="text" class="form-control" id="inputCantidad" placeholder="2" disabled>
-                        </div>
-                        <div class="form-group row">
-                          <div class="form-group col-xs-6">
-                            <label for="exampleInputFile">Fecha realizacion</label>                  
-                            <!-- Date -->                              
-                            <input type="text" class="form-control pull-right" id="datepicker" placeholder="15/09/2018" disabled>
-                          </div>
-                          <div class="form-group col-xs-6">
-                            <label for="exampleInputFile">Fecha esperada</label>                  
-                            <!-- Date -->                            
-                            <input type="text" class="form-control pull-right" id="datepicker" placeholder="26/09/2018" disabled>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="inputJust">Justificacion</label>
-                          <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50" disabled>
-                            Se necesita impresora para imprimir los diferentes documentos requeridos en el desarrollo de las actividades
-                          </textarea>
-                        </div>
-                      </div>                                                   
-                  </div>
-                  <!-- Otro panel colapsable -->
-                  <div class="panel panel-default">                    
-                      <div class="panel-heading">
-                        <h3 class="panel-title">
-                          <a data-toggle="collapse" data-parent="#acordion" href="#collapse2">Solucitud #2</a>
-                          <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
-                        </h3>                  
+
+                      <div class="form-group">
+                        <label for="inputElemento">Elemento requerido</label>
+                        <input type="text" class="form-control" id="inputElemento" placeholder="Impresora" disabled>
                       </div>
-                      <div id="collapse2" class="panel-collapse collapse">
-                        <div class="form-group row">
-                          <div class="col-xs-6">
-                            <label for="inputNombre">Nombre Solicitante</label>
-                            <input type="text" class="form-control" id="inputNombre" disabled>
-                          </div>
-                          <div class="col-xs-3">
-                            <label for="inputId">Identificacion</label>
-                            <input type="text" class="form-control" id="inputId" disabled>
-                          </div>
+
+                      <div class="form-group">
+                        <label for="inputCantidad">Cantidad</label>
+                        <input type="text" class="form-control" id="inputCantidad" placeholder="2" disabled>
+                      </div>
+
+                      <div class="form-group row">
+                        <div class="form-group col-xs-6">
+                          <label for="exampleInputFile">Fecha realizacion</label>                  
+                          <!-- Date -->                              
+                          <input type="text" class="form-control pull-right" id="datepicker" placeholder="15/09/2018" disabled>
                         </div>
-                        <div class="form-group">
-                          <label for="inputElemento">Elemento requerido</label>
-                          <input type="text" class="form-control" id="inputElemento" disabled>
+
+                        <div class="form-group col-xs-6">
+                          <label for="exampleInputFile">Fecha esperada</label>                  
+                          <!-- Date -->                            
+                          <input type="text" class="form-control pull-right" id="datepicker" placeholder="26/09/2018" disabled>
                         </div>
-                        <div class="form-group">
-                          <label for="inputCantidad">Cantidad</label>
-                          <input type="number" min="1" max="100" class="form-control" id="inputCantidad" disabled>
-                        </div>
-                        <div class="form-group row">
-                          <div class="form-group col-xs-6">
-                            <label for="exampleInputFile">Fecha realizacion</label>                  
-                            <!-- Date -->
-                              <div class="input-group date">
-                                <div class="input-group-addon">
-                                  <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" disabled>
-                              </div>                  
-                          </div>
-                          <div class="form-group col-xs-6">
-                            <label for="exampleInputFile">Fecha esperada</label>                  
-                            <!-- Date -->
-                              <div class="input-group date">
-                                <div class="input-group-addon">
-                                  <i class="fa fa-calendar"></i>
-                                </div>
-                                <input type="text" class="form-control pull-right" id="datepicker" disabled>
-                              </div>                  
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="inputJust">Justificacion</label>
-                          <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="10" cols="50" disabled></textarea>
-                        </div>
-                      </div>   
-                    </div>                                               
-                  </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="inputJust">Justificacion</label>
+                        <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50" disabled>
+                          Se necesita impresora para imprimir los diferentes documentos requeridos en el desarrollo de las actividades
+                        </textarea>
+                      </div>
+                    <!-- collapse --> 
+                    </div>   
+                  <!-- panel -->                                               
+                  </div>                                                 
                 </div>
+                {% endfor %} 
               </div>
-              {% else %}
-              <h3>no hay solicitudes registradas</h3>
-              {% endif %}
-              <!-- /.box-body -->
-
-      
-
-              <div class="box-footer text-center">
-                <button type="submit" class="btn btn-primary">Nueva Solicitud</button>      
-              </div>
-            </form>
-          </div>
-          <!-- /.box -->            
-
-              </form>
-            </div>
+            {% else %}
+            <h3>no hay solicitudes registradas</h3>
+            {% endif %}
             <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>                  
+            </div>    
+            <div class="box-footer text-center">
+              <button type="submit" class="btn btn-primary">Nueva Solicitud</button>      
+            </div>        
+        <!-- /.box -->            
+          </form>          
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>                  
     </section>
     <!-- /.content -->
   </div>
