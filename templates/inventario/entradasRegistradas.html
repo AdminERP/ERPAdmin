@@ -7,18 +7,19 @@
 
 {% endblock css %}
 
-{% block titulo %} Entradas{% endblock titulo %}
-{% block titulo_pagina %}Entradas{% endblock titulo_pagina %}
+{% block titulo %} Entradas Registradas{% endblock titulo %}
+{% block titulo_pagina %}Entradas Registradas{% endblock titulo_pagina %}
 
 {% block miga_pan %}
 
   <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
-  <li class="active">Entradas</li>
+  <li><a href="/inventario/entradas"><i class="fa fa-dashboard"></i> Entradas</a></li>
+  <li class="active">Entradas Registradas</li>
 
 {% endblock miga_pan %}
 
 {% block titulo_panel %} 
-<a href="{% url 'entradasRegistradas' %}" type="button" class="btn bg-purple margin">Entradas Registradas<div class="ripple-container"></div></a>
+<a href="{% url 'entradas' %}" type="button" class="btn bg-purple margin">Volver a Entradas<div class="ripple-container"></div></a>
  {% endblock titulo_panel %}
 
 {% block contenido_panel %}
@@ -48,7 +49,7 @@
               <td class="sorting_1 text-center" tabindex="0">{{ orden.proveedores }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.total }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.tiempo }}</td>
-              <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'registroEntrada' orden.id %}" type="button" class="btn btn-block btn-info">Generar Entrada</a>
+              <td class="sorting_1 text-center" tabindex="0"> <a href=""{% url 'registroEntrada' orden.id %}"" type="button" class="btn btn-block btn-info">Editar</a>
 
 
     {% endfor %}

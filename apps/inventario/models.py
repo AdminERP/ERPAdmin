@@ -19,34 +19,32 @@ class OrdenCompra(models.Model):
         return self.articulo
 
     @staticmethod
-    def listar():
+    def listarAtendidas():
         try:
-            ordenes = OrdenCompra.objects.all()
-            #entradas = Entrada.objects.all()
-            #listaOrdenes = []
-            #for entrada in entradas:
-            #    listaOrdenes.append(entrada.ordenCompra.id)
-
-            #print(listaOrdenes)
-
-            #for orden in listaOrdenes
-
-            #print(entradas)
+            entradas = Entrada.objects.all()
+            listaOrdenes = []
+            for entrada in entradas:
+                listaOrdenes.append(entrada.ordenCompra.id)
+            ordenes = OrdenCompra.objects.filter(id__in = listaOrdenes)
             return ordenes
         except OrdenCompra.DoesNotExist:
             return None
 
     @staticmethod
-    def listarActivos():
+    def listarNoAtendidas():
         try:
-            ordenes = OrdenCompra.objects.all()
+            entradas = Entrada.objects.all()
+            listaOrdenes = []
+            for entrada in entradas:
+                listaOrdenes.append(entrada.ordenCompra.id)
+            ordenes = OrdenCompra.objects.exclude(id__in = listaOrdenes)
             return ordenes
         except OrdenCompra.DoesNotExist:
             return None
 
 class Entrada(models.Model):
     condicion = models.BooleanField(choices = CONDICIONES, default = 'Buena', null=False)
-    razon_devolucion = models.CharField(max_length=500, null=True)
+    comentario = models.CharField(max_length=500, null=True)
     fecha = models.DateField(auto_now = True)
     ordenCompra = models.ForeignKey(OrdenCompra, null=False, blank=False, on_delete=models.CASCADE)
 

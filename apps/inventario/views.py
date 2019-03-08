@@ -10,8 +10,12 @@ def index (request):
     return render(request, 'inventario/landing.html')
 
 def entradas (request):
-    ordenes = OrdenCompra.listar()
+    ordenes = OrdenCompra.listarNoAtendidas()
     return render(request, 'inventario/entrada.html', {'ordenes': ordenes})
+
+def entradasRegistradas (request):
+    ordenes = OrdenCompra.listarAtendidas()
+    return render(request, 'inventario/entradasRegistradas.html', {'ordenes': ordenes})
 
 def inventario (request):
     inventario = Inventario.listar()
@@ -26,6 +30,9 @@ def registroEntrada(request, idOrden):
 
         if form.is_valid():
             form.save()
+
+            #Espacio para crear objeto en inventario
+
             messages.success(request, 'Entrada registrada exitosamente')
             return redirect('entradas')
         else:
