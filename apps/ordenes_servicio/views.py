@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import *
 from django.db import models
+from apps.usuarios.models import Cliente # ¿Modelo Cliente va en usuarios?
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -102,7 +103,7 @@ def operadores_autocomplete(request):
     if request.GET.get('q'):
         q = request.GET['q']
         criterio_uno = (models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q))
-        criterio_dos = models.Q(cargo="O") 
+        criterio_dos = models.Q(cargo="O") # Tiene que ser operario
         data = User.objects.filter(criterio_uno & criterio_dos).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
         arr = list(data)
         for tupla in arr:
@@ -111,7 +112,23 @@ def operadores_autocomplete(request):
             apellidos = tupla[2]
             id = tupla[3]
             json.append({'id': id, 'text':cedula + ' - ' + nombre + ' ' + apellidos})
-    return JsonResponse(json, safe=False)
+    return JsonResponse(json, safe=False, json_dumps_params={'ensure_ascii':False})
+
+def clientes_autocomplete(request):
+    # user = request.user
+    json = []
+    if request.GET.get('q'):
+        q = request.GET['q']
+        criterio_uno = (models.Q(nombres__icontains=q) | models.Q(apellidos__icontains=q) | models.Q(cedula__icontains=q) | models.Q(telefono__icontains=q) | models.Q(email__icontains=q))
+        data = Cliente.objects.filter(criterio_uno).values_list('cedula', 'nombres', 'apellidos', 'id')[:10]
+        arr = list(data)
+        for tupla in arr:
+            cedula = str(tupla[0])
+            nombre = tupla[1]
+            apellidos = tupla[2]
+            id = tupla[3]
+            json.append({'id': id, 'text':cedula + ' - ' + nombre + ' ' + apellidos})
+    return JsonResponse(json, safe=False, json_dumps_params={'ensure_ascii':False})
 
 @login_required(login_url="/ordenes_servicio/login/")
 def crear_cliente(request):
