@@ -18,10 +18,24 @@ def entradasRegistradas (request):
     ordenes = list(ordenes)
     listaEntradas = []
     for orden in ordenes:
-        entrada = Entrada.objects.get(id = orden.id)
+        entrada = Entrada.objects.get(ordenCompra = orden)
         listaEntradas.append(entrada)
     lista = zip(ordenes, listaEntradas)
     return render(request, 'inventario/entradasRegistradas.html', {'ordenes': lista})
+
+def editarEntrada(request, idEntrada, idOrden):
+    entrada = Entrada.objects.get(id = idEntrada)
+    form = RegistroEntrada (instance = entrada)
+    if request.method == 'POST':
+        form = RegistroEntrada(request.POST, instance = entrada)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Entrada registrada exitosamente')
+            return redirect('entradasRegistradas')
+        else:
+            messages.error(request, 'Por favor corrige los errores')
+    return render(request, 'inventario/editarEntrada.html', {'form': form, 'entrada': entrada, 'orden': idOrden})
+
 
 def inventario (request):
     inventario = Inventario.listar()
