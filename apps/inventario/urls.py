@@ -10,6 +10,8 @@ urlpatterns = [
     path('entradas', entradas, name='entradas'),
     path('entradasRegistradas', entradasRegistradas, name='entradasRegistradas'),
     path('list', inventario, name= 'inventario'),
+    path('salidas', salidas, name= 'salidas'),
+    path('salida', salida, name= 'salida'),
     path('crearEntrada/<str:idOrden>', registroEntrada, name= 'registroEntrada')
 
 ]

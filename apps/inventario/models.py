@@ -52,7 +52,7 @@ class Inventario(models.Model):
     articulo = models.CharField(max_length=100)
     cantidad = models.PositiveSmallIntegerField(null=True)
     entrada = models.ForeignKey(Entrada, null=False, blank=False, on_delete=models.CASCADE)
-    #estado = models.BooleanField(default = True)
+    estado = models.BooleanField(default = True)
 
     def __str__(self):
         return self.articulo
@@ -60,7 +60,30 @@ class Inventario(models.Model):
     @staticmethod
     def listar():
         try:
-            inventario = Inventario.objects.all()
+            salidas = Salida.objects.all()
+            listaSalidas = []
+            for salida in salidas:
+                listaSalidas.append(salida.entrada.id)
+            inventario = Inventario.objects.exclude(id__in=listaSalidas)
             return inventario
         except Inventario.DoesNotExist:
             return None
+
+    @staticmethod
+    def listarSalidas():
+        try:
+            salidas = Salida.objects.all()
+            listaSalidas = []
+            for salida in salidas:
+                listaSalidas.append(salida.entrada.id)
+            inventario = Inventario.objects.filter(id__in=listaSalidas)
+            return inventario
+        except Inventario.DoesNotExist:
+            return None
+
+class Salida(models.Model):
+    fecha = models.DateField(auto_now_add=True)
+    entrada = models.ForeignKey(Inventario, null=False, blank=False, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.articulo

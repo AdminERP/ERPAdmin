@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
+from django.http.response import JsonResponse
 from apps.inventario.models import *
 from apps.inventario.forms import *
 
@@ -49,3 +50,22 @@ def registroEntrada(request, idOrden):
             return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden})
 
     return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden})
+
+def salidas(request):
+    salidas = Inventario.listarSalidas()
+    return render(request, 'inventario/salidas.html', {'salidas' : salidas})
+
+def salida(request):
+    if request.is_ajax():
+        id = request.POST.get('id', None)
+        # Validar cuando un curso no exista.
+        try:
+            salida = Salida(entrada_id=id)
+            salida.save()
+            messages.success(request, 'Salida generada exitosamente')
+        except Inventario.DoesNotExist as e:
+            messages.error(request, 'El articulo no existe')
+    else:
+        messages.error(request, 'No estas autorizado para realizar esta acción')
+    data = {'url': 'list'}
+    return JsonResponse(data)

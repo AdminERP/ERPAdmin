@@ -21,7 +21,7 @@
 
 {% endblock miga_pan %}
 {% block titulo_panel %}
-<a href="{% url 'entradasRegistradas' %}" type="button" class="btn bg-purple margin">Salidas Registradas<div class="ripple-container"></div></a>
+<a href="{% url 'salidas' %}" type="button" class="btn bg-purple margin">Salidas Registradas<div class="ripple-container"></div></a>
  {% endblock titulo_panel %}
 
 {% block contenido_panel %}
@@ -32,7 +32,6 @@
               <th class="text-center">ID</th>
               <th class="text-center">Articulo</th>
               <th class="text-center">Cantidad</th>
-              <th class="text-center">Dependecia</th>
               <th class="text-center">Codigo Entrada</th>
               <th class="text-center">Accion</th>
             </tr>
@@ -45,14 +44,35 @@
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.id }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.articulo }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.cantidad }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ articulo.dependencia}}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ articulo.entrada.id}}</td>
-              <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="#">Generar Salida</a></td>
+              <td class="sorting_1 text-center" tabindex="0"> <a class="btn btn-info" href="#modal-salida" data-toggle="modal" data-id="{{ articulo.id }}" data-nombre="{{ articulo.articulo }}" data-cantidad="{{ articulo.cantidad }}">Generar Salida</a></td>
 
     {% endfor %}
                     </tbody>
 
         </table>
+    <div class="modal fade" id="modal-salida" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+          <h3 class="modal-title">
+            <span class="id"></span>
+          </h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <p> ¿Esta seguro que generar la salida del articulo # <span class="id"></span> (Nombre: <span class="nombre"></span> Cantidad: <span class="cantidad"></span>)<p/>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="salida" class="btn btn-success" type="button">Aceptar</button>
+          <button data-dismiss="modal" class="btn btn-danger" type="button">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock contenido_panel %}
 
 {% block pie_panel %}
@@ -73,4 +93,22 @@
     })
   })
 </script>
+    <script type="text/javascript">
+    $('#modal-salida').on('shown.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var nombre = button.data('nombre')
+    var cantidad = button.data('cantidad')
+    var id = button.data('id')
+    var modal = $(this)
+    modal.find('.modal-body .nombre').text(nombre)
+    modal.find('.modal-body .cantidad').text(cantidad)
+    modal.find('.modal-body .id').text(id)
+    $('#salida').click(function(){
+      $.post("{% url 'salida' %}", {"csrfmiddlewaretoken":'{{ csrf_token }}', 'id': id},
+      function (data){
+        window.location.href=data.url;
+      });
+    });
+  });
+    </script>
 {% endblock js %}
