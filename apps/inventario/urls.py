@@ -10,6 +10,7 @@ urlpatterns = [
     path('entradas', entradas, name='entradas'),
     path('entradasRegistradas', entradasRegistradas, name='entradasRegistradas'),
     path('list', inventario, name= 'inventario'),
-    path('crearEntrada/<str:idOrden>', registroEntrada, name= 'registroEntrada')
+    path('crearEntrada/<str:idOrden>', registroEntrada, name= 'registroEntrada'),
+    path('editarEntrada/<str:idEntrada>/<str:idOrden>/', editarEntrada, name= 'editarEntrada')
 
 ]

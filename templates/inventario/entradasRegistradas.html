@@ -58,7 +58,7 @@
               <td class="sorting_1 text-center" tabindex="0">{% if entrada.condicion %} <span style="color: green;">Buena</span> {% else %} <span style="color: red;">Mala</span> {% endif %}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ entrada.comentario }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ entrada.fecha }}</td>
-              <td class="sorting_1 text-center" tabindex="0"> <a href=""{% url 'registroEntrada' orden.id %}"" type="button" class="btn btn-block btn-info">Editar</a>
+              <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'editarEntrada' entrada.id orden.id %}" type="button" class="btn btn-block btn-info">Editar</a>
 
 
     {% endfor %}

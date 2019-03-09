@@ -45,7 +45,7 @@ class OrdenCompra(models.Model):
 class Entrada(models.Model):
     condicion = models.BooleanField(choices = CONDICIONES, default = 'Buena', null=False)
     comentario = models.CharField(max_length=500, null=True)
-    fecha = models.DateField(auto_now = True)
+    fecha = models.DateField(auto_now_add = True)
     ordenCompra = models.ForeignKey(OrdenCompra, null=False, blank=False, on_delete=models.CASCADE)
 
 class Inventario(models.Model):
