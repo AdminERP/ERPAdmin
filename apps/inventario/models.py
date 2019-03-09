@@ -64,7 +64,7 @@ class Inventario(models.Model):
             listaSalidas = []
             for salida in salidas:
                 listaSalidas.append(salida.entrada.id)
-            inventario = Inventario.objects.exclude(id__in=listaSalidas)
+            inventario = Inventario.objects.exclude(id__in=listaSalidas).filter(estado = True)
             return inventario
         except Inventario.DoesNotExist:
             return None
@@ -76,7 +76,7 @@ class Inventario(models.Model):
             listaSalidas = []
             for salida in salidas:
                 listaSalidas.append(salida.entrada.id)
-            inventario = Inventario.objects.filter(id__in=listaSalidas)
+            inventario = Inventario.objects.filter(id__in=listaSalidas, estado = True)
             return inventario
         except Inventario.DoesNotExist:
             return None

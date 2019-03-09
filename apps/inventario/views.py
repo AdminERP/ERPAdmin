@@ -29,7 +29,16 @@ def editarEntrada(request, idEntrada, idOrden):
     if request.method == 'POST':
         form = RegistroEntrada(request.POST, instance = entrada)
         if form.is_valid():
-            form.save()
+            data = form.save()
+
+            if data.condicion:
+                inventario = Inventario.objects.get(entrada_id=data.id)
+                inventario.estado = True
+                inventario.save()
+            else:
+                inventario = Inventario.objects.get(entrada_id=data.id)
+                inventario.estado = False
+                inventario.save()
             messages.success(request, 'Entrada registrada exitosamente')
             return redirect('entradasRegistradas')
         else:
