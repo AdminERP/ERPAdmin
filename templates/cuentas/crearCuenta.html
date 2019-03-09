@@ -10,10 +10,11 @@
 <link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
 <!-- Date Picker -->
 <link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 {% endblock css %}
 
-{% block titulo_pagina %} Crear Nueva Cuenta {% endblock titulo_pagina %}
+{% block titulo_pagina %} Nueva Cuenta Por Pagar {% endblock titulo_pagina %}
 
 {% block miga_pan %}
 <li><a href="#">Cuentas por Pagar</a></li>
@@ -28,22 +29,82 @@
     <div class="row">
         <!-- Columna Izquierda -->
         <div class="col-md-5">
-            <form role="form">
-                <div class="box-body">
+            <div class="box-body">
+                <form role="form" method="POST" id="create-account-form">
+                    <!-- Token -->
+                    {% csrf_token %}
                     <div class="form-group">
                         <label>Orden de compra</label>
-                        <select class="form-control select2" style="width: 100%;">
-                            <option selected="selected">001</option>
-                            <option>001</option>
-                            <option>002</option>
-                            <option>003</option>
-                            <option>004</option>
-                            <option>005</option>
+                        <select 
+                            name="order_id" 
+                            class="form-control {% if form.order_id.errors %} is-invalid {% endif %}">
+                            <option value="0">Seleccione --</option>
+                            <option 
+                                value="1"
+                                {% if form.order_id.value == "1"%} selected {% endif %}>
+                                001
+                            </option>
+                            <option 
+                                value="2"
+                                {% if form.order_id.value == "2"%} selected {% endif %}>
+                                002
+                            </option>
+                            <option 
+                                value="3"
+                                {% if form.order_id.value == "3"%} selected {% endif %}>
+                                003
+                            </option>
+                            <option 
+                                value="4"
+                                {% if form.order_id.value == "4"%} selected {% endif %}>
+                                004
+                            </option>
+                            <option 
+                                value="5"
+                                {% if form.order_id.value == "5"%} selected {% endif %}>
+                                005
+                            </option>
                         </select>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.order_id.errors }}</strong>
+                        </span>
                     </div>
                     <div class="form-group">
                         <label>Proveedor</label>
-                        <input type="text" class="form-control">
+                        <select 
+
+                            name="supplier_id"
+                            class="form-control {% if form.supplier_id.errors %} is-invalid {% endif %}">
+                            <option value="0">Seleccione --</option>
+                            <option 
+                                value="1" 
+                                {% if form.supplier_id.value == "1"%} selected {% endif %}>
+                                Proveedor 1
+                            </option>
+                            <option 
+                                value="2"
+                                {% if form.supplier_id.value == "2"%} selected {% endif %}>
+                                Proveedor 2
+                            </option>
+                            <option 
+                                value="3"
+                                {% if form.supplier_id.value == "3"%} selected {% endif %}>
+                                Proveedor 3
+                            </option>
+                            <option 
+                                value="4"
+                                {% if form.supplier_id.value == "4"%} selected {% endif %}>
+                                Proveedor 4
+                            </option>
+                            <option 
+                                value="5"
+                                {% if form.supplier_id.value == "5"%} selected {% endif %}>
+                                Proveedor 5
+                            </option>
+                        </select>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.supplier_id.errors }}</strong>
+                        </span>
                     </div>
                     <div class="form-group">
                         <label>Fecha de Factura</label>
@@ -51,7 +112,15 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" class="form-control pull-right" id="datepicker">
+                            <input 
+                                name="invoice_date" 
+                                class="form-control pull-right datepicker {% if form.invoice_date.errors %} is-invalid {% endif %}"
+                                id="invoice_date"
+                                value="{{ form.invoice_date.value|default_if_none:'' }}"
+                                autocomplete="off">
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ form.invoice_date.errors }}</strong>
+                            </span>
                         </div>
                         <!-- /.input group -->
                     </div>
@@ -61,107 +130,88 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                             </div>
-                            <input type="text" class="form-control pull-right" id="datepicker">
+                            <input 
+                                name="term_date" 
+                                class="form-control pull-right datepicker {% if form.term_date.errors %} is-invalid {% endif %}"
+                                id="term_date"
+                                value="{{ form.term_date.value|default_if_none:'' }}"
+                                autocomplete="off">
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ form.term_date.errors }}</strong>
+                            </span>
                         </div>
                         <!-- /.input group -->
                     </div>
-                    <td>
-                        <button type="button" class="btn btn-block btn-info"> Registrar</button>
-                    </td>
-                </div>
-            </form>
+                    <input type="text" name="allitems" id="allitems" value="{{ form.allitems.value|default_if_none:'' }}">
+                    <input type="text" name="total" class="total" value="{{ form.total.value|default_if_none:'' }}">
+                </form>
+            </div>
         </div>
         <!-- Columna Derecha -->
         <div class="col-md-5 col-md-offset-1">
             <!-- Editable table -->
             <div class="card">
                 <div style="margin-top: 3rem; margin-bottom: 3rem">
-                    <h4 class="card-tittle text-muted text-center py-4">Detalle de Cobros</h4>
+                    <h4 class="card-tittle text-muted text-center py-4">
+                        Detalle de Cobros
+                    </h4>
                     <div class="col-md-4 col-md-offset-8">
-                        <span class="table-add float-left mb-5 mr-2"><a href="#!" class="text-success"><i class="fa fa-plus " aria-hidden="false"></i> Agregar Item </a></span>
+                        <span class="table-add float-left mb-5 mr-2">
+                            <a 
+                                class="text-success"
+                                onclick="addItem();"
+                                style="cursor: pointer;">
+                                <i class="fa fa-plus " aria-hidden="false"></i> Agregar Item 
+                            </a>
+                        </span>
                     </div>
                 </div>
                 <div class="card-body">
                     <div id="table">
                         <table class="table table-bordered table-responsive-md text-center">
-                            <tr>
-                                <th class="text-center">Item</th>
-                                <th class="text-center">Valor</th>
-                                <th class="text-center">Eliminar</th>
-                            </tr>
-                            <tr>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="table-remove">
-                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-0 ">Borrar </button>
-
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="table-remove">
-                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-0">Borrar
-                                        </button>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="table-remove">
-                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-0">Borrar
-                                        </button>
-                                    </span>
-                                </td>
-                            </tr>
-                            <!-- This is our clonable table line -->
-                            <tr class="hide">
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="item[]" class="form-control" type="text" placeholder="Item" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td class="pt-3-half">
-                                    <div class="form-group">
-                                        <input name="valor[]" class="form-control" type="text" placeholder="0" style="text-align: center">
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="table-remove">
-                                        <button type="button" class="btn btn-info btn-rounded btn-sm my-5">Borrar
-                                        </button>
-                                    </span>
-                                </td>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 40%">Item</th>
+                                    <th class="text-center" style="width: 30%">Valor</th>
+                                    <th class="text-center" style="width: 30%">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pt-3-half">
+                                        <div class="form-group">
+                                        <input
+                                            name="items[]" 
+                                            class="form-control" 
+                                            type="text" 
+                                            placeholder="Item" 
+                                            style="text-align: center">
+                                        </div>
+                                    </td>
+                                    <td class="pt-3-half">
+                                        <div class="form-group">
+                                        <input 
+                                            name="values[]"
+                                            class="form-control item-value" 
+                                            type="number"
+                                            step="0.1" 
+                                            placeholder="0" 
+                                            min="0" 
+                                            style="text-align: center">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="table-remove">
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-info btn-rounded btn-sm my-0 "
+                                                onclick="removeRow(this)">
+                                                Borrar 
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr> 
+                            </tbody>                      
                         </table>
                         <div class="container-fluid">
                             <div class="row">
@@ -170,8 +220,16 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input style="pointer-events: none" type="text" class="form-control">
-                                    </div>
+                                        <input 
+                                            name="total" 
+                                            style="pointer-events: none" 
+                                            type="text" 
+                                            class="form-control {% if form.total.errors %} is-invalid {% endif %} total "
+                                            value="{{ form.total.value|default_if_none:'' }}"
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ form.total.errors }}</strong>
+                                            </span>
+                                        </div>
                                 </div>
 
                             </div>
@@ -180,6 +238,14 @@
                 </div>
             </div>
             <!--Fin Editable table -->
+            <div class="form-group">
+                <button 
+                    type="submit" 
+                    class="btn btn-block btn-primary"
+                    form="create-account-form"> 
+                    Registrar
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -192,13 +258,138 @@
 <!-- Date Picker-->
 <script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script>
+    //Funciones para realizar acciones a partir de eventos
+    removeItem();
+    evenValues();
+
+    //Formato para campos de fechas
     $(function() {
         //Date picker
-        $('#datepicker').datepicker({
-            autoclose: true
+        $('.datepicker').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
         })
     })
 
+    //Agregar una fila para un item
+    function addItem(){
+        var html =  '<tr> '+
+                        '<td class="pt-3-half"> '+
+                            '<div class="form-group"> '+
+                                '<input '+
+                                    'name="items[]" '+
+                                    'class="form-control" '+
+                                    'type="text" '+
+                                    'placeholder="Item" '+
+                                    'style="text-align: center"> '+
+                            '</div> '+
+                        '</td> '+
+                        '<td class="pt-3-half"> '+
+                            '<div class="form-group"> '+
+                                '<input '+
+                                    'name="values[]" '+
+                                    'class="form-control item-value" '+
+                                    'type="number" '+
+                                    'min="0" '+
+                                    'step = "0.1" '+
+                                    'placeholder="0" '+
+                                    'style="text-align: center"> '+
+                            '</div> '+
+                        '</td> '+
+                        '<td> '+
+                            '<span class="table-remove"> '+
+                                '<button '+
+                                    'type="button" '+
+                                    'class="btn btn-info btn-rounded btn-sm my-0 remove">'+
+                                    'Borrar '+
+                                '</button> ' +
+                            '</span> '+
+                        '</td> '+
+                    '</tr> ';
+        $("#table tbody").append(html);
+        removeItem();
+        evenValues();
+    }
+
+    //Eliminar una fila
+    function removeItem(){
+        $(".remove").click(function(){
+            $(this).parent().parent().parent().remove();
+        });
+    }
+
+    function evenValues(){
+        $(".item-value").keyup(function(){
+            sumValues();
+        });
+        $(".item-value").change(function(){
+            sumValues();
+        });
+    }
+
+    function sumValues(){
+        var rows = $("#table tbody tr");
+        var total = 0;
+        for(var i=0; i<rows.length; i++){
+            $("input [name=total]").val(0);
+            var value = $(rows[i])
+                        .children("td").eq(1)
+                        .children("div").eq(0)
+                        .children("input").eq(0).val();
+            if(!isNaN(Number.parseFloat(value))){ 
+                total = total + Number.parseFloat(value);          
+            }
+        }
+        $(".total").val(total);
+    }
+
+
+
+    $("#create-account-form").submit(function(e){
+        var fecha_factura = $("#invoice_date").datepicker("getDate");
+        var fecha_plazo = $("#term_date").datepicker("getDate");
+        var rows = $("#table tbody tr");
+        $("#allitems").val("");
+        var items = $("#allitems");
+        if(fecha_factura == null || fecha_plazo == null){
+            e.preventDefault();
+            toastr.error("Complete las fechas de factura y plazo", "Error en Fechas");
+        }
+        if (fecha_plazo < fecha_factura) {
+            e.preventDefault();
+            toastr.error("La fecha de plazo debe ser superior o igual a la fecha de la factura", "Error en Fechas");
+        }
+        if(rows.length <= 0){
+            e.preventDefault();
+            toastr.error("Debe agregar mínimo un item a la cuenta", "Error en Items");
+        }
+        for(var i=0; i<rows.length; i++){
+            var item =  $(rows[i])
+                        .children("td").eq(0)
+                        .children("div").eq(0)
+                        .children("input").eq(0).val();
+            var value = $(rows[i])
+                        .children("td").eq(1)
+                        .children("div").eq(0)
+                        .children("input").eq(0).val();
+            if(item == ""){
+                e.preventDefault();
+                toastr.error("El campo item debe ser completado", "Error en Item");
+                return false;
+            }else if(value <= 0){
+                e.preventDefault();
+                toastr.error("Debe especificar un valor para cada item", "Error en Item");
+                return false;
+            }
+            if(items.val() == "" ){
+                items.val(item+"~|~"+value);
+            }else{
+                items.val(items.val()+"~||~"+item+"~|~"+value);
+            }
+        }
+    });
 </script>
 {% endblock js %}
