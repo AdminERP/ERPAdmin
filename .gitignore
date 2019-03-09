@@ -1,4 +1,3 @@
-ERPAdmin/settings.py
 apps/*/migrations/
 **/__pycache__/
 *.log
@@ -7,3 +6,4 @@ apps/*/migrations/
 media
 .idea
 db.sqlite3
+.env/
