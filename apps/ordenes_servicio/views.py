@@ -88,11 +88,12 @@ def crear_orden_servicio(request):
                 messages.error(request, 'El formulario NO es valido, Por favor corrige los errores')
                 for error in form.errors:
                     messages.error(request, "Hay un problema con " + error)
+            context = {"form":form}
         else:
             form = OrdenServicioForm()
             context = {"form":form}
             manage_options(request,context)
-            return render(request, 'ordenes_servicio/crear_orden_servicio.html', context)
+        return render(request, 'ordenes_servicio/crear_orden_servicio.html', context)
     else:
         messages.error(request, 'No estas autorizado para realizar esta acción')
         return redirect('accounts:home')

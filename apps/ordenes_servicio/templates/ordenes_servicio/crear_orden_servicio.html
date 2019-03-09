@@ -26,10 +26,14 @@
                 {% bootstrap_field form.servicio_vendido%}
               </div>
               <div class="col-sm-6">
-                {% bootstrap_field form.cliente%}
+                {% bootstrap_field form.cliente_select %}
               </div>
               <div class="col-sm-6">
-                {% bootstrap_field form.comentarios%}
+                  <label class="control-label">Cliente seleccionado:</label>
+                  <input type="text" id="id_cliente_seleccionado_texto" class="form-control" disabled>
+              </div>
+              <div class="col-sm-12">
+                  <input type="text" name="cliente" id="id_cliente" class="form-control hidden">
               </div>
               <div class="col-sm-6">
                 {% bootstrap_field form.encargado_select %}
@@ -40,6 +44,10 @@
               </div>
               <div class="col-sm-12">
                   <input type="text" name="encargado" id="id_encargado" class="form-control hidden">
+              </div>
+
+              <div class="col-sm-6">
+                {% bootstrap_field form.comentarios%}
               </div>
           </div>
             <div class="row">
@@ -58,19 +66,31 @@
 {% block js %}
 <script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/3de7ad37/dist/latest/bootstrap-autocomplete.js"></script>
 <script>
-    $('.basicAutoSelect').autoComplete(
+    $('.basicAutoSelectEncargado').autoComplete(
         {minLength: 1}
     );
-    $('.basicAutoSelect').on('autocomplete.select', function (evt, item) {
+    $('.basicAutoSelectEncargado').on('autocomplete.select', function (evt, item) {
       //doc: https://gitcdn.link/cdn/xcash/bootstrap-autocomplete/4192ba1848802880b288985fc4332478f9a8699a/dist/latest/index.html
       document.getElementById("id_encargado").value = item["id"];
       document.getElementById("id_encargado_seleccionado_texto").value = item["text"];
       document.getElementById("id_encargado_select").value = "";
     });
 
-    $('.basicAutoSelect').keypress(function() {
+    $('.basicAutoSelectEncargado').keypress(function() {
       document.getElementById("id_encargado_seleccionado_texto").value = "";
     });
 
+    $('.basicAutoSelectCliente').autoComplete(
+        {minLength: 1}
+    );
+    $('.basicAutoSelectCliente').on('autocomplete.select', function (evt, item) {
+      document.getElementById("id_cliente").value = item["id"];
+      document.getElementById("id_cliente_seleccionado_texto").value = item["text"];
+      document.getElementById("id_cliente_select").value = "";
+    });
+
+    $('.basicAutoSelectCliente').keypress(function() {
+      document.getElementById("id_cliente_seleccionado_texto").value = "";
+    });
 </script>
 {% endblock js %}
