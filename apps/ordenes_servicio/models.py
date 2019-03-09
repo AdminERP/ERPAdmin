@@ -5,9 +5,9 @@ class OrdenServicio(models.Model):
     servicio_vendido = models.CharField(max_length=100) # Datos Mestros
     encargado = models.ForeignKey(User,
                                   limit_choices_to={'cargo':'O'}, #Solo los operarios pueden encargarse
-                                  on_delete=models.CASCADE, blank=True, null=True,
+                                  on_delete=models.CASCADE, blank=True, null=False,
                                   related_name='encargado_set', verbose_name="Encargado")
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, blank=True, null=True,
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, blank=True, null=False,
                                 related_name='cliente_set', verbose_name="Cliente")# Datos Maestros
     comentarios = models.CharField(max_length=255)
 

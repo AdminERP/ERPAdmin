@@ -10,7 +10,10 @@ class OrdenServicioForm(forms.ModelForm):
             'placeholder' : "Buscar un operario",
             "data-noresults-text" : "No hay resultados",
         }))
-    encargado = forms.CharField(required=True)
+    encargado_seleccionado_texto = forms.CharField(label="Encargado:", required=False, widget=forms.TextInput(
+        attrs={
+            'placeholder' : "Encargado Seleccionado",
+        }))
     cliente_select = forms.CharField(label = "Buscar Cliente:",required=False, widget=forms.TextInput(
         attrs={
             'class': 'basicAutoSelectCliente',
@@ -18,7 +21,31 @@ class OrdenServicioForm(forms.ModelForm):
             'placeholder' : "Buscar un cliente",
             "data-noresults-text" : "No hay resultados",
         }))
-    cliente = forms.CharField(required=True)
+    cliente_seleccionado_texto = forms.CharField(label="Cliente:", required=False, widget=forms.TextInput(
+        attrs={
+            'placeholder' : "Cliente Seleccionado",
+        }))
     class Meta:
         model = OrdenServicio
-        fields = ('servicio_vendido', 'comentarios')
+        fields = ('servicio_vendido', 'comentarios', 'cliente', 'encargado')
+        fields_required = ('servicio_vendido', 'comentarios', 'cliente', 'encargado')
+        widgets = {
+            'cliente': forms.HiddenInput(),
+            'encargado': forms.HiddenInput(),
+        }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        cliente_aux = cleaned_data.get('cliente')
+        encargado_aux = cleaned_data.get('encargado')
+        if cliente_aux == None:
+            msg = 'Debes seleccionar un Cliente'
+            self._errors['cliente'] = self.error_class([msg])
+            del cleaned_data['cliente']
+            del cleaned_data['cliente_seleccionado_texto']
+        if encargado_aux == None:
+            msg = 'Debes seleccionar un Encargado'
+            self._errors['encargado'] = self.error_class([msg])
+            del cleaned_data['encargado']
+            del cleaned_data['encargado_seleccionado_texto']
+        return cleaned_data

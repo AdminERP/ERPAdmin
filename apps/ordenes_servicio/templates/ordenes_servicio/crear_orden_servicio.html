@@ -11,6 +11,13 @@
 
 {% block css %}
 <style media="screen">
+    input[name=cliente_seleccionado_texto] {
+    pointer-events: none;
+   }
+
+   input[name=encargado_seleccionado_texto] {
+    pointer-events: none;
+   }
 </style>
 {% endblock css %}
 
@@ -29,21 +36,19 @@
                 {% bootstrap_field form.cliente_select %}
               </div>
               <div class="col-sm-6">
-                  <label class="control-label">Cliente seleccionado:</label>
-                  <input type="text" id="id_cliente_seleccionado_texto" class="form-control" disabled>
+                  {% bootstrap_field form.cliente_seleccionado_texto %}
               </div>
               <div class="col-sm-12">
-                  <input type="text" name="cliente" id="id_cliente" class="form-control hidden">
+                  {% bootstrap_field form.cliente %}
               </div>
               <div class="col-sm-6">
                 {% bootstrap_field form.encargado_select %}
               </div>
               <div class="col-sm-6">
-                  <label class="control-label">Encargado seleccionado:</label>
-                  <input type="text" id="id_encargado_seleccionado_texto" class="form-control" disabled>
+                  {% bootstrap_field form.encargado_seleccionado_texto  %}
               </div>
               <div class="col-sm-12">
-                  <input type="text" name="encargado" id="id_encargado" class="form-control hidden">
+                  {% bootstrap_field form.encargado %}
               </div>
 
               <div class="col-sm-6">
