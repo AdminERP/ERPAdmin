@@ -3,6 +3,9 @@
 {% block css %}
 <style>
  .btn {border:1px solid transparent; margin: 0px; border-color:#00acd6; padding: 5px;}
+ .bg-purple {
+    background-color: #2196f3 !important;
+}
 </style>
 
 {% endblock css %}
@@ -17,7 +20,7 @@
 
 {% endblock miga_pan %}
 
-{% block titulo_panel %} 
+{% block titulo_panel %}
 <a href="{% url 'entradasRegistradas' %}" type="button" class="btn bg-purple margin">Entradas Registradas<div class="ripple-container"></div></a>
  {% endblock titulo_panel %}
 

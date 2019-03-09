@@ -3,6 +3,9 @@
 {% block css %}
 <style>
  .btn {border:1px solid transparent; margin: 0px; border-color:#00acd6; padding: 5px;}
+ .bg-purple {
+    background-color: #2196f3 !important;
+}
 </style>
 
 {% endblock css %}
@@ -18,7 +21,7 @@
 
 {% endblock miga_pan %}
 
-{% block titulo_panel %} 
+{% block titulo_panel %}
 <a href="{% url 'entradas' %}" type="button" class="btn bg-purple margin">Volver a Entradas<div class="ripple-container"></div></a>
  {% endblock titulo_panel %}
 
@@ -33,13 +36,16 @@
               <th class="text-center">Precio</th>
                 <th class="text-center">Proeevedor</th>
                 <th class="text-center">Total</th>
-                <th class="text-center">Fecha de llegada</th>
+                <th class="text-center">Fecha Aprox</th>
+                <th class="text-center">Condición Llegada</th>
+                <th class="text-center">Comentario</th>
+                <th class="text-center">Fecha Llegada</th>
                 <th class="text-center">Accion</th>
             </tr>
           </thead>
           <tbody>
 
-          {% for orden in ordenes %}
+          {% for orden, entrada in ordenes %}
 
           <tr role="row" class="even">
               <td class="sorting_1 text-center" tabindex="0">{{ orden.id }}</td>
@@ -49,6 +55,9 @@
               <td class="sorting_1 text-center" tabindex="0">{{ orden.proveedores }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.total }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.tiempo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{% if entrada.condicion %} <span style="color: green;">Buena</span> {% else %} <span style="color: red;">Mala</span> {% endif %}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ entrada.comentario }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ entrada.fecha }}</td>
               <td class="sorting_1 text-center" tabindex="0"> <a href=""{% url 'registroEntrada' orden.id %}"" type="button" class="btn btn-block btn-info">Editar</a>
 
 

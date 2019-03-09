@@ -5,7 +5,6 @@ from apps.inventario.forms import *
 
 # Create your views here.
 
-
 def index (request):
     return render(request, 'inventario/landing.html')
 
@@ -15,7 +14,13 @@ def entradas (request):
 
 def entradasRegistradas (request):
     ordenes = OrdenCompra.listarAtendidas()
-    return render(request, 'inventario/entradasRegistradas.html', {'ordenes': ordenes})
+    ordenes = list(ordenes)
+    listaEntradas = []
+    for orden in ordenes:
+        entrada = Entrada.objects.get(id = orden.id)
+        listaEntradas.append(entrada)
+    lista = zip(ordenes, listaEntradas)
+    return render(request, 'inventario/entradasRegistradas.html', {'ordenes': lista})
 
 def inventario (request):
     inventario = Inventario.listar()
@@ -32,12 +37,9 @@ def registroEntrada(request, idOrden):
             nuevaEntrada = form.save()
 
             objeto = Inventario.objects.create(
-            articulo = orden.articulo, cantidad = orden.cantidad ,
-            dependencia = orden.articulo, entrada = nuevaEntrada
+            articulo = orden.articulo, cantidad = orden.cantidad, entrada = nuevaEntrada
             )
             objeto.save()
-
-            print (objeto)
 
             messages.success(request, 'Entrada registrada exitosamente')
             return redirect('entradas')
