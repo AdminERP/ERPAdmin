@@ -1,0 +1,4 @@
+from .categoria_listar import CategoriaListView
+from .categoria_crear import CategoriaCreateView
+from .categoria_editar import CategoriaUpdateView
+from .categoria_eliminar import CategoriaDeleteView
