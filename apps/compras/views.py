@@ -39,15 +39,10 @@ class SolicitudCreate(CreateView):
         usuario.rol = "jefe_compras"
         # usuario.rol = "gerente"
         ####
-        solicitudes_autorizar = []
-        if usuario.rol == "jefe_compras" or usuario.rol == "gerente":
-            #TODO: Consultar las solicitudes asociadas a sus empleados
-            pass
-
         context['usuario'] = usuario
-        context['solicitudes_autorizar'] = solicitudes_autorizar
 
         return context
+
 class CotizacionCreate(CreateView): 
     model = Cotizacion 
     form_class = CotizacionForm
@@ -69,6 +64,25 @@ class CotizacionList(ListView) :
 class SolicitudList(ListView) : 
     model = SolicitudCompra 
     template_name= 'compras/lista_solicitudes.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        ###
+        # Se debe evaluar el rol segun lo establezca el grupo de roles y permisos
+        # Mientras, comentar todas las siguientes lineas excepto la del rol a probar
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
+        # usuario.rol = "gerente"
+        ####
+        solicitudes_autorizar = []
+        if usuario.rol == "jefe_compras" or usuario.rol == "gerente":
+            #TODO: Consultar las solicitudes asociadas a sus empleados
+            pass
+
+        context['usuario'] = usuario
+        context['solicitudes_autorizar'] = solicitudes_autorizar
+
+        return context
 
 class OrdenList(ListView) : 
     model = OrdenCompra 
