@@ -10,6 +10,15 @@
 <li class="active">GESTIONAR USUARIOS</li>
 {% endblock miga_pan %}
 
+{% block css %}
+{{ form.media.css }}
+<style media="screen">
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+{% endblock css %}
+
 {% block contenido_panel %}
 
 <form method="post" role="form">
@@ -91,5 +100,5 @@
     //Datemask dd/mm/yyyy
     $('#id_fecha_nacimiento').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 </script>
+{{ form.media.js }}
 {% endblock js %}
-

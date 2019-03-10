@@ -10,12 +10,21 @@
 <li class="active">GESTIONAR CARGOS</li>
 {% endblock miga_pan %}
 
+{% block css %}
+{{ form.media.css }}
+<style media="screen">
+    .select2-container {
+        width: 100% !important;
+    }
+</style>
+{% endblock css %}
+
 {% block contenido_panel %}
 
 <form method="post" role="form">
     {% csrf_token %}
+    {% bootstrap_form form %}
     {% for field in form %}
-        <p>{% bootstrap_field field %}<p>
         {% for error in field.errors %}
             <p style="color: red">{{ error }}</p>
         {% endfor %}
@@ -25,3 +34,7 @@
     <button type="submit" class="btn btn-raised btn-success">Crear Cargo</button>
 </form>
 {% endblock pie_panel %}
+
+{% block js %}
+{{ form.media.js }}
+{% endblock js %}

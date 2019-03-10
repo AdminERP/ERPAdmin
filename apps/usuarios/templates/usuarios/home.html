@@ -1,3 +1,47 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% block titulo %}Dashboard{% endblock titulo %}
+{% block titulo_pagina %}Dashboard{% endblock titulo_pagina %}
+{% block miga_pan %}
+{% endblock miga_pan %}
+
+{% block contenido %}
+
+    <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>.</h3>
+
+              <p>Módulo Cargos</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-users"></i>
+            </div>
+            <a href="{% url 'usuarios:consultar_cargos' %}" class="small-box-footer">Más informacion <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>44</h3>
+
+              <p>Módulo Usuarios</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{% url 'usuarios:consultar_usuarios' %}" class="small-box-footer">Más información <i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+
+      </div>
+
+{% endblock contenido %}
