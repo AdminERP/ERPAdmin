@@ -14,8 +14,8 @@ class index(TemplateView):
 class SolicitudCreate(CreateView): 
     model= SolicitudCompra
     form_class= SolicitudCompraForm
-    #template_name= 
-    success_url = reverse_lazy('compras:solicitud')
+    template_name= 'compras/crear_solicitudes.html'
+    success_url = reverse_lazy('compras:solicitudes')
 
 class CotizacionCreate(CreateView): 
     model = Cotizacion 

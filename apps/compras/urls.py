@@ -8,8 +8,8 @@ from .views import SolicitudList, index
 urlpatterns = [
     path('', index.as_view(), name='index'),
     # path('solicitud/crear', ,name='solicitud_crear'),
-    path('solicitud/', SolicitudList.as_view(), name='solicitud'),
-    path('solicitud/listar', SolicitudList.as_view(), name='solicitud_listar'),
+    path('solicitud/', SolicitudList.as_view(), name='solicitudes'),
+    path('solicitud/listar', SolicitudList.as_view(), name='solicitudes_listar'),
     # path('solicitud/detalle/<int:pk>', ,name='solicitud_detalles'),
     # 
     # path('orden/crear', ,name='orden_crear'),
