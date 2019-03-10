@@ -82,9 +82,9 @@ def gtfo(request):
 
 @login_required(login_url="/ordenes_servicio/login/")
 def crear_orden_servicio(request):
-    # user = request.user
+    usuario = request.user
     # Validar que el usuario sea un coordinador de servicios
-    if True:
+    if usuario.cargo == "C":
         if request.method == 'POST':
             form = OrdenServicioForm(request.POST)
             if form.is_valid():
