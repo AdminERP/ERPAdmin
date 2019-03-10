@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from apps.compras.forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
-from apps.compras.models import Cotizacion, SolicitudCompra, OrdenCompra
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView   
-# Create your views here.
 
+from .models import Cotizacion, SolicitudCompra, OrdenCompra
+from .forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
+# Create your views here.
 
 
 class Prueba(CreateView): ##esta sirve solo para hacer pruebas 
@@ -41,7 +41,7 @@ class CotizacionList(ListView) :
 
 class SolicitudList(ListView) : 
     model = SolicitudCompra 
-    template_name= 'compras/prueba.html'
+    template_name= 'compras/lista_solicitudes.html'
 
 class OrdenList(ListView) : 
     model = OrdenCompra 

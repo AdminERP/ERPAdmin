@@ -23,11 +23,13 @@ class SolicitudCompra(models.Model):
     PENDIENTE = 'pendiente'
     APROBADO_JEFE = 'aprobado_jefe'
     APROBADO_GERENTE = 'aprobado_gerente'
+    RECHAZADO = 'rechazada'
 
     ESTADOS = [
         (PENDIENTE, 'Pendiente aprobacion'),
         (APROBADO_JEFE, 'Aprobado jefe'),
-        (APROBADO_GERENTE, 'Aprobado gerente')
+        (APROBADO_GERENTE, 'Aprobado gerente'),
+        (RECHAZADO, 'Rechazada'),
     ]
 
     justificacion = models.CharField(max_length=1000)
@@ -52,7 +54,7 @@ class ArticulosSolicitud(models.Model):
 
 class Cotizacion(models.Model):
     
-    total = precio = models.DecimalField(max_digits=17,decimal_places=2)    # Representa desde 0,00 hasta (10E15)-1,99 en pesos.
+    total  = models.DecimalField(max_digits=17,decimal_places=2)    # Representa desde 0,00 hasta (10E15)-1,99 en pesos.
     fecha_realizada = models.DateField(auto_now_add=True)
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
