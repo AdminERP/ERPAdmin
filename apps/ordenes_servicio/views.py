@@ -48,14 +48,14 @@ def manage_options(request, context):
     if request.user.cargo == 'C':
         context["options"] += [
             {"name": "Crear Orden de Servicio", "href": "/ordenes_servicio/crear_orden_servicio/"},
-            {"name": "Consultar Ordenes de Servicio", "href": "#"}
+            {"name": "Consultar Ordenes de Servicio", "href": "/ordenes_servicio/consultar_orden_servicio/"}
         ]
         context["boxes"] = [
             {"title": "Ordenes Registradas", "value": 0, "color": "bg-green", "icon": "ion-bag"},
         ]
     if request.user.cargo == 'O':
         context["options"] += [
-            {"name": "Consultar Ordenes de Servicio", "href": "#"}
+            {"name": "Consultar Ordenes de Servicio", "href": "/ordenes_servicio/consultar_orden_servicio/"}
         ]
         context["boxes"] = [
             {"title": "Ordenes Por Atender", "value": 0, "color": "bg-yellow", "icon": "ion-folder"},
@@ -102,7 +102,9 @@ def crear_orden_servicio(request):
 def consultar_orden_servicio(request):
     usuario = request.user
     if usuario.cargo == "C" or usuario.cargo == "O":
-        return render(request, 'ordenes_servicio/consultar_orden_servicio.html', {'ordenes': listar_ordenes(usuario)})
+        context ={'ordenes': listar_ordenes(usuario)}
+        manage_options(request,context)
+        return render(request, 'ordenes_servicio/consultar_orden_servicio.html', context)
     else:
         messages.error(request, 'No estas autorizado para realizar esta acción')
         return redirect('/ordenes_servicio/')
