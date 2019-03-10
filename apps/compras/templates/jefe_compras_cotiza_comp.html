@@ -1,13 +1,10 @@
 {% extends 'base.html' %}
 
-{% block titulo_pagina %}
-  Solicitudes de Compra
-{% endblock titulo_pagina %} 
-
 {% block miga_pan %}
   <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
   <li><a href="#">Compras</a></li>
   <li class="active">Solicitudes de Compra</li>
+  <li class="active">Cotizaciones</li>
 {% endblock miga_pan %}
 
 {% block contenido %}
@@ -31,12 +28,14 @@
 
                 <div class="col-xs-3">
                   <label for="inputId">Identificación</label>
-                  <input type="text" class="form-control" id="inputId" placeholder="2468" disabled>
+                  <input type="text" class="form-control" id="inputId" disabled
+                    placeholder={{solicitud.usuario.codigo}}>
                 </div>
 
                 <div class="col-xs-3">
                   <label for="inputNombre">Cargo</label>
-                  <input type="text" class="form-control" id="inputNombre" placeholder="Jefe de Compras" disabled>
+                  <input type="text" class="form-control" id="inputNombre" disabled
+                    placeholder="Jefe de Compras">
                 </div>
               </div> 
 
@@ -44,193 +43,194 @@
                 <li class="active"><a data-toggle="tab" href="#cotizaciones">Cotizaciones</a></li>
                 <li><a data-toggle="tab" href="#ordenes">Órdenes de compra</a></li>                    
               </ul>
-
+              
               <div class="tab-content">
-                <div id="cotizaciones" class="tab-pane fade in active">                      
-                  <div class="panel-group" id="accordion">  
+                {% if cotizaciones %}
+                {% for cotizacion in cotizaciones %}
+                  <div id="cotizaciones" class="tab-pane fade in active">                      
+                    <div class="panel-group" id="accordion">  
 
-                    <div class="panel panel-default">                                                                      
-                      <div class="panel-heading">
-                        <h3 class="panel-title">
-                          <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">Cotización #1</a>
-                        </h3>                  
-                      </div>
-
-                      <div id="collapse1" class="panel-collapse collapse">
-                        <div class="form-group row">
-                          <div class="col-xs-6">
-                            <label for="inputNombre">Nombre Proveedor</label>
-                            <input type="text" class="form-control" id="inputNombre" placeholder="XYZ" disabled>
-                          </div>
-
-                          <div class="col-xs-3">
-                            <label for="inputId">Identificación</label>
-                            <input type="text" class="form-control" id="inputId" placeholder="1590" disabled>
-                          </div>                          
+                      <div class="panel panel-default">                                                                      
+                        <div class="panel-heading">
+                          <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">
+                              Cotización #{{cotizacion.codigo}}
+                            </a>
+                          </h3>                  
                         </div>
 
-                        <div class="form-group">
-                          <label for="inputElemento">Elemento</label>
-                          <input type="text" class="form-control" id="inputElemento" placeholder="Impresora" disabled>
-                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                          <div class="form-group row">
+                            <div class="col-xs-6">
+                              <label for="inputNombre">Nombre Proveedor</label>
+                              <input type="text" class="form-control" id="inputNombre" disabled
+                                placeholder={{cotizacion.proveedor.nombre}}> 
+                                <!--proveedor no tiene nombre en el diagram ER-->
+                            </div>
 
-                        <div class="form-group row">
-                          <div class="col-xs-6">
-                            <label for="inputMarca">Marca</label>
-                            <input type="text" class="form-control" id="inputMarca" placeholder="HP" disabled>
+                            <div class="col-xs-3">
+                              <label for="inputId">Identificación</label>
+                              <input type="text" class="form-control" id="inputId" disabled
+                                placeholder={{cotizacion.proveedor.codigo}}>
+                            </div>                          
                           </div>
 
-                          <div class="col-xs-6">
-                            <label for="inputModelo">Modelo</label>
-                            <input type="text" class="form-control" id="inputModelo" placeholder="HP231" disabled>
-                          </div>
-                        </div>
+                          <div class="form-group">
+                            <label for="inputElemento">Elemento</label>
+                            <input type="text" class="form-control" id="inputElemento" disabled
+                              placeholder={{cotizacion.articulo.nombre}}>
+                          </div>                        
 
-                        <div class="form-group">
-                          <label for="inputCantidad">Cantidad</label>
-                          <input type="text" class="form-control" id="inputCantidad" placeholder="2" disabled>
-                        </div>
-
-                        <div class="form-group row">
-                          <div class="form-group col-xs-6">
-                            <label for="datepicker">Fecha recepción</label>                  
-                            <!-- Date -->                              
-                            <input type="text" class="form-control pull-right" id="datepicker" placeholder="15/09/2018" disabled>
+                          <div class="form-group">
+                            <label for="inputCantidad">Cantidad</label>
+                            <input type="text" class="form-control" id="inputCantidad" disabled
+                              placeholder={{cotizacion.articulo.cantidad}}>
                           </div>
 
-                          <div class="form-group col-xs-6">
-                            <label for="datepicker">Fecha enviado</label>                  
-                            <!-- Date -->                            
-                            <input type="text" class="form-control pull-right" id="datepicker" placeholder="17/09/2018" disabled>
-                          </div>
-                        </div> <!-- group row -->
+                          <div class="form-group row">
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha recepción</label>                  
+                              <!-- Date -->                              
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder="15/09/2018">
+                            </div>
 
-                        <div class="form-group row">                              
-                          <div class="form-group col-xs-6">
-                            <label for="inputValorU">Valor unidad $</label>
-                            <input type="text" class="form-control" id="inputValorU" placeholder="800.000" disabled>
-                          </div> 
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha enviado</label>                  
+                              <!-- Date -->                            
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder="17/09/2018">
+                            </div>
+                          </div> <!-- group row -->
 
-                          <div class="form-group col-xs-6">
-                            <label for="inputValorT">Valor Total $</label>       
-                            <input type="text" class="form-control pull-right" id="inputValorT" placeholder="1'600.000" disabled>
-                          </div>                            
-                        </div> <!-- group row --> 
+                          <div class="form-group row">                              
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorU">Valor unidad $</label>
+                              <input type="text" class="form-control" id="inputValorU" disabled
+                                placeholder="800.000">
+                            </div> 
 
-                      </div> <!--collapse-->   
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorT">Valor Total $</label>       
+                              <input type="text" class="form-control pull-right" id="inputValorT" disabled
+                                placeholder="1'600.000">
+                            </div>                            
+                          </div> <!-- group row --> 
 
-                    </div> <!--panel-->
+                        </div> <!--collapse-->   
 
-                    <div class="box-footer text-center">
-                      <button type="submit" class="btn btn-primary">Nueva Cotización</button>
-                    </div> 
-                  </div> <!--accordion-->
+                      </div> <!--panel-->
+
+                      <div class="box-footer text-center">
+                        <button type="submit" class="btn btn-primary">Nueva Cotización</button>
+                      </div> 
+                    </div> <!--accordion-->
+                  {% endfor %}
+                  {% else %}
+                    <h3>No hay cotizaciones</h3>
+                  {% endif %}
                 </div> <!--tab 1-->  
                 
                 <div id="ordenes" class="tab-pane fade">
-                  <div class="panel-group" id="accordion">                                       
-                    <div class="panel panel-default">   
+                  {% if ordenes %}
+                  {% for orden in ordenes %}
+                    <div class="panel-group" id="accordion">                                       
+                      <div class="panel panel-default">   
 
-                      <div class="panel-heading">
-                        <h3 class="panel-title">
-                          <a data-toggle="collapse" data-parent="#acordion" href="#collapse2">Orden de compra #1</a>
-                        </h3>                  
-                      </div>
-
-                      <div id="collapse2" class="panel-collapse collapse">
-                        <div class="form-group row">
-
-                          <div class="col-xs-6">
-                            <label for="inputNombre">Nombre Proveedor</label>
-                            <div class="dropdown">
-                              <button class="btn btn-default dropdown-toggle" type="button" id="prov1" data-toggle="dropdown">Proveedor<span class="caret"></span></button>
-                              <ul class="dropdown-menu" role="menu" aria-labelledby="prov1">
-                                <li role="presentation"><a role="menuitem" href="#">XYZ</a></li>
-                                <li role="presentation"><a role="menuitem" href="#">ABC</a></li>
-                              </ul>
-                            </div>                                
-                          </div>
-
-                          <div class="col-xs-3">
-                            <label for="inputId">Identificación</label>
-                            <input type="text" class="form-control" id="inputId" placeholder="1590" disabled>
-                          </div>                          
+                        <div class="panel-heading">
+                          <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#acordion" href="#collapse2">
+                              Orden de compra #{{orden_compra.codigo}}
+                            </a>
+                          </h3>                  
                         </div>
 
-                        <div class="form-group row">
-                          <div class="col-xs-6">
-                            <label for="inputEmail">Email</label>
-                            <input type="text" class="form-control" id="inputEmail" placeholder="xyz@mail.com" disabled>
+                        <div id="collapse2" class="panel-collapse collapse">
+                          <div class="form-group row">
+
+                            <div class="col-xs-6">
+                              <label for="inputNombre">Nombre Proveedor</label>
+                              <input type="text" class="form-control" id="inputId" disabled
+                                placeholder="Proveedor">                      
+                            </div>
+
+                            <div class="col-xs-3">
+                              <label for="inputId">Identificación</label>
+                              <input type="text" class="form-control" id="inputId" disabled
+                                placeholder={{orden_compra.cotizacion.proveedor.codigo}}>
+                            </div>                          
                           </div>
 
-                          <div class="col-xs-3">
-                            <label for="inputDir">Dirección</label>
-                            <input type="text" class="form-control" id="inputDir" placeholder="calle 9 # 32" disabled>
-                          </div>                          
-                        </div>
+                          <div class="form-group row">
+                            <div class="col-xs-6">
+                              <label for="inputEmail">Email</label>
+                              <input type="text" class="form-control" id="inputEmail" placeholder="xyz@mail.com" disabled>
+                            </div>
 
-                        <div class="form-group">
-                          <label for="inputElemento">Elemento</label>
-                          <input type="text" class="form-control" id="inputElemento" placeholder="Impresora" disabled>
-                        </div>
-
-                        <div class="form-group row">
-                          <div class="col-xs-6">
-                            <label for="inputMarca">Marca</label>
-                            <input type="text" class="form-control" id="inputMarca" placeholder="HP" disabled>
+                            <div class="col-xs-3">
+                              <label for="inputDir">Dirección</label>
+                              <input type="text" class="form-control" id="inputDir" placeholder="calle 9 # 32" disabled>
+                            </div>                          
                           </div>
 
-                          <div class="col-xs-6">
-                            <label for="inputModelo">Modelo</label>
-                            <input type="text" class="form-control" id="inputModelo" placeholder="HP231" disabled>
-                          </div>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="inputCantidad">Cantidad</label>
-                          <input type="text" class="form-control" id="inputCantidad" placeholder="2" disabled>
-                        </div>
-
-                        <div class="form-group row">
-                          <div class="form-group col-xs-6">
-                            <label for="datepicker">Fecha</label>                  
-                            <!-- Date -->                              
-                            <input type="text" class="form-control pull-right" id="datepicker" placeholder="17/09/2018" disabled>
+                          <div class="form-group">
+                            <label for="inputElemento">Elemento</label>
+                            <input type="text" class="form-control" id="inputElemento" disabled
+                              placeholder={{orden_compra.cotizacion.articulo.nombre}}>
                           </div>
 
-                          <div class="form-group col-xs-6">
-                            <label for="datepicker">Fecha de llegada</label>                  
-                            <!-- Date -->                            
-                            <input type="text" class="form-control pull-right" id="datepicker" placeholder="20/09/2018" disabled>
+                          <div class="form-group">
+                            <label for="inputCantidad">Cantidad</label>
+                            <input type="text" class="form-control" id="inputCantidad" disabled
+                              placeholder={{orden_compra.cotizacion.articulo.cantidad}}>
                           </div>
-                        </div> <!-- group row -->
 
-                        <div class="form-group row">                              
-                          <div class="form-group col-xs-6">
-                            <label for="inputValorU">Valor unidad $</label>
-                            <input type="text" class="form-control" id="inputValorU" placeholder="800.000" disabled>
-                          </div> 
+                          <div class="form-group row">
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha</label>                  
+                              <!-- Date -->                              
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder="17/09/2018">
+                            </div>
 
-                          <div class="form-group col-xs-6">
-                            <label for="inputValorT">Valor Total $</label>       
-                            <input type="text" class="form-control pull-right" id="inputValorT" placeholder="1'600.000" disabled>
-                          </div>
-                        </div> <!-- group row --> 
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha de llegada</label>                  
+                              <!-- Date -->                            
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder="20/09/2018">
+                            </div>
+                          </div> <!-- group row -->
 
-                      </div> <!--collapse-->  
+                          <div class="form-group row">                              
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorU">Valor unidad $</label>
+                              <input type="text" class="form-control" id="inputValorU" disabled
+                                placeholder="800.000">
+                            </div> 
 
-                    </div> <!--panel-->
-                    <div class="box-footer text-center">                          
-                      <button type="submit" class="btn btn-primary">Nueva Orden</button>
-                    </div> 
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorT">Valor Total $</label>       
+                              <input type="text" class="form-control pull-right" id="inputValorT" disabled
+                                placeholder="1'600.000">
+                            </div>
+                          </div> <!-- group row --> 
 
-                  </div>                      
+                        </div> <!--collapse-->  
+
+                      </div> <!--panel-->
+                      <div class="box-footer text-center">                          
+                        <button type="submit" class="btn btn-primary">Nueva Orden</button>
+                      </div> 
+
+                    </div>  
+                  {% endfor %}   
+                {% else %}                 
+                  <h3>No hay ordenes de comra</h3>
+                {% endif %}
                 </div> <!-- tab 2 -->
-
               </div> <!--tab content-->
             </div>
-          </div>
-          <!-- /.box-body -->            
+          </div> <!-- /.box-body -->            
         </form>
         <!-- /.box-body -->
       </div>
