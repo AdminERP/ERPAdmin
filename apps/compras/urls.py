@@ -3,11 +3,11 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
 
-from .views import SolicitudList, index
+from .views import SolicitudList, index, SolicitudCreate
 
 urlpatterns = [
     path('', index.as_view(), name='index'),
-    # path('solicitud/crear', ,name='solicitud_crear'),
+    path('solicitud/crear', SolicitudCreate.as_view(),name='solicitud_crear'),
     path('solicitud/', SolicitudList.as_view(), name='solicitudes'),
     path('solicitud/listar', SolicitudList.as_view(), name='solicitudes_listar'),
     # path('solicitud/detalle/<int:pk>', ,name='solicitud_detalles'),

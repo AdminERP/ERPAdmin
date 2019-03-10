@@ -1,8 +1,26 @@
 {% extends 'base.html' %}
 
+
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
 <li><a href="{% url 'compras:index' %}">Compras</a></li>
 <li><a href="{% url 'compras:solicitudes' %}">Solicitudes de compra</a></li>
 <li class="active"><a href="#">Generar Solicitud de compra</a></li>
 {% endblock miga_pan %}
+
+{% block titulo %}Gestión de Solicitudes de Compras{% endblock titulo %}
+
+{% block titulo_pagina %}
+Nueva Solicitud de Compra
+{% endblock titulo_pagina %}
+
+{% block contenido_panel %}
+
+<form class="forms-sample" method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-confirm" type="submit" value="Guardar Solicitud">
+    <a style="padding: 0.56rem 1.375rem; width: 178px" href="{% url 'compras:solicitudes' %}" class="btn btn-primary">Cancelar</a>
+
+</form>
+
+{% endblock contenido_panel %}

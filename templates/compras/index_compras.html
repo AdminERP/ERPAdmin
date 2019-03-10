@@ -4,11 +4,12 @@
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
 <li class="active"><a href="{% url 'compras:index' %}">Compras</a></li>
 {% endblock miga_pan %}
+{% block titulo %}Módulo de Compras{% endblock titulo %}
 
 
 {% block contenido %}
 <div class="col-md-3 col-sm-6 col-xs-12">
-    <a href="{% url 'compras:solicitud_listar' %}">
+    <a href="{% url 'compras:solicitudes' %}">
         <div class="info-box bg-aqua">
             <span class="info-box-icon"><i class="glyphicon glyphicon-open-file"></i></span>
 
@@ -32,9 +33,8 @@
 </div>
 
 
-{% comment %}
-<!-- {% if usuario.rol == 'jefe_compras' or  usuario.rol == 'gerente' %} -->
-{% endcomment %}
+{% if usuario.rol == 'jefe_compras' or  usuario.rol == 'gerente' %}
+
     
 
 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -61,8 +61,7 @@
     <!-- /.info-box -->
 </div>
 
-{% comment %}
-<!-- {% endif %} -->
-{% endcomment %}
+{% endif %}
+
     
 {% endblock contenido %}

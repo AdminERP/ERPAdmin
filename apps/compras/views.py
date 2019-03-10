@@ -8,6 +8,18 @@ from .forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
 
 class index(TemplateView):
     template_name= 'compras/index_compras.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        ###
+        # Comentar todas las siguientes lineas excepto la del rol a probar
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
+        # usuario.rol = "gerente"
+        ####
+        context['usuario'] = usuario
+        return context
 
 
 ######---CREATES---######
@@ -16,7 +28,26 @@ class SolicitudCreate(CreateView):
     form_class= SolicitudCompraForm
     template_name= 'compras/crear_solicitudes.html'
     success_url = reverse_lazy('compras:solicitudes')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        ###
+        # Se debe evaluar el rol segun lo establezca el grupo de roles y permisos
+        # Mientras, comentar todas las siguientes lineas excepto la del rol a probar
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
+        # usuario.rol = "gerente"
+        ####
+        solicitudes_autorizar = []
+        if usuario.rol == "jefe_compras" or usuario.rol == "gerente":
+            #TODO: Consultar las solicitudes asociadas a sus empleados
+            pass
 
+        context['usuario'] = usuario
+        context['solicitudes_autorizar'] = solicitudes_autorizar
+
+        return context
 class CotizacionCreate(CreateView): 
     model = Cotizacion 
     form_class = CotizacionForm

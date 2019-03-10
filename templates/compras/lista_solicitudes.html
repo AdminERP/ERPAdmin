@@ -7,108 +7,199 @@
 {% endblock miga_pan %}
 
 {% block titulo_pagina %}
-  Solicitudes de Compra
-{% endblock titulo_pagina %} 
+Solicitudes de Compra
+{% endblock titulo_pagina %}
+
+{% block titulo %}Gestión de Solicitudes de Compras{% endblock titulo %}
+
 
 {% block contenido %}
-  <div class="content-wrapper">       
-    <!-- Main content -->
-    <section class="box">          
-      <div class="col-md-12">
-        <!-- general form elements -->
-        <div class="box box-primary">                      
-          <!-- form start -->
-          <form role="form">
-            <div class="box-body">
-              <!-- Panel colapsable --> 
-              {% if solicitudes %}
-              <div class="container col-md-12">  
-                {% for solicitud in solicitudes %}                
-                <div class="panel-group" id="accordion">                                       
-                  <div class="panel panel-default">   
+<div class="content-wrapper">
+  <!-- Main content -->
+  <section class="box">
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="box box-primary">
+        <!-- form start -->
 
-                    <div class="panel-heading">
-                      <h3 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">
-                          Solucitud #{{solicitud.codigo}}
-                        </a>
-                        <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
-                      </h3>                  
+        <div class="box-body">
+          <!-- Panel colapsable -->
+          {% if object_list %}
+          <div class="container col-md-12">
+            {% for solicitud in object_list %}
+            <div class="panel-group" id="accordion">
+              <div class="panel panel-default">
+
+                <div class="panel-heading">
+                  <h3 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">
+                      Solucitud #{{solicitud.codigo}}
+                    </a>
+                    <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
+                  </h3>
+                </div>
+
+                <div id="collapse1" class="panel-collapse collapse">
+                  <div class="form-group row">
+                    <div class="col-xs-6">
+                      <label for="inputNombre">Nombre Solicitante</label>
+                      <input type="text" class="form-control" id="inputNombre" disabled>
                     </div>
 
-                    <div id="collapse1" class="panel-collapse collapse">
-                      <div class="form-group row">
-                        <div class="col-xs-6">
-                          <label for="inputNombre">Nombre Solicitante</label>
-                          <input type="text" class="form-control" id="inputNombre" disabled>                          
-                        </div>
+                    <div class="col-xs-3">
+                      <label for="inputId">Identificacion</label>
+                      <input type="text" class="form-control" id="inputId" disabled placeholder={{solicitud.usuario.codigo}}>
+                      <!-- ¿¿esto se hace así?? -->
+                    </div>
+                  </div>
 
-                        <div class="col-xs-3">
-                          <label for="inputId">Identificacion</label>
-                          <input type="text" class="form-control" id="inputId" disabled 
-                            placeholder={{solicitud.usuario.codigo}}> <!-- ¿¿esto se hace así?? -->                           
-                        </div>                        
-                      </div>
+                  <div class="form-group">
+                    <label for="inputElemento">Elemento requerido</label>
+                    <input type="text" class="form-control" id="inputElemento" disabled placeholder={{solicitud.articulo.nombre}}>
+                  </div>
 
-                      <div class="form-group">
-                        <label for="inputElemento">Elemento requerido</label>
-                        <input type="text" class="form-control" id="inputElemento" disabled
-                          placeholder={{solicitud.articulo.nombre}}>                        
-                      </div>
+                  <div class="form-group">
+                    <label for="inputCantidad">Cantidad</label>
+                    <input type="text" class="form-control" id="inputCantidad" disabled placeholder={{solicitud.articulo.cantidad}}>
+                  </div>
 
-                      <div class="form-group">
-                        <label for="inputCantidad">Cantidad</label>
-                        <input type="text" class="form-control" id="inputCantidad" disabled
-                          placeholder={{solicitud.articulo.cantidad}}>                        
-                      </div>
+                  <div class="form-group row">
+                    <div class="form-group col-xs-6">
+                      <label for="exampleInputFile">Fecha realizacion</label>
+                      <!-- Date -->
+                      <input type="text" class="form-control pull-right" id="datepicker" disabled placeholder={{solicitud.fecha_realizacion}}>
+                      <!--{{solicitud.fecha_realizacion}} en el modelo ER esta tiempo ¿? -->
+                    </div>
 
-                      <div class="form-group row">
-                        <div class="form-group col-xs-6">
-                          <label for="exampleInputFile">Fecha realizacion</label>                  
-                          <!-- Date -->                              
-                          <input type="text" class="form-control pull-right" id="datepicker" disabled
-                            placeholder={{solicitud.fecha_realizacion}}>
-                          <!--{{solicitud.fecha_realizacion}} en el modelo ER esta tiempo ¿? -->
-                        </div>
+                    <div class="form-group col-xs-6">
+                      <label for="exampleInputFile">Fecha esperada</label>
+                      <!-- Date -->
+                      <input type="text" class="form-control pull-right" id="datepicker" disabled placeholder={{solicitud.fecha_esperada}}>
+                      <!--{{solicitud.fecha_esperada}} en el modelo ER esta tiempo ¿? -->
+                    </div>
+                  </div>
 
-                        <div class="form-group col-xs-6">
-                          <label for="exampleInputFile">Fecha esperada</label>                  
-                          <!-- Date -->                            
-                          <input type="text" class="form-control pull-right" id="datepicker" disabled
-                            placeholder={{solicitud.fecha_esperada}}>
-                          <!--{{solicitud.fecha_esperada}} en el modelo ER esta tiempo ¿? -->
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label for="inputJust">Justificacion</label>
-                        <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50" readonly>
-                          {{solicitud.justificacion}}
-                        </textarea>
-                      </div>
-                    <!-- collapse --> 
-                    </div>   
-                  <!-- panel -->                                               
-                  </div>                                                 
+                  <div class="form-group">
+                    <label for="inputJust">Justificacion</label>
+                    <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50"
+                      readonly>
+                              {{solicitud.justificacion}}
+                            </textarea>
+                  </div>
+                  <!-- collapse -->
                 </div>
-                {% endfor %} 
+                <!-- panel -->
               </div>
-            {% else %}
-            <h3>No hay solicitudes registradas</h3>
-            {% endif %}
-            <!-- /.box-body -->
-            </div>    
-            <div class="box-footer text-center">
-              <button type="submit" class="btn btn-primary">Nueva Solicitud</button>      
-            </div>        
-            <!-- /.box -->            
-          </form>          
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <h3>No hay solicitudes registradas</h3>
+          {% endif %}
+          <!-- /.box-body -->
+        </div>
+        <div class="box-footer text-center">
+          <a href="{% url 'compras:solicitud_crear' %}" class="btn btn-primary">Nueva Solicitud</a>
+        </div>
+        <!-- /.box -->
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+
+{% if usuario.rol == 'jefe_compras' or  usuario.rol == 'gerente' %}
+
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="box box-primary">
+        <!-- form start -->
+
+        <div class="box-body">
+          <!-- Panel colapsable -->
+          {% if solicitudes_autorizar %}
+          <div class="container col-md-12">
+            {% for solicitud in solicitudes_autorizar %}
+            <div class="panel-group" id="accordion">
+              <div class="panel panel-default">
+
+                <div class="panel-heading">
+                  <h3 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">
+                      Solucitud #{{solicitud.codigo}}
+                    </a>
+                    <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
+                  </h3>
+                </div>
+
+                <div id="collapse1" class="panel-collapse collapse">
+                  <div class="form-group row">
+                    <div class="col-xs-6">
+                      <label for="inputNombre">Nombre Solicitante</label>
+                      <input type="text" class="form-control" id="inputNombre" disabled>
+                    </div>
+
+                    <div class="col-xs-3">
+                      <label for="inputId">Identificacion</label>
+                      <input type="text" class="form-control" id="inputId" disabled placeholder={{solicitud.usuario.codigo}}>
+                      <!-- ¿¿esto se hace así?? -->
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputElemento">Elemento requerido</label>
+                    <input type="text" class="form-control" id="inputElemento" disabled placeholder={{solicitud.articulo.nombre}}>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputCantidad">Cantidad</label>
+                    <input type="text" class="form-control" id="inputCantidad" disabled placeholder={{solicitud.articulo.cantidad}}>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="form-group col-xs-6">
+                      <label for="exampleInputFile">Fecha realizacion</label>
+                      <!-- Date -->
+                      <input type="text" class="form-control pull-right" id="datepicker" disabled placeholder={{solicitud.fecha_realizacion}}>
+                      <!--{{solicitud.fecha_realizacion}} en el modelo ER esta tiempo ¿? -->
+                    </div>
+
+                    <div class="form-group col-xs-6">
+                      <label for="exampleInputFile">Fecha esperada</label>
+                      <!-- Date -->
+                      <input type="text" class="form-control pull-right" id="datepicker" disabled placeholder={{solicitud.fecha_esperada}}>
+                      <!--{{solicitud.fecha_esperada}} en el modelo ER esta tiempo ¿? -->
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputJust">Justificacion</label>
+                    <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50"
+                      readonly>
+                            {{solicitud.justificacion}}
+                          </textarea>
+                  </div>
+                  <!-- collapse -->
+                </div>
+                <!-- panel -->
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <h3>No hay solicitudes por autorizar</h3>
+          {% endif %}
           <!-- /.box-body -->
         </div>
         <!-- /.box -->
-      </div>                  
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+
+{% endif %}
+  
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 {% endblock contenido %}

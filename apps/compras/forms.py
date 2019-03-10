@@ -33,8 +33,7 @@ class SolicitudCompraForm (forms.ModelForm):
 
         widgets = {
             'justificacion' : forms.TextInput(attrs= {'class': 'form-control'}),
-            'fecha_esperada' :forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
-                                                                                 months = MESES)) ,
+            'fecha_esperada' : forms.SelectDateWidget(empty_label= EMPTY_LABEL, months = MESES) ,
             'estado_aprobacion' : Select2Widget(),
             'articulos' : Select2MultipleWidget(),
         }
@@ -81,6 +80,5 @@ class OrdenCompraForm(forms.ModelForm):
         widgets = {
             'cotizacion' : Select2Widget(),
             'estado_aprobacion' :  Select2Widget(),
-            'fecha_esperada' :forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
-                                                                                 months = MESES)) ,
+            'fecha_esperada' : forms.SelectDateWidget(empty_label= EMPTY_LABEL, months = MESES) ,
         }
