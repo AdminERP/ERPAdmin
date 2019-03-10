@@ -88,6 +88,8 @@
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a href="{% url 'modificar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Consultar/Modificar</a>
                                         </li>
+                                        <li><a href="{% url 'crear_evaluacion' empleado.id %}"><i class="fa fa-circle-o"></i>Evaluar</a>
+                                        </li>
 
                                         <li class="divider"></li>
                                         {% if empleado.status %}
