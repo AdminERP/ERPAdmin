@@ -15,4 +15,5 @@ urlpatterns = [
     path('pay_account/', pay_account, name='pay_account'),
     path('payments/', payments, name='payments'),
     path('payment_details/<pk>', payment_details, name='payment_details'),
+    path('createOrder/', createOrder, name='createOrder'),
 ]

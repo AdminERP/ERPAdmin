@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import PaymentAccountForm, ItemForm
+from .forms import PaymentAccountForm, ItemForm, ServiceOrderForm
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import CuentaPagar, Item, Payment, CuentaEmpresa
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.core import serializers
+from django.views.generic import CreateView
 
 
 # Create your views here.
@@ -110,3 +111,7 @@ def listarCobrar (request):
 
 def listarDetalles (request):
 	return render(request, 'cuentas/listarDetalles.html')
+
+def createOrder(request):
+    form = ServiceOrderForm()
+    return render(request, 'cuentas/createOrder.html', {'form': form})

@@ -6,6 +6,14 @@ from enum import Enum
 class CuentaEmpresa(models.Model):
     saldo = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)   
 
+class ServiceOrder(models.Model):
+    status = models.CharField(max_length=254, null=False)
+    sold_service = models.CharField(max_length=254, null=False)
+    employee_id = models.IntegerField(null=False, validators=[MinValueValidator(1)])
+    comments = models.TextField(max_length=508, null=True)
+    total = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class CuentaPagar(models.Model):
     ORDER_STATUS = (
@@ -65,8 +73,8 @@ class Payment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class CuentaCobrar(models.Model):
-    tarifa = models.IntegerField()
-    costo_total = models.IntegerField()
+    tarifa = models.IntegerField(null=False, validators=[MinValueValidator(1)])
+    costo_total = models.IntegerField(null=False, validators=[MinValueValidator(1)])
     Fecha_vencimiento = models.DateTimeField()
     estado = models.BooleanField()
     servicio = models.CharField(max_length=50)
