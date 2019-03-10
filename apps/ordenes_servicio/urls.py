@@ -13,6 +13,8 @@ urlpatterns = [
     path('crear_orden_servicio/', crear_orden_servicio, name='crear_orden_servicio'),
     path('consultar-orden_servicio/', consultar_orden_servicio, name='consultar_orden_servicio'),
     path('cancelar_orden_servicio/<int:id>', cancelar_orden_servicio, name='cancelar_orden_servicio'),
+    path('en_tramite_orden_servicio/<int:id>', en_tramite_orden_servicio, name='en_tramite_orden_servicio'),
+    path('api/cerrar_orden_servicio/', cerrar_orden_servicio, name='cerrar_orden_servicio'),
     path('operadores-autocomplete', operadores_autocomplete, name='operadores_autocomplete'),
     path('clientes-autocomplete', clientes_autocomplete, name='clientes_autocomplete'),
 ]

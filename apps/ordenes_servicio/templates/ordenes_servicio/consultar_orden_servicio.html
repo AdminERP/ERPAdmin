@@ -11,6 +11,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
 {% endblock css %}
 
 {% block contenido %}
@@ -37,7 +38,7 @@
                 {% for orden in ordenes %}
                 <tr>
                     <td>{{ orden.id }}</td>
-                    <td>
+                    <td id="estado">
                         {%  if orden.estado == 'AS' %}
                         <span class="label label-warning">Asignada</span>
                         {% elif orden.estado == 'TR' %}
@@ -53,20 +54,49 @@
                     <td>{{ orden.encargado }}</td>
                     <td>{{ orden.comentarios }}</td>
                     <td>
+                        {%  if orden.estado == 'AS' %}
+                        <a href="{% url 'ordenes_servicio:en_tramite_orden_servicio' orden.id %}">
+                            <button style="margin: 1px 15%" type="button" class="btn btn-primary btn-xs">Aceptar Orden</button>
+                        </a>
+                        {% else %}
                         <div style="margin: 1px 10%" class="btn-group btn-group-xs">
-                            <button type="button" href="#" class="btn btn-success">Cerrada</button>
-                            <button type="button" href="{% url 'ordenes_servicio:cancelar_orden_servicio' orden.id %}" class="btn btn-danger">Cancelada</button>
+                            <button id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button>
+                            <a href="{% url 'ordenes_servicio:cancelar_orden_servicio' orden.id %}">
+                                <button id="cancelar_boton" type="button" class="btn btn-danger">Cancelada</button>
+                            </a>
                         </div>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
 
                 </tbody>
             </table>
-
         </div>
     </div>
 </div>
+<div class="modal fade" id="confirmar_cerrada">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cerrar Orden de Servicio</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea cerrar la orden de servicio No.
+                    <b id="my_orden_id"></b>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary cerrando_orden">Si</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 {% endblock contenido %}
 
 {% block js %}
@@ -85,5 +115,40 @@
             } ]
         } );
     } );
+
+    $(document).ready(function() {
+        var estado = document.getElementById('estado').innerText;
+        console.log(estado)
+        if(estado == 'Cerrada' || estado == 'Cancelada'){
+            $('#cerrar_boton').prop('disabled', true);
+            $('#cancelar_boton').prop('disabled', true);
+        }
+
+    } );
+
+    $('.cerrar_orden').click(function(){
+        var orden_id = $(this).data('id');
+        $(".modal-body #my_orden_id").text(orden_id);
+    });
+
+    $('.cerrando_orden').click(function(){
+        var orden_id = document.getElementById('my_orden_id').innerText;
+        console.log(orden_id);
+        $.ajax({
+            type: "GET",
+            url: '{% url "ordenes_servicio:cerrar_orden_servicio" %}',
+            data: {
+                'orden_id': orden_id
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.success == true){ // if true (1)
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 5000);
+                }
+            }
+        });
+    });
 </script>
 {% endblock js %}

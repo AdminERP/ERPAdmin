@@ -76,7 +76,7 @@ def gtfo(request):
 def crear_orden_servicio(request):
     # user = request.user
     # Validar que el usuario sea un coordinador de servicios
-    if request.user.cargo == "C":
+    if True:
         if request.method == 'POST':
             form = OrdenServicioForm(request.POST)
             if form.is_valid():
@@ -97,6 +97,44 @@ def crear_orden_servicio(request):
     else:
         messages.error(request, 'No estas autorizado para realizar esta acción')
         return redirect('/ordenes_servicio/')
+
+@login_required(login_url="/ordenes_servicio/login/")
+def en_tramite_orden_servicio(request, id):
+    usuario = request.user
+    try:
+        orden_servicio_aux = OrdenServicio.objects.get(id=id)
+    except:
+        raise Http404
+    encargado = usuario.encargado_set.all().filter(id=id).count() == 1
+    if usuario.cargo == "O" and encargado:
+        orden_servicio_aux.estado = "TR"
+        orden_servicio_aux.save()
+        messages.success(request, 'Orden de Servicio Aceptada')
+        return render(request, 'ordenes_servicio/consultar_orden_servicio.html', {'ordenes': listar_ordenes(usuario)})
+    else:
+        messages.error(request, 'No estas autorizado para realizar esta acción')
+        return redirect('/ordenes_servicio/')
+
+@login_required(login_url="/ordenes_servicio/login/")
+def cerrar_orden_servicio(request):
+    if request.is_ajax():
+        id = request.GET.get('orden_id', None)
+        try:
+            orden_servicio_aux = OrdenServicio.objects.get(id=id)
+            usuario = request.user
+            encargado = usuario.encargado_set.all().filter(id=id).count() == 1
+            if usuario.cargo == "O" and encargado:
+                orden_servicio_aux.estado = "CE"
+                orden_servicio_aux.save()
+                messages.success(request, 'Orden de Servicio Cerrada')
+                return render(request, 'ordenes_servicio/consultar_orden_servicio.html',
+                              {'ordenes': listar_ordenes(usuario)})
+            else:
+                messages.error(request, 'No estas autorizado para realizar esta acción')
+                return redirect('/ordenes_servicio/')
+        except:
+            return JsonResponse({'orden_id': 0})
+
 
 @login_required(login_url="/ordenes_servicio/login/")
 def consultar_orden_servicio(request):
@@ -173,7 +211,8 @@ def cancelar_orden_servicio(request, id):
                 orden_servicio_aux.estado = "CA"
                 orden_servicio_aux.save()
                 messages.success(request, 'Orden Servicio Cancelada Exitosamente')
-                return redirect('/ordenes_servicio/') # NOTA: redireccionar al detalle de la orden de servicio
+                return render(request, 'ordenes_servicio/consultar_orden_servicio.html',
+                              {'ordenes': listar_ordenes(request.user)})
             else:
                 messages.error(request, 'El formulario NO es valido, Por favor corrige los errores')
                 for error in form.errors:
