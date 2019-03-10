@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Listar cuenta{% endblock titulo %}
+
+{% block css %}
+
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+
+{% endblock css %}
+
+{% block titulo_pagina %} Ver cuentas {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Pagar</a></li>
+<li class="active">Ver Cuentas</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Información de cuentas</small>{% endblock titulo_panel %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Listado de Pagos</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="table-accounts" class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Orden</th>
+                                    <th>Fecha</th>
+                                    <th>Total</th>
+                                    <th>Detalles</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                    <tr>
+                                        <td>{{payment.pk}}</td>
+                                        <td>{{payment.account.order_id}}</td>
+                                        <td>{{payment.created_at}}</td>
+                                        <td>{{payment.total}}</td>
+                                        <td>
+                                            <a href="{% url 'payment_details' pk=payment.pk %}">Detalles</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}                         
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>    
+    <!-- /.container -->
+{% endblock contenido %}
+
+{% block js %}
+
+<!-- DataTables -->
+<script src="{% static 'dist/js/editable-table.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<!-- page script -->
+<script>
+    {% if error %}
+        {% if error == 'NOCREDIT' %}
+            toastr.error('El saldo es insuficiente para pagar la cuenta asociada a la orden '+'{{order}}', 'Error pagar la cuenta');
+        {% elif error == 'PAYD' %}
+            toastr.error('La cuenta asociada a la orden '+'{{order}}'+' ya está paga', 'Error pagar la cuenta');
+        {% elif error == 'CANCELLED' %}
+            toastr.error('La cuenta asociada a la orden '+'{{order}}'+' ya está anulada', 'Error pagar la cuenta');
+        {% endif %}
+    {% endif %}
+    $('#table-accounts').DataTable({
+        'paging'      : true,
+        'lengthChange': false,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false,
+        "language": {
+            "url":"//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json",
+        },
+        "columnDefs": [
+            { "orderable": true, "targets": [ 0,1,2,3 ] },
+            { "className": "text-center", "targets": [0,1,2,4] },
+            { "className": "text-right", "targets": [3] },
+        ],
+    });
+</script>
+{% endblock js %}

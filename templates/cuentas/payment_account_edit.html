@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
+{% load humanize %}
 
 {% block titulo %} Crear Cuenta{% endblock titulo %}
 
@@ -30,7 +31,7 @@
         <!-- Columna Izquierda -->
         <div class="col-md-5">
             <div class="box-body">
-                <form role="form" method="POST" id="create-account-form">
+                <form role="form" method="POST" id="edit-account-form">
                     <!-- Token -->
                     {% csrf_token %}
                     <div class="form-group">
@@ -41,27 +42,27 @@
                             <option value="0">Seleccione --</option>
                             <option 
                                 value="1"
-                                {% if form.order_id.value == "1"%} selected {% endif %}>
+                                {% if form.order_id.value == 1 %} selected {% endif %}>
                                 001
                             </option>
                             <option 
                                 value="2"
-                                {% if form.order_id.value == "2"%} selected {% endif %}>
+                                {% if form.order_id.value == 2 %} selected {% endif %}>
                                 002
                             </option>
                             <option 
                                 value="3"
-                                {% if form.order_id.value == "3"%} selected {% endif %}>
+                                {% if form.order_id.value == 3 %} selected {% endif %}>
                                 003
                             </option>
                             <option 
                                 value="4"
-                                {% if form.order_id.value == "4"%} selected {% endif %}>
+                                {% if form.order_id.value == 4 %} selected {% endif %}>
                                 004
                             </option>
                             <option 
                                 value="5"
-                                {% if form.order_id.value == "5"%} selected {% endif %}>
+                                {% if form.order_id.value == 5 %} selected {% endif %}>
                                 005
                             </option>
                         </select>
@@ -78,46 +79,33 @@
                             <option value="0">Seleccione --</option>
                             <option 
                                 value="1" 
-                                {% if form.supplier_id.value == "1"%} selected {% endif %}>
+                                {% if form.supplier_id.value == 1 %} selected {% endif %}>
                                 Proveedor 1
                             </option>
                             <option 
                                 value="2"
-                                {% if form.supplier_id.value == "2"%} selected {% endif %}>
+                                {% if form.supplier_id.value == 2 %} selected {% endif %}>
                                 Proveedor 2
                             </option>
                             <option 
                                 value="3"
-                                {% if form.supplier_id.value == "3"%} selected {% endif %}>
+                                {% if form.supplier_id.value == 3 %} selected {% endif %}>
                                 Proveedor 3
                             </option>
                             <option 
                                 value="4"
-                                {% if form.supplier_id.value == "4"%} selected {% endif %}>
+                                {% if form.supplier_id.value == 4 %} selected {% endif %}>
                                 Proveedor 4
                             </option>
                             <option 
                                 value="5"
-                                {% if form.supplier_id.value == "5"%} selected {% endif %}>
+                                {% if form.supplier_id.value == 5 %} selected {% endif %}>
                                 Proveedor 5
                             </option>
                         </select>
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ form.supplier_id.errors }}</strong>
                         </span>
-                    </div>
-                    <div class="form-group">
-                        <label>Factura</label>
-                        <input 
-                            name="invoice" 
-                            class="form-control {% if form.invoice.errors %} is-invalid {% endif %}"
-                            id="invoice"
-                            value="{{ form.invoice.value|default_if_none:'' }}"
-                            autocomplete="off">
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ form.invoice.errors }}</strong>
-                        </span>
-                        <!-- /.input group -->
                     </div>
                     <div class="form-group">
                         <label>Fecha de Factura</label>
@@ -129,7 +117,7 @@
                                 name="invoice_date" 
                                 class="form-control pull-right datepicker {% if form.invoice_date.errors %} is-invalid {% endif %}"
                                 id="invoice_date"
-                                value="{{ form.invoice_date.value|default_if_none:'' }}"
+                                value="{{ form.invoice_date.value|date:'Y-m-d'|default_if_none:'' }}"
                                 autocomplete="off">
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ form.invoice_date.errors }}</strong>
@@ -147,7 +135,7 @@
                                 name="term_date" 
                                 class="form-control pull-right datepicker {% if form.term_date.errors %} is-invalid {% endif %}"
                                 id="term_date"
-                                value="{{ form.term_date.value|default_if_none:'' }}"
+                                value="{{ form.term_date.value|date:'Y-m-d'|default_if_none:'' }}"
                                 autocomplete="off">
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ form.term_date.errors }}</strong>
@@ -155,7 +143,13 @@
                         </div>
                         <!-- /.input group -->
                     </div>
-                    <input type="hidden" name="status" value="3">
+                    {% if form.status == 1 %}
+                        <input type="hidden" name="status" value="1">
+                    {% elif form.status == 2 %}
+                        <input type="hidden" name="status" value="2">
+                    {% else %}
+                        <input type="hidden" name="status" value="3">
+                    {% endif %} 
                     <input type="hidden" name="allitems" id="allitems" value="{{ form.allitems.value|default_if_none:'' }}">
                     <input type="hidden" name="total" class="total" value="{{ form.total.value|default_if_none:'' }}">
                 </form>
@@ -191,6 +185,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            	{% for item in items %}
                                 <tr>
                                     <td class="pt-3-half">
                                         <div class="form-group">
@@ -198,7 +193,7 @@
                                             name="items[]" 
                                             class="form-control" 
                                             type="text" 
-                                            placeholder="Item" 
+                                            value="{{item.name}}" 
                                             style="text-align: center">
                                         </div>
                                     </td>
@@ -209,8 +204,8 @@
                                             class="form-control item-value" 
                                             type="number"
                                             step="0.1" 
-                                            placeholder="0" 
                                             min="0" 
+                                            value="{{item.uncommad}}"  
                                             style="text-align: center">
                                         </div>
                                     </td>
@@ -218,13 +213,14 @@
                                         <span class="table-remove">
                                             <button 
                                                 type="button" 
-                                                class="btn btn-info btn-rounded btn-sm my-0 "
-                                                onclick="removeRow(this)">
+                                                class="btn btn-info btn-rounded btn-sm my-0 remove"
+                                                onclick="removeItem(this)">
                                                 Borrar 
                                             </button>
                                         </span>
                                     </td>
                                 </tr> 
+                                {% endfor %}
                             </tbody>                      
                         </table>
                         <div class="container-fluid">
@@ -239,7 +235,7 @@
                                             style="pointer-events: none" 
                                             type="text" 
                                             class="form-control {% if form.total.errors %} is-invalid {% endif %} total "
-                                            value="{{ form.total.value|default_if_none:'' }}"
+                                            value="{{ form.total.value|floatformat:1|default_if_none:'' }}">
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ form.total.errors }}</strong>
                                             </span>
@@ -256,8 +252,8 @@
                 <button 
                     type="submit" 
                     class="btn btn-block btn-primary"
-                    form="create-account-form"> 
-                    Registrar
+                    form="edit-account-form"> 
+                    Actualizar Órden
                 </button>
             </div>
         </div>
@@ -332,7 +328,9 @@
     function removeItem(){
         $(".remove").click(function(){
             $(this).parent().parent().parent().remove();
+            sumValues();
         });
+        sumValues();
     }
 
     function evenValues(){
@@ -346,21 +344,24 @@
 
     function sumValues(){
         var rows = $("#table tbody tr");
-        var total = 0;
+        var total = 0.0;
+        $(".total").val(total);
         for(var i=0; i<rows.length; i++){
             $("input [name=total]").val(0);
             var value = $(rows[i])
                         .children("td").eq(1)
                         .children("div").eq(0)
                         .children("input").eq(0).val();
-            if(!isNaN(Number.parseFloat(value))){ 
-                total = total + Number.parseFloat(value);          
+            if(!isNaN(Number.parseFloat(value.replace(',', '.')))){ 
+                total = total + Number(Number.parseFloat(value.replace(',', '.')));          
             }
         }
         $(".total").val(total);
     }
 
-    $("#create-account-form").submit(function(e){
+
+
+    $("#edit-account-form").submit(function(e){
         var fecha_factura = $("#invoice_date").datepicker("getDate");
         var fecha_plazo = $("#term_date").datepicker("getDate");
         var rows = $("#table tbody tr");

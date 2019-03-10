@@ -6,7 +6,8 @@ class PaymentAccountForm(forms.ModelForm):
     class Meta:
         model = CuentaPagar
         fields = (
-    		'total', 
+    		'total',
+            'invoice', 
     		'invoice_date',
     		'term_date',
     		'status',
