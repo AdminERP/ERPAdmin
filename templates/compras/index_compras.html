@@ -2,7 +2,7 @@
 
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-<li class="active" a href="#">Compras</a></li>
+<li class="active"><a href="{% url 'compras:index' %}">Compras</a></li>
 {% endblock miga_pan %}
 
 
@@ -15,7 +15,7 @@
             <div class="info-box-content">
                 <span class="info-box-text">Solicitudes de Compra</span>
                 <!-- TODO: Contar las solicitudes -->
-                <span class="info-box-number">36</span>
+                <span class="info-box-number">4</span>
 
                 <!-- TODO: Ver que progreso se puede medir -->
                 <div class="progress">
@@ -30,6 +30,12 @@
     </a>
     <!-- /.info-box -->
 </div>
+
+
+{% comment %}
+<!-- {% if usuario.rol == 'jefe_compras' or  usuario.rol == 'gerente' %} -->
+{% endcomment %}
+    
 
 <div class="col-md-3 col-sm-6 col-xs-12">
     <a href="#">
@@ -54,4 +60,9 @@
     </a>
     <!-- /.info-box -->
 </div>
+
+{% comment %}
+<!-- {% endif %} -->
+{% endcomment %}
+    
 {% endblock contenido %}

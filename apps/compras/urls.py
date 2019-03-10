@@ -3,10 +3,10 @@
 from django.urls import path
 from django.views.generic.base import TemplateView
 
-from .views import SolicitudList
+from .views import SolicitudList, index
 
 urlpatterns = [
-    path('',TemplateView.as_view(template_name='index_compras.html'), name='index'),
+    path('', index.as_view(), name='index'),
     # path('solicitud/crear', ,name='solicitud_crear'),
     path('solicitud/', SolicitudList.as_view(), name='solicitud'),
     path('solicitud/listar', SolicitudList.as_view(), name='solicitud_listar'),
