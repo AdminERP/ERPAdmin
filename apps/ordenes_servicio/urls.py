@@ -11,7 +11,6 @@ urlpatterns = [
     path('crear_cliente/',crear_cliente,name="Crear Cliente"),
     path('consultar_clientes/',consultar_clientes,name="Consultar Clientes"),
     path('crear_orden_servicio/', crear_orden_servicio, name='crear_orden_servicio'),
-    path('consultar-orden_servicio/', consultar_orden_servicio, name='consultar_orden_servicio'),
     path('operadores-autocomplete', operadores_autocomplete, name='operadores_autocomplete'),
     path('clientes-autocomplete', clientes_autocomplete, name='clientes_autocomplete'),
 ]
