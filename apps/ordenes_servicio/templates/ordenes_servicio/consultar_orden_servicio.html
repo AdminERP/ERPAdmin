@@ -60,7 +60,9 @@
                     <td>{{ orden.comentarios }}</td>
                     <td>
                         {%  if orden.estado == 'AS' %}
-                        <button style="margin: 1px 15%" type="button" class="btn btn-primary btn-xs cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_asignacion">Aceptar Orden</button>
+                            {%  if cargo != 'C' %}
+                                <button style="margin: 1px 15%" type="button" class="btn btn-primary btn-xs cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_asignacion">Aceptar Orden</button>
+                            {% endif %}
                         {% else %}
                         <div style="margin: 1px 10%" class="btn-group btn-group-xs">
                             <button name="{{orden.estado}}" id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button>

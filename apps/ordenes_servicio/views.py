@@ -37,6 +37,8 @@ def manage_options(request, context):
     context["options"] = [
         {"name": "Inicio", "href": "/ordenes_servicio/welcome/"},
     ]
+    if not request.user.is_anonymous:
+        context["cargo"] = request.user.cargo
     if request.user.is_superuser:
         context["options"] += [
             {"name": "Django Admin Site", "href": "/admin"},
