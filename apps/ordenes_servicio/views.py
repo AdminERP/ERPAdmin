@@ -147,6 +147,40 @@ def cerrar_orden_servicio(request):
 
 
 @login_required(login_url="/ordenes_servicio/login/")
+def cancelar_orden_servicio(request):
+    if request.is_ajax():
+        id = request.GET.get('orden_id', None)
+        comentarios = request.GET.get('comentarios', None)
+        print("entraaaaaa")
+        try:
+            orden_servicio_aux = OrdenServicio.objects.get(id=id)
+        except:
+            return JsonResponse({'success': False})
+        pertenece_a_usuario =  request.user.encargado_set.all().filter(id=id).count() == 1
+        if request.user.cargo == "C" or (request.user.cargo == "O" and pertenece_a_usuario):
+            error = False
+            if(orden_servicio_aux.estado == "CA"):
+                messages.error(request, "No se puede cancelar una orden de servicio ya cancelada")
+                error = True
+            elif(orden_servicio_aux.estado == "CE"):
+                messages.error(request, "No se puede cancelar una orden de servicio cerrada")
+                error = True
+            if comentarios != "":
+                orden_servicio_aux.comentarios = comentarios
+                orden_servicio_aux.estado = "CA"
+                orden_servicio_aux.save()
+                messages.success(request, 'Orden de Servicio Cancelada Exitósamente')
+                return JsonResponse({'success': True})
+            else:
+                error = True
+                messages.error(request, 'Debe agregar un comentarios de cancelacion')
+            if error:
+                return JsonResponse({'success': False})
+        else:
+            messages.error(request, 'No estas autorizado para realizar esta acción')
+            return JsonResponse({'success': False})
+
+@login_required(login_url="/ordenes_servicio/login/")
 def consultar_orden_servicio(request):
     usuario = request.user
     if usuario.cargo == "C" or usuario.cargo == "O":
@@ -207,37 +241,3 @@ def consultar_clientes(request):
         manage_options(request,context)
         return render(request,"usuarios/consultar_clientes.html",context)
 
-@login_required(login_url="/ordenes_servicio/login/")
-def cancelar_orden_servicio(request, id):
-    try:
-        orden_servicio_aux = OrdenServicio.objects.get(id=id)
-    except:
-        raise Http404
-    print(request.user.encargado_set)
-    pertenece_a_usuario =  request.user.encargado_set.all().filter(id=id).count() == 1
-    if request.user.cargo == "C" or (request.user.cargo == "O" and pertenece_a_usuario):
-        if request.method == 'POST':
-            form = CancelarOrdenServicioForm(request.POST)
-            if form.is_valid():
-                orden_servicio_aux.comentarios = form.data["comentario_cancelar"]
-                orden_servicio_aux.estado = "CA"
-                orden_servicio_aux.save()
-                messages.success(request, 'Orden de Servicio Cancelada Exitósamente')
-                return render(request, 'ordenes_servicio/consultar_orden_servicio.html',
-                              {'ordenes': listar_ordenes(request.user)})
-            else:
-                messages.error(request, 'El formulario NO es valido, Por favor corrige los errores')
-                for error in form.errors:
-                    messages.error(request, "Hay un problema con " + error)
-        if(orden_servicio_aux.estado == "CA"):
-            messages.error(request, "No se puede cancelar una orden de servicio ya cancelada")
-            return redirect('/ordenes_servicio/')
-        elif(orden_servicio_aux.estado == "CE"):
-            messages.error(request, "No se puede cancelar una orden de servicio cerrada")
-            return redirect('/ordenes_servicio/')
-        form = CancelarOrdenServicioForm()
-        context = {"form":form}
-        return render(request, 'ordenes_servicio/cancelar_orden_servicio.html', context)
-    else:
-        messages.error(request, 'No estas autorizado para realizar esta acción')
-        return redirect('/ordenes_servicio/')
