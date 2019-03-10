@@ -6,6 +6,14 @@
  .bg-purple {
     background-color: #2196f3 !important;
 }
+textarea {
+   resize: none;
+    background-color: white;
+}
+
+h4 {
+  font-weight: bold;
+}
 </style>
 
 {% endblock css %}
@@ -56,7 +64,12 @@
               <td class="sorting_1 text-center" tabindex="0">{{ orden.total }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.tiempo }}</td>
               <td class="sorting_1 text-center" tabindex="0">{% if entrada.condicion %} <span style="color: green;">Buena</span> {% else %} <span style="color: red;">Mala</span> {% endif %}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ entrada.comentario }}</td>
+              <td class="sorting_1 text-center" tabindex="0">
+                  <a class="btn btn-info" href="#modal-datos" data-toggle="modal" data-id="{{ orden.id }}" data-articulo="{{ orden.articulo }}"
+                  data-cantidad="{{ orden.cantidad }}" data-condicion="{% if entrada.condicion %} Buena {% else %} Mala {% endif %}" data-comentario="{{ entrada.comentario }}">
+                      Comentario
+                  </a>
+              </td>
               <td class="sorting_1 text-center" tabindex="0">{{ entrada.fecha }}</td>
               <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'editarEntrada' entrada.id orden.id %}" type="button" class="btn btn-block btn-info">Editar</a>
 
@@ -65,6 +78,32 @@
                     </tbody>
 
         </table>
+
+    <div class="modal fade" id="modal-datos" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+          <h3 class="modal-title">Información</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <h4>Id:</h4><p class="id"></p>
+              <h4>Articulo:</h4><p class="articulo"></p>
+              <h4>Cantidad:</h4><p class="cantidad"></p>
+              <h4>Condicion:</h4><p class="condicion"></p>
+              <h4 >Comentario:</h4><textarea disabled rows="5" cols="60" class="comentario"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button data-dismiss="modal" class="btn btn-success" type="button">Regresar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock contenido_panel %}
 
 {% block pie_panel %}
@@ -83,4 +122,20 @@
     })
   })
 </script>
+    <script type="text/javascript">
+  $('#modal-datos').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var id = button.data('id')
+    var articulo = button.data('articulo')
+    var cantidad = button.data('cantidad')
+    var condicion = button.data('condicion')
+    var comentario = button.data('comentario')
+    var modal = $(this)
+    modal.find('.modal-body .id').text(id)
+    modal.find('.modal-body .articulo').text(articulo)
+    modal.find('.modal-body .cantidad').text(cantidad)
+    modal.find('.modal-body .condicion').text(condicion)
+    modal.find('.modal-body .comentario').text(comentario)
+  });
+  </script>
 {% endblock js %}
