@@ -146,14 +146,16 @@ def consultar_clientes(request):
 
 @login_required(login_url="/ordenes_servicio/login/")
 def cancelar_orden_servicio(request, id):
-    if request.user.cargo == "C":
+    try:
+        orden_servicio_aux = OrdenServicio.objects.get(id=id)
+    except:
+        raise Http404
+    print(request.user.encargado_set)
+    pertenece_a_usuario =  request.user.encargado_set.all().filter(id=id).count() == 1
+    if request.user.cargo == "C" or (request.user.cargo == "O" and pertenece_a_usuario):
         if request.method == 'POST':
             form = CancelarOrdenServicioForm(request.POST)
             if form.is_valid():
-                try:
-                    orden_servicio_aux = OrdenServicio.objects.get(id=id)
-                except:
-                    raise Http404
                 orden_servicio_aux.comentarios = form.data["comentario_cancelar"]
                 orden_servicio_aux.estado = "CA"
                 orden_servicio_aux.save()
@@ -163,10 +165,6 @@ def cancelar_orden_servicio(request, id):
                 messages.error(request, 'El formulario NO es valido, Por favor corrige los errores')
                 for error in form.errors:
                     messages.error(request, "Hay un problema con " + error)
-        try:
-            orden_servicio_aux = OrdenServicio.objects.get(id=id)
-        except:
-            raise Http404
         if(orden_servicio_aux.estado == "CA"):
             messages.error(request, "No se puede cancelar una orden de servicio ya cancelada")
             return redirect('/ordenes_servicio/')
