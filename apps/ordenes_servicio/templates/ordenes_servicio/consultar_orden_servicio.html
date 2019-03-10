@@ -60,9 +60,7 @@
                     <td>{{ orden.comentarios }}</td>
                     <td>
                         {%  if orden.estado == 'AS' %}
-                        <a href="{% url 'ordenes_servicio:en_tramite_orden_servicio' orden.id %}">
-                            <button style="margin: 1px 15%" type="button" class="btn btn-primary btn-xs">Aceptar Orden</button>
-                        </a>
+                        <button style="margin: 1px 15%" type="button" class="btn btn-primary btn-xs cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_asignacion">Aceptar Orden</button>
                         {% else %}
                         <div style="margin: 1px 10%" class="btn-group btn-group-xs">
                             <button name="{{orden.estado}}" id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button>
@@ -102,6 +100,31 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+
+<!-- Modal para confirmar asignacion -->
+<div class="modal fade" id="confirmar_asignacion">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Aceptar Orden de Servicio</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea aceptar la orden de servicio No.
+                        <b id="my_orden_id"></b>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
+                    <button onclick="aceptar_orden_servicio()" type="button" class="btn btn-primary">Si</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 {% endblock contenido %}
 
 {% block js %}
@@ -141,19 +164,45 @@
         }
     });
 
-    //activar modal
+    //activar modal en cerrar orden
     $('.cerrar_orden').click(function(){
         var orden_id = $(this).data('id');
         $(".modal-body #my_orden_id").text(orden_id);
     });
-    
-    //cuando se da click en SI
+
+    //activar modal en aceptar orden
+    $('.aceptar_orden').click(function(){
+        var orden_id = $(this).data('id');
+        $(".modal-body #my_orden_id").text(orden_id);
+    });
+
+    //cuando se da click en SI en cerrar orden
     function cerrar_orden_servicio(){
         var orden_id = document.getElementById('my_orden_id').innerText;
         console.log(orden_id);
         $.ajax({
             type: "GET",
             url: '{% url "ordenes_servicio:cerrar_orden_servicio" %}',
+            data: {
+                'orden_id': orden_id
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.success == true){ // if true (1)
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 100);
+                }
+            }
+        });
+    }
+    //cuando se da click en SI en aceptar orden
+    function aceptar_orden_servicio(){
+        var orden_id = document.getElementById('my_orden_id').innerText;
+        console.log(orden_id);
+        $.ajax({
+            type: "GET",
+            url: '{% url "ordenes_servicio:aceptar_orden_servicio" %}',
             data: {
                 'orden_id': orden_id
             },

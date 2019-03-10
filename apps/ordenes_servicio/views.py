@@ -105,21 +105,24 @@ def crear_orden_servicio(request):
         return redirect('/ordenes_servicio/')
 
 @login_required(login_url="/ordenes_servicio/login/")
-def en_tramite_orden_servicio(request, id):
-    usuario = request.user
-    try:
-        orden_servicio_aux = OrdenServicio.objects.get(id=id)
-    except:
-        raise Http404
-    encargado = usuario.encargado_set.all().filter(id=id).count() == 1
-    if usuario.cargo == "O" and encargado:
-        orden_servicio_aux.estado = "TR"
-        orden_servicio_aux.save()
-        messages.success(request, 'Orden de Servicio Aceptada')
-        return render(request, 'ordenes_servicio/consultar_orden_servicio.html', {'ordenes': listar_ordenes(usuario)})
-    else:
-        messages.error(request, 'No estas autorizado para realizar esta acción')
-        return redirect('/ordenes_servicio/')
+def aceptar_orden_servicio(request):
+    if request.is_ajax():
+        id = request.GET.get('orden_id', None)
+        try:
+            orden_servicio_aux = OrdenServicio.objects.get(id=id)
+            usuario = request.user
+            encargado = usuario.encargado_set.all().filter(id=id).count() == 1
+            if usuario.cargo == "O" and encargado:
+                orden_servicio_aux.estado = "TR"
+                orden_servicio_aux.save()
+                messages.success(request, 'Orden de Servicio Aceptada')
+                return JsonResponse({'success': True})
+            else:
+                messages.error(request, 'No estas autorizado para realizar esta acción')
+                return JsonResponse({'success': False})
+        except:
+            return JsonResponse({'orden_id': 0})
+
 
 @login_required(login_url="/ordenes_servicio/login/")
 def cerrar_orden_servicio(request):
