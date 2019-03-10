@@ -5,11 +5,11 @@ from django.utils import timezone
 
 
 class Job(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)
-    functions = models.TextField()
-    has_vacants = models.BooleanField(default=True)
-    estado = models.BooleanField(default=True)
+    name = models.CharField(max_length=200, verbose_name="Nombre")
+    description = models.CharField(max_length=200, verbose_name="Descripción")
+    functions = models.TextField(verbose_name="Funciones")
+    has_vacants = models.BooleanField(default=True, verbose_name="¿Tiene vacantes?")
+    estado = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):
         return self.name
@@ -36,20 +36,20 @@ class Employee(models.Model):
         ('DAVIVIENDA', 'Davivienda')
     )
 
-    name = models.CharField(max_length=200)
-    id_type = models.CharField(max_length=2, choices=IDENTIFICATION_TYPE)
-    identification = models.CharField(max_length=200)
-    address = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
-    telephone = models.CharField(max_length=200)
-    eps = models.CharField(max_length=200)
-    pension_fund = models.CharField(max_length=200)
-    severance_fund = models.CharField(max_length=200)
-    bank = models.CharField(max_length=10, choices=BANK_CHOICE)
-    account_number = models.CharField(max_length=200)
-    salary = models.IntegerField()
-    cargo = models.ForeignKey(Job, on_delete=models.CASCADE)
-    status = models.BooleanField(default=True)
+    name = models.CharField(max_length=200, verbose_name="Nombre")
+    id_type = models.CharField(max_length=2, choices=IDENTIFICATION_TYPE, verbose_name="Tipo de identificación")
+    identification = models.CharField(max_length=200, verbose_name="Número de identificación")
+    address = models.CharField(max_length=200, verbose_name="Dirección")
+    email = models.CharField(max_length=200, verbose_name="Correo electrónico")
+    telephone = models.CharField(max_length=200, verbose_name="Teléfono")
+    eps = models.CharField(max_length=200, verbose_name="EPS")
+    pension_fund = models.CharField(max_length=200, verbose_name="Fondo de pensiones")
+    severance_fund = models.CharField(max_length=200, verbose_name="Fondo de cesantias")
+    bank = models.CharField(max_length=10, choices=BANK_CHOICE, verbose_name="Banco")
+    account_number = models.CharField(max_length=200, verbose_name="Número de cuenta")
+    salary = models.IntegerField(verbose_name="Salario")
+    cargo = models.ForeignKey(Job, on_delete=models.CASCADE, verbose_name="Cargo")
+    status = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):
         return self.name

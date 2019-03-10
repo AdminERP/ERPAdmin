@@ -42,8 +42,9 @@
                     <th>EPS</th>
                     <th>Fondo de pensiones</th>
                     <th>Fondo de cesantias</th>
+                <!--
                     <th>Banco</th>
-                    <th>Numero de Cuenta</th>
+                    <th>Numero de Cuenta</th> -->
                     <th>Salario</th>
                     <th>Estado</th>
                     {% if action == 'list' %}
@@ -63,13 +64,14 @@
                         <td>{{ empleado.eps }}</td>
                         <td>{{ empleado.pension_fund }}</td>
                         <td>{{ empleado.severance_fund }}</td>
+                    <!--
                         <td>{{ empleado.bank }}</td>
-                        <td>{{ empleado.account_number }}</td>
+                        <td>{{ empleado.account_number }}</td> -->
                         <td>{{ empleado.salary }}</td>
                         {% if empleado.status %}
-                            <td>ACTIVO</td>
+                            <td><span class="label label-success">ACTIVO</span></td>
                         {% else %}
-                            <td>INACTIVO</td>
+                            <td><span class="label label-danger">INACTIVO</span></td>
                         {% endif %}
                         {% if action == 'list' %}
                             <td>
@@ -84,19 +86,19 @@
 
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a href="{% url 'modificar_empleado' empleado.id %}">Consultar/Modificar</a>
+                                        <li><a href="{% url 'modificar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Consultar/Modificar</a>
                                         </li>
 
                                         <li class="divider"></li>
                                         {% if empleado.status %}
                                             <li><a class="delete-empleado" href="#" data-toggle="modal"
                                                    data-target="#deactivate-modal"
-                                                   data-url="{% url 'desactivar_empleado' empleado.id %}">Desactivar</a>
+                                                   data-url="{% url 'desactivar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Desactivar</a>
                                             </li>
                                         {% else %}
                                             <li><a class="activate-empleado" href="#" data-toggle="modal"
                                                    data-target="#activate-modal"
-                                                   data-url="{% url 'activar_empleado' empleado.id %}">Activar</a></li>
+                                                   data-url="{% url 'activar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Activar</a></li>
                                         {% endif %}
 
                                     </ul>

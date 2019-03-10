@@ -44,9 +44,9 @@
                         <td>{{ cargo.name }}</td>
                         <td>{{ cargo.description }}</td>
                         {% if cargo.estado %}
-                            <td>ACTIVO</td>
+                            <td><span class="label label-success">ACTIVO</span></td>
                         {% else %}
-                            <td>INACTIVO</td>
+                            <td><span class="label label-danger">INACTIVO</span></td>
                         {% endif %}
                         <td>{{ cargo.has_vacants|yesno:"Si,No" }}</td>
                         <td>

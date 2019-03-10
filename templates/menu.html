@@ -10,7 +10,7 @@
         <img src="dist/img/user-160x160.jpg" class="img-circle" alt="User Image">
       </div>-->
       <div class="pull-left info">
-        <p>Thanh Nguyen</p>
+        <p>Jhonier Calero</p>
         <!-- Status -->
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>
@@ -18,11 +18,58 @@
 
     <!-- Sidebar Menu -->
     <ul class="sidebar-menu" data-widget="tree">
-      <li class="header">HEADER</li>
+      <li class="header">MAIN NAVIGATION</li>
       <!-- Optionally, you can add icons to the links -->
-      <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-      <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
       <li class="treeview">
+          <a href="#">
+            <i class="fa fa-users"></i> <span>Cargos</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a href="{% url 'registrar_cargo' %}"><span class="glyphicon glyphicon-plus"></span><span>Registrar cargo</span></a></li>
+              <li><a href="{% url 'consultar_cargo' %}"></i> <span class="glyphicon glyphicon-list-alt"></span><span>Listar cargos</span></a></li>
+          </ul>
+      </li>
+        <li class="treeview">
+          <a href="#">
+              <span class="glyphicon glyphicon-user"></span><span>Empleados</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a href="{% url 'registrar_empleado' %}"><i class="fa fa-user-plus"></i><span>Registrar empleado</span></a></li>
+              <li><a href="{% url 'consultar_empleado' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Listar empleados</span></a></li>
+          </ul>
+      </li>
+        <li class="treeview">
+          <a href="#">
+              <span class="glyphicon glyphicon-usd"></span><span>Nomina</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a href="{% url 'modulo_nomina' %}"><span class="glyphicon glyphicon-pencil"></span><span>Generar nomina</span></a></li>
+              <li><a href="{% url 'consultar_nomina' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Consultar nomina</span></a></li>
+          </ul>
+      </li>
+      <li class="treeview">
+          <a href="#">
+              <span class="glyphicon glyphicon-check"></span><span>Evaluación</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+              <li><a href="{% url 'registrar_pregunta' %}"><span class="glyphicon glyphicon-pencil"></span><span>Registrar pregunta</span></a></li>
+              <li><a href="{% url 'consultar_pregunta' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Consultar pregunta</span></a></li>
+              <li><a href="{% url 'consultar_evaluacion' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Consultar evaluación</span></a></li>
+          </ul>
+      </li>
+      <!--<li class="treeview">
         <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
           <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
@@ -32,7 +79,7 @@
           <li><a href="#">Link in level 2</a></li>
           <li><a href="#">Link in level 2</a></li>
         </ul>
-      </li>
+      </li>-->
     </ul>
     <!-- /.sidebar-menu -->
   </section>

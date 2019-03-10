@@ -28,8 +28,62 @@
         <!-- form start -->
         <form method="POST">{% csrf_token %}
             <div class="box-body">
-
-                {% bootstrap_form form %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.id_type %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.identification %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.name %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.email %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.address %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.telephone %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.eps %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.pension_fund %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.severance_fund %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.cargo %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.bank %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.account_number %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.salary %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.status %}
+                    </div>
+                </div>
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
