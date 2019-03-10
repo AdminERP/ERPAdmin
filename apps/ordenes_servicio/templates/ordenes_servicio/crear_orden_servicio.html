@@ -83,6 +83,7 @@
 
     $('.basicAutoSelectEncargado').keypress(function() {
       document.getElementById("id_encargado_seleccionado_texto").value = "";
+      document.getElementById("id_encargado").value = "";
     });
 
     $('.basicAutoSelectCliente').autoComplete(
@@ -96,6 +97,7 @@
 
     $('.basicAutoSelectCliente').keypress(function() {
       document.getElementById("id_cliente_seleccionado_texto").value = "";
+      document.getElementById("id_cliente").value = "";
     });
 </script>
 {% endblock js %}
