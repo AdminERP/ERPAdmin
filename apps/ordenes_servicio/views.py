@@ -151,7 +151,6 @@ def cancelar_orden_servicio(request):
     if request.is_ajax():
         id = request.GET.get('orden_id', None)
         comentarios = request.GET.get('comentarios', None)
-        print("entraaaaaa")
         try:
             orden_servicio_aux = OrdenServicio.objects.get(id=id)
         except:
