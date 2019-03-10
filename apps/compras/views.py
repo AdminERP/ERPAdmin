@@ -1,31 +1,27 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView   
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView   
 
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
 from .forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
 # Create your views here.
 
-
-class Prueba(CreateView): ##esta sirve solo para hacer pruebas 
-    model = Cotizacion
-    form_class = CotizacionForm
-    template_name= 'compras/prueba.html'
-    success_url = '/admin'
+class index(TemplateView):
+    template_name= 'compras/index_compras.html'
 
 
 ######---CREATES---######
+class SolicitudCreate(CreateView): 
+    model= SolicitudCompra
+    form_class= SolicitudCompraForm
+    template_name= 'compras/crear_solicitudes.html'
+    success_url = reverse_lazy('compras:solicitudes')
+
 class CotizacionCreate(CreateView): 
     model = Cotizacion 
     form_class = CotizacionForm
     #template_name = 
     success_url = '/'   
-
-class SolicitudCreate(CreateView): 
-    model= SolicitudCompra
-    form_class= SolicitudCompraForm
-    #template_name= 
-    success_url = '/'
 
 class OrdenCreate(CreateView): 
     model = OrdenCompra

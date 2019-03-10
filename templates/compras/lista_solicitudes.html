@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block miga_pan %}
-<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-<li><a href="#">Compras</a></li>
-<li class="active">Solicitudes de Compra</li>
+<li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+<li><a href="{% url 'compras:index' %}">Compras</a></li>
+<li class="active"><a href="{% url 'compras:solicitudes' %}">Solicitudes de compra</a></li>
 {% endblock miga_pan %}
 
 {% block titulo_pagina %}
@@ -46,20 +46,20 @@
                         <div class="col-xs-3">
                           <label for="inputId">Identificacion</label>
                           <input type="text" class="form-control" id="inputId" disabled 
-                            placeholder={{solicitud.usuario.codigo}}> 
+                            placeholder={{solicitud.solicitante}}> 
                         </div>                        
                       </div>
 
                       <div class="form-group">
                         <label for="inputElemento">Elemento requerido</label>
                         <input type="text" class="form-control" id="inputElemento" disabled
-                          placeholder={{solicitud.articulo.nombre}}>                        
+                          placeholder={{articulossolicitud.articulo.nombre}}>                        
                       </div>
 
                       <div class="form-group">
                         <label for="inputCantidad">Cantidad</label>
                         <input type="text" class="form-control" id="inputCantidad" disabled
-                          placeholder={{solicitud.articulo.cantidad}}>                        
+                          placeholder={{articulossolicitud.cantidad}}>                        
                       </div>
 
                       <div class="form-group row">                        
