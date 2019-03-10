@@ -77,6 +77,9 @@
                                             <a href="#" style="color: green;" onclick="paymentModal('{{cuenta.order_id}}', '{{cuenta.pk}}')">
                                                 <i class="far fa-money-bill-alt fa-2x"></i>
                                             </a>
+                                            <a href="#" style="color: red;" onclick="cancellModal('{{cuenta.order_id}}', '{{cuenta.pk}}')">
+                                                <i class="fas fa-ban fa-2x"></i>
+                                            </a>
                                             {% endif %}
                                             <a href="{% url 'payment_account_details' pk=cuenta.pk %}" style="color: gray;">
                                                 <i class="far fa-list-alt fa-2x"></i>
@@ -122,7 +125,39 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-danger" form="pay-account-form">Pagar</button>
+                    <button type="submit" class="btn btn-danger" form="pay-account-form">Pagar Cuenta</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /The Modal -->
+
+    <!-- The Modal -->
+    <div class="modal" id="cancelle-account-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirme anulación de cuenta!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <h3 id="modal-title-cancelle"></h3>  
+                    <form method="POST" action="{% url 'cancelle_account' %}" id="cancelle-account-form">
+                        <!-- Token -->
+                        {% csrf_token %}
+                        <input type="hidden" name="account_id" id="form-account-id-1">
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" form="cancelle-account-form">Anular Cuenta</button>
                     <br>
                 </div>
             </div>
@@ -166,6 +201,7 @@
         },
         "columnDefs": [
             { "orderable": true, "targets": [ 0,1,2,3,4,5,6 ] },
+            { "orderable": false, "targets": [ 7 ] },
             { "className": "text-center", "targets": [0,1,2,4,5,6,7] },
             { "className": "text-right", "targets": [3] },
         ],
@@ -175,6 +211,12 @@
         $("#modal-title").text("Desea Pagar la cuenta asociada a la orden "+order_id+"?");
         $("#form-account-id").val(account_id);
         $("#pay-account-modal").modal("show");
+    }
+
+    function cancellModal(order_id, account_id){
+        $("#modal-title-cancelle").text("Desea Anular la cuenta asociada a la orden "+order_id+"?");
+        $("#form-account-id-1").val(account_id);
+        $("#cancelle-account-modal").modal("show");
     }
 </script>
 {% endblock js %}

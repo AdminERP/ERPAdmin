@@ -85,6 +85,23 @@ def pay_account(request):
 	else:
 		return redirect('listarPagar')
 
+def cancelle_account(request):
+	if request.POST:
+		account = get_object_or_404(CuentaPagar, pk=request.POST.get('account_id'))
+		#si está paga
+		if account.status == '2':
+			cuentas = CuentaPagar.objects.all().order_by('id')
+			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'PAYD', 'order':account.order_id})
+		# si está cancelada
+		if account.status == '1':
+			cuentas = CuentaPagar.objects.all().order_by('id')
+			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'CANCELLED', 'order':account.order_id})
+		account.status = '1'
+		account.save()
+		return redirect('listarPagar')
+	else:
+		return redirect('listarPagar')
+
 def payments(request):
 	payments = Payment.objects.all().order_by('id')
 	return render(request, 'cuentas/payments.html', {'payments':payments})
