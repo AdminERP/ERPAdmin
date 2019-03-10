@@ -142,8 +142,8 @@
                         </div>
                         <!-- /.input group -->
                     </div>
-                    <input type="text" name="allitems" id="allitems" value="{{ form.allitems.value|default_if_none:'' }}">
-                    <input type="text" name="total" class="total" value="{{ form.total.value|default_if_none:'' }}">
+                    <input type="hidden" name="allitems" id="allitems" value="{{ form.allitems.value|default_if_none:'' }}">
+                    <input type="hidden" name="total" class="total" value="{{ form.total.value|default_if_none:'' }}">
                 </form>
             </div>
         </div>
