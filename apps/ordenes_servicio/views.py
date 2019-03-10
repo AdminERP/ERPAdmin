@@ -222,7 +222,7 @@ def cancelar_orden_servicio(request, id):
                 orden_servicio_aux.comentarios = form.data["comentario_cancelar"]
                 orden_servicio_aux.estado = "CA"
                 orden_servicio_aux.save()
-                messages.success(request, 'Orden Servicio Cancelada Exitosamente')
+                messages.success(request, 'Orden de Servicio Cancelada Exitósamente')
                 return render(request, 'ordenes_servicio/consultar_orden_servicio.html',
                               {'ordenes': listar_ordenes(request.user)})
             else:
