@@ -2,6 +2,9 @@ from django import forms
 from apps.ordenes_servicio.models import *
 from django.urls import reverse_lazy
 
+class CancelarOrdenServicioForm(forms.Form):
+    comentario_cancelar = forms.CharField(label = "Comentarios sobre la cancelacion:",required=True)
+
 class OrdenServicioForm(forms.ModelForm):
     encargado_select = forms.CharField(label = "Buscar Encargado:",required=False, widget=forms.TextInput(
         attrs={
