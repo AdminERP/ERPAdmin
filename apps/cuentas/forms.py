@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import CuentaPagar, Item
+from .models import CuentaPagar, Item, ServiceOrder
 
 class PaymentAccountForm(forms.ModelForm):
     class Meta:
@@ -19,3 +19,15 @@ class ItemForm(forms.ModelForm):
         fields = (
     		'name', 
     		'value')
+
+
+
+class ServiceOrderForm(forms.ModelForm):
+    class Meta:
+        model = ServiceOrder
+        fields = (
+            'status', 
+            'sold_service',
+            'employee_id',
+            'comments',
+            'total')

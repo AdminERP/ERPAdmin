@@ -10,5 +10,6 @@ urlpatterns = [
     path('listarPagar/', listarPagar,  name='listarPagar'),
     path('listarCobrar/', listarCobrar, name='listarCobrar'),
     path('detalles/', listarDetalles, name='detalles'),
+    path('createOrder/', createOrder, name='createOrder'),
 
     ]

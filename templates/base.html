@@ -23,8 +23,9 @@
 
     <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!--datatable-->
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/DataTables/datatables.min.css' %}"/>
     {{ form.media.css }}
     {% block css %}{% endblock css %}
 </head>
@@ -139,6 +140,8 @@
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+<!--datatable-->
+<script type="text/javascript" src="{% static 'plugins/DataTables/datatables.min.js' %}"></script>
 {{ form.media.js }}
 
 <script>

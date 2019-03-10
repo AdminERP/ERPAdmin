@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block titulo %} Crear Orden{% endblock titulo %}
+
+{% block css %}
+
+
+{% endblock css %}
+
+{% block titulo_pagina %} Nueva Orden de Servicio {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Orden de Servicio</a></li>
+<li class="active">Crear Orden</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Datos de Factura</small>{% endblock titulo_panel %}
+
+{% block contenido_panel %}
+<form method="POST">
+	{% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+
+{% endblock contenido_panel %}
+
+{% block js %}
+<!--datatable-->
+
+{% endblock js %}
