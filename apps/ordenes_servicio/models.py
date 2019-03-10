@@ -37,7 +37,7 @@ class OrdenServicio(models.Model):
         choices=opciones_estado,
         default=ASIGNADA,
     )
-    valor = models.IntegerField(null=False, default=0)
+    valor = models.PositiveIntegerField(null=False, default=0)
 
     class Meta:
         verbose_name_plural = "Ordenes de Servicio"

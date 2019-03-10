@@ -80,6 +80,7 @@ def crear_orden_servicio(request):
         if request.method == 'POST':
             form = OrdenServicioForm(request.POST)
             if form.is_valid():
+                form.instance.coordinador = request.user
                 form.save()
                 messages.success(request, 'Orden de servicio creada exitosamente')
                 form = OrdenServicioForm()
