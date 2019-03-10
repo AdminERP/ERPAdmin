@@ -35,10 +35,11 @@ def ordenes_login(request):
 
 def manage_options(request, context):
     context["options"] = [
-        {"name": "Django Admin Site", "href": "/admin"},
+        {"name": "Inicio", "href": "/ordenes_servicio/welcome/"},
     ]
     if request.user.is_superuser:
         context["options"] += [
+            {"name": "Django Admin Site", "href": "/admin"},
             {"name": "Crear Cliente", "href": "/ordenes_servicio/crear_cliente/"},
             {"name": "Consultar Clientes", "href": "/ordenes_servicio/consultar_clientes/"}
         ]
@@ -57,8 +58,13 @@ def manage_options(request, context):
         context["options"] += [
             {"name": "Consultar Ordenes de Servicio", "href": "/ordenes_servicio/consultar_orden_servicio/"}
         ]
+
+        atender = len(OrdenServicio.objects.filter(estado="AS"))
+        tramite = len(OrdenServicio.objects.filter(estado="TR"))
         context["boxes"] = [
-            {"title": "Ordenes Por Atender", "value": 0, "color": "bg-yellow", "icon": "ion-folder"},
+            {"title": "Ordenes Por Atender", "value": atender, "color": "bg-yellow", "icon": "ion-folder"},
+            {"title": "Ordenes en Tramite", "value": tramite, "color": "bg-red", "icon": "ion-clock"},
+            {"title": "Ordenes Cerradas", "value": 0, "color": "bg-green-active", "icon": "ion-checkmark"},
         ]
 
 @login_required(login_url="/ordenes_servicio/login/")
