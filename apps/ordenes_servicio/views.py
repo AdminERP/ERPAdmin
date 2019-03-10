@@ -133,11 +133,10 @@ def cerrar_orden_servicio(request):
                 orden_servicio_aux.estado = "CE"
                 orden_servicio_aux.save()
                 messages.success(request, 'Orden de Servicio Cerrada')
-                return render(request, 'ordenes_servicio/consultar_orden_servicio.html',
-                              {'ordenes': listar_ordenes(usuario)})
+                return JsonResponse({'success': True})
             else:
                 messages.error(request, 'No estas autorizado para realizar esta acción')
-                return redirect('/ordenes_servicio/')
+                return JsonResponse({'success': False})
         except:
             return JsonResponse({'orden_id': 0})
 

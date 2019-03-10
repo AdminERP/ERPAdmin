@@ -52,6 +52,7 @@
                         {% elif orden.estado == 'CE' %}
                         <span class="label label-success">Cerrada</span>
                         {% endif %}
+                    </td>
                     <td>{{ orden.cliente }}</td>
                     <td>{{ orden.servicio_vendido }}</td>
                     <td>{{ orden.valor }}</td>
@@ -64,9 +65,9 @@
                         </a>
                         {% else %}
                         <div style="margin: 1px 10%" class="btn-group btn-group-xs">
-                            <button id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button>
+                            <button name="{{orden.estado}}" id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button>
                             <a href="{% url 'ordenes_servicio:cancelar_orden_servicio' orden.id %}">
-                                <button id="cancelar_boton" type="button" class="btn btn-danger">Cancelada</button>
+                                <button name="{{orden.estado}}" id="cancelar_boton" type="button" class="btn btn-danger">Cancelada</button>
                             </a>
                         </div>
                         {% endif %}
@@ -93,7 +94,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
-                <button type="button" class="btn btn-primary cerrando_orden">Si</button>
+                <button onclick="cerrar_orden_servicio()" type="button" class="btn btn-primary">Si</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -104,7 +105,12 @@
 {% endblock contenido %}
 
 {% block js %}
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery-3.3.1.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/dataTables.bootstrap4.min.js' %}"></script>
 <script>
+
+
     $(document).ready(function() {
         $('#tabla_ordenes').DataTable( {
             columnDefs: [ {
@@ -121,21 +127,28 @@
     } );
 
     $(document).ready(function() {
-        var estado = document.getElementById('estado').innerText;
-        console.log(estado)
-        if(estado == 'Cerrada' || estado == 'Cancelada'){
-            $('#cerrar_boton').prop('disabled', true);
-            $('#cancelar_boton').prop('disabled', true);
+        var botones_cerrar = document.getElementsByName('CE');
+        var botones_cancelar = document.getElementsByName('CA');
+        botones_cancelar.disabled = true;
+        botones_cerrar.disabled = true;
+        for (var i = 0; i < botones_cancelar.length; i++) {
+            var item = botones_cancelar[i]; 
+            item.disabled = true;
         }
+        for (var i = 0; i < botones_cerrar.length; i++) {
+            var item = botones_cerrar[i]; 
+            item.disabled = true;
+        }
+    });
 
-    } );
-
+    //activar modal
     $('.cerrar_orden').click(function(){
         var orden_id = $(this).data('id');
         $(".modal-body #my_orden_id").text(orden_id);
     });
-
-    $('.cerrando_orden').click(function(){
+    
+    //cuando se da click en SI
+    function cerrar_orden_servicio(){
         var orden_id = document.getElementById('my_orden_id').innerText;
         console.log(orden_id);
         $.ajax({
@@ -149,10 +162,10 @@
                 if(data.success == true){ // if true (1)
                     setTimeout(function(){// wait for 5 secs(2)
                         location.reload(); // then reload the page.(3)
-                    }, 5000);
+                    }, 100);
                 }
             }
         });
-    });
+    }
 </script>
 {% endblock js %}
