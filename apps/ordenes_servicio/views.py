@@ -101,7 +101,7 @@ def crear_orden_servicio(request):
 @login_required(login_url="/ordenes_servicio/login/")
 def consultar_orden_servicio(request):
     usuario = request.user
-    if not usuario.is_anonymous:
+    if usuario.cargo == "C" or usuario.cargo == "O":
         return render(request, 'ordenes_servicio/consultar_orden_servicio.html', {'ordenes': listar_ordenes(usuario)})
     else:
         messages.error(request, 'No estas autorizado para realizar esta acción')

@@ -10,7 +10,7 @@
 {% block titulo_pagina %}Consultar Orden de Servicio{% endblock %}
 
 {% block css %}
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 {% endblock css %}
 
 {% block contenido %}
@@ -30,6 +30,7 @@
                     <th>Valor</th>
                     <th>Encargado</th>
                     <th>Comentarios</th>
+                    <th>Cambiar Estado a</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -51,6 +52,12 @@
                     <td>{{ orden.valor }}</td>
                     <td>{{ orden.encargado }}</td>
                     <td>{{ orden.comentarios }}</td>
+                    <td>
+                        <div style="margin: 1px 10%" class="btn-group btn-group-xs">
+                            <button type="button" href="#" class="btn btn-success">Cerrada</button>
+                            <button type="button" href="{% url 'ordenes_servicio:cancelar_orden_servicio' orden.id %}" class="btn btn-danger">Cancelada</button>
+                        </div>
+                    </td>
                 </tr>
                 {% endfor %}
 
@@ -63,5 +70,20 @@
 {% endblock contenido %}
 
 {% block js %}
-
+<script>
+    $(document).ready(function() {
+        $('#tabla_ordenes').DataTable( {
+            columnDefs: [ {
+                targets: [ 0 ],
+                orderData: [ 0, 1 ]
+            }, {
+                targets: [ 1 ],
+                orderData: [ 1, 0 ]
+            }, {
+                targets: [ 4 ],
+                orderData: [ 4, 0 ]
+            } ]
+        } );
+    } );
+</script>
 {% endblock js %}
