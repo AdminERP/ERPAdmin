@@ -1,26 +1,22 @@
 """ Modelos propios modulo Compras """
 
 from django.db import models
-
-# from usuarios import User
+#Se importa el User por defecto en espera de la implentacion del otro grupo
+from django.contrib.auth.models import User as Usuario
+# from apps.usuarios import Usuario
 
 class Proveedor(models.Model):
     
     nombre = models.CharField(max_length=50)
+    direccion = models.CharField(max_length=50)
+    telefono = models.CharField(max_length=10)
     email = models.EmailField()
 
 class Articulo(models.Model):
     
     nombre = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=150)
     
-class ArticulosSolicitud(models.Model):
-
-    cantidad = models.SmallIntegerField()
-
-class ArticulosCotizacion(models.Model):
-
-    cantidad = models.SmallIntegerField()
-    precio = models.DecimalField(max_digits=15,decimal_places=2)    # Representa desde 0,00 hasta (10E13)-1,99 en pesos.
 
 class SolicitudCompra(models.Model):
     
@@ -34,25 +30,43 @@ class SolicitudCompra(models.Model):
         (APROBADO_GERENTE, 'Aprobado gerente')
     ]
 
-    articulos = models.ManyToManyField(Articulo, through=ArticulosSolicitud)
     justificacion = models.CharField(max_length=1000)
     fecha_realizada = models.DateField(auto_now_add=True)
     fecha_esperada = models.DateField()
-    # solicitante = models.ForeignKey(User, null=True)
-    estado_aprobacion = models.CharField(max_length=16, choices=ESTADOS, default=PENDIENTE)
-    # jefe_aprobo = models.ForeignKey(User, null=True)
-    # gerente_aprobo = models.ForeignKey(User, null=True)
     
+    estado_aprobacion = models.CharField(max_length=16, choices=ESTADOS, default=PENDIENTE)
+
+    solicitante = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+    articulos = models.ManyToManyField(Articulo, through='ArticulosSolicitud')
+    # Estos campos son verdaderamente necesarios?
+    # jefe_aprobo = models.ForeignKey(Usuario, null=True)
+    # gerente_aprobo = models.ForeignKey(Usuario, null=True)
+
+class ArticulosSolicitud(models.Model):
+
+    cantidad = models.SmallIntegerField()
+
+    solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
+    articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
+
+
 class Cotizacion(models.Model):
     
-    articulos = models.ManyToManyField(Articulo, through=ArticulosCotizacion)
-    cantidad = models.SmallIntegerField()
     total = precio = models.DecimalField(max_digits=17,decimal_places=2)    # Representa desde 0,00 hasta (10E15)-1,99 en pesos.
-
     fecha_realizada = models.DateField(auto_now_add=True)
-    fecha_esperada = models.DateField()
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
+    articulos = models.ManyToManyField(Articulo, through='ArticulosCotizacion')
+
+
+class ArticulosCotizacion(models.Model):
+
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)
+    articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
+
+    cantidad = models.SmallIntegerField()
+    precio = models.DecimalField(max_digits=15,decimal_places=2)    # Representa desde 0,00 hasta (10E13)-1,99 en pesos.
 
 class OrdenCompra(models.Model):
 
@@ -65,9 +79,8 @@ class OrdenCompra(models.Model):
         (APROBADO_GERENTE, 'Aprobado gerente'),
         (EMITIDA, 'Emitida al proveedor')
     ]
-
-    cotizaciones = models.ManyToManyField(Cotizacion)  # Al menos 3 por orden de compra, una sola elegida.
-    cotizacion_elegida = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)    # Elegida tambien puede definirse mediante flag en la relacion.
+    # cotizaciones = models.ManyToManyField(Cotizacion)  # Al menos 3 por orden de compra, una sola elegida.
+    cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)    # Elegida tambien puede definirse mediante flag en la relacion.
 
     fecha_realizada = models.DateField(auto_now_add=True)
     fecha_esperada = models.DateField()

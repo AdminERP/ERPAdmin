@@ -2,14 +2,14 @@
 
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-<li><a href="#">Compras</a></li>
+<li><a href="{% url 'compras:index' %}">Compras</a></li>
 <li class="active">Solicitudes de Compra</li>
 {% endblock miga_pan %}
 
 {% block titulo_pagina %}
   Solicitudes de Compra
 {% endblock titulo_pagina %} 
-
+<hr>
 {% block contenido %}
   <div class="content-wrapper">       
     <!-- Main content -->

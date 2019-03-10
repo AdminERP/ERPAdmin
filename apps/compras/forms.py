@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext as _
 from apps.compras.models import Cotizacion, SolicitudCompra, OrdenCompra
 
 
@@ -17,26 +18,26 @@ class CotizacionForm(forms.ModelForm):
 
         fields= [ 
             'proveedor', 
-            'articulo',
+            'articulos',
             'cantidad',
-            'fecha_realizada',
+            # 'fecha_realizada',
             'fecha_esperada'
         ]
 
         labels = {
             'proveedor' : 'Proveedor',
-            'articulo' : 'Artículo', 
+            'articulos' : 'Artículo', 
             'cantidad' : 'Cantidad', 
-            'fecha_realizada' : 'Fecha de realización', 
+            # 'fecha_realizada' : 'Fecha de realización', 
             'fecha_esperada' : 'Fecha esperada de entrega'
         }
 
         widgets = {
             'proveedor' : forms.Select(attrs= {'class': 'form-control'}) ,
-            'articulo' :forms.Select(attrs= {'class': 'form-control'}) , 
+            'articulos' :forms.Select(attrs= {'class': 'form-control'}) , 
             'cantidad' : forms.NumberInput(attrs= {'class': 'form-control'}) , 
-            'fecha_realizada' : forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
-                                                                                 months = MESES)) , 
+            # 'fecha_realizada' : forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
+            #                                                                      months = MESES)) , 
             'fecha_esperada' : forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
                                                                                  months = MESES)) , 
         }
@@ -52,7 +53,7 @@ class SolicitudCompraForm (forms.ModelForm):
             'aprobacion_departamento',
             'aprobacion_gerencia',
             'justificacion',
-            'fecha_realizada',
+            # 'fecha_realizada',
             'fecha_esperada',
             'aprobacion_departamento',
             'aprobacion_gerencia',
@@ -61,7 +62,7 @@ class SolicitudCompraForm (forms.ModelForm):
         labels = {
             'articulo' : 'Artículo',
             'justificacion' : 'Justificación',
-            'fecha_realizada' : 'Fecha de realización', 
+            # 'fecha_realizada' : 'Fecha de realización', 
             'fecha_esperada' : 'Fecha esperada de entrega ',
             'aprobacion_departamento' : 'Aprobación de departamento',
             'aprobacion_gerencia' : 'Aprobación de gerencia',
@@ -70,8 +71,8 @@ class SolicitudCompraForm (forms.ModelForm):
         widgets = {
             'articulo' : forms.Select(attrs= {'class': 'form-control'}),
             'justificacion' : forms.TextInput(attrs= {'class': 'form-control'}),
-            'fecha_realizada' :forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
-                                                                                 months = MESES)) ,
+            # 'fecha_realizada' :forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
+                                                                                #  months = MESES)) ,
             'fecha_esperada' :forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
                                                                                  months = MESES)) ,
             'aprobacion_departamento' :forms.CheckboxInput(attrs= {'class': 'form-control'}),
@@ -86,19 +87,19 @@ class OrdenCompraForm(forms.ModelForm):
 
         fields= [
             'cotizacion',
-            'fecha_realizada',
+            # 'fecha_realizada',
             'aprobacion_gerencia',
         ]
 
         labels = {
-            'cotizacion' : 'Cotización '
-            'fecha_realizada' :  'Fecha de realización'
-            'aprobacion_gerencia' :  'Aprobación de gerencia'
+            'cotizacion' : 'Cotización ',
+            # 'fecha_realizada' :  'Fecha de realización',
+            'aprobacion_gerencia' :  'Aprobación de gerencia',
         }
 
         widgets = {
             'cotizacion' : forms.Select(attrs= {'class': 'form-control'}),
-            'fecha_realizada' : forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
-                                                                                 months = MESES))  ,
+            # 'fecha_realizada' : forms.DateField(widget=forms.SelectDateWidget(empty_label= EMPTY_LABEL,
+            #                                                                      months = MESES))  ,
             'aprobacion_gerencia' :  forms.CheckboxInput(attrs= {'class': 'form-control'}),
         }
