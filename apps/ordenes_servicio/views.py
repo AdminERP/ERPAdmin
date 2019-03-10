@@ -59,8 +59,8 @@ def manage_options(request, context):
             {"name": "Consultar Ordenes de Servicio", "href": "/ordenes_servicio/consultar_orden_servicio/"}
         ]
 
-        atender = len(OrdenServicio.objects.filter(estado="AS"))
-        tramite = len(OrdenServicio.objects.filter(estado="TR"))
+        atender = OrdenServicio.objects.filter(estado="AS").filter(encargado=request.user).count()
+        tramite = OrdenServicio.objects.filter(estado="TR").filter(encargado=request.user).count()
         context["boxes"] = [
             {"title": "Ordenes Por Atender", "value": atender, "color": "bg-yellow", "icon": "ion-folder"},
             {"title": "Ordenes en Tramite", "value": tramite, "color": "bg-red", "icon": "ion-clock"},
