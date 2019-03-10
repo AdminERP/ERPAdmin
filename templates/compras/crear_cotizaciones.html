@@ -19,15 +19,10 @@ Generar Cotizacion
         <!-- general form elements -->
         <div class="box box-primary">                      
           <!-- form start -->
-          <form role="form">
-            <div class="box-body">                                   
+            <form role="form">                               
                 <div class="panel panel-default">   
                     <div class="panel-heading">
-                        <h3 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">
-                            Nueva Cotizacion
-                        </a>                        
-                        </h3>                  
+                        <h3 class="panel-title">Nueva Cotizacion</h3>                  
                     </div>
 
                     <div>
@@ -38,7 +33,7 @@ Generar Cotizacion
                                 placeholder={{proveedor.nombre}}>                          
                             </div>
 
-                            <div class="col-xs-3">
+                            <div class="col-xs-6">
                                 <label for="inputId">Identificacion</label>
                                 <input type="text" class="form-control" id="inputId" disabled 
                                 placeholder={{proveedor.codigo}}> 
@@ -46,12 +41,12 @@ Generar Cotizacion
                         </div>
 
                         <div class="form-group row">
-                            <div class="form-group">
+                            <div class="col-xs-6">
                                 <label for="inputElemento">Elemento</label>
                                 <input type="text" class="form-control" id="inputElemento">                        
                             </div>                       
 
-                            <div class="form-group">
+                            <div class="col-xs-6">
                                 <label for="inputCantidad">Cantidad</label>
                                 <input type="text" class="form-control" id="inputCantidad">                        
                             </div>   
@@ -77,22 +72,21 @@ Generar Cotizacion
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-xs-12">
                             <label for="inputJust">Justificacion</label>
                             <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50">                          
                             </textarea>
-                        </div>                    
-                    </div>   
+                        </div>  
+                        
+                        <div class="box-footer text-center">
+                            <button type="submit" class="btn btn-success">Guardar Cotizacion</button>
+                            <button type="reset" class="btn btn-danger">Cancelar</button>
+                        </div> 
+                    </div>                                           
                 <!-- panel -->                                               
-                </div>
-            <!-- /.box-body -->
-            </div>    
-            <div class="box-footer text-center">
-              <button type="submit" class="btn btn-success">Guardar Cotizacion</button>
-              <button type="reset" class="btn btn-danger">Cancelar</button>
-            </div>        
+                </div>                      
             <!-- /.box -->            
-          </form>          
+            </form>          
           <!-- /.box-body -->
         </div>
         <!-- /.box -->
