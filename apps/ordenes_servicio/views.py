@@ -63,10 +63,12 @@ def manage_options(request, context):
 
         atender = OrdenServicio.objects.filter(estado="AS").filter(encargado=request.user).count()
         tramite = OrdenServicio.objects.filter(estado="TR").filter(encargado=request.user).count()
+        cerradas = OrdenServicio.objects.filter(estado="CE").filter(encargado=request.user).count()
+
         context["boxes"] = [
             {"title": "Ordenes Por Atender", "value": atender, "color": "bg-yellow", "icon": "ion-folder"},
             {"title": "Ordenes en Tramite", "value": tramite, "color": "bg-red", "icon": "ion-clock"},
-            {"title": "Ordenes Cerradas", "value": 0, "color": "bg-green-active", "icon": "ion-checkmark"},
+            {"title": "Ordenes Cerradas", "value": cerradas, "color": "bg-green-active", "icon": "ion-checkmark"},
         ]
 
 @login_required(login_url="/ordenes_servicio/login/")
@@ -92,6 +94,7 @@ def crear_orden_servicio(request):
                 form.save()
                 messages.success(request, 'Orden de servicio creada exitosamente')
                 form = OrdenServicioForm()
+                return redirect('/ordenes_servicio/consultar_orden_servicio')
             else:
                 messages.error(request, 'El formulario NO es valido, Por favor corrige los errores')
                 for error in form.errors:
