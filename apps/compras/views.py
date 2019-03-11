@@ -88,6 +88,18 @@ class OrdenList(ListView) :
     model = OrdenCompra 
     template_name= 'compras/prueba.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        ###
+        # Comentar todas las siguientes lineas excepto la del rol a probar
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
+        # usuario.rol = "gerente"
+        ####
+        context['usuario'] = usuario
+        return context
+
 
 #######---UPDATES---#######
 class CotizacionUpdate(UpdateView): 
@@ -96,17 +108,43 @@ class CotizacionUpdate(UpdateView):
     #template_name = 
     success_url = '/'   
 
+    
+
 class SolicitudUpdate(UpdateView): 
     model= SolicitudCompra
     form_class= SolicitudCompraForm
     #template_name= 
     success_url = '/'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        ###
+        # Comentar todas las siguientes lineas excepto la del rol a probar
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
+        # usuario.rol = "gerente"
+        ####
+        context['usuario'] = usuario
+        return context
+
 class OrdenUpdate(UpdateView): 
     model = OrdenCompra
     form_class= OrdenCompraForm
     #template_name = 
     success_url= '/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        ###
+        # Comentar todas las siguientes lineas excepto la del rol a probar
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
+        # usuario.rol = "gerente"
+        ####
+        context['usuario'] = usuario
+        return context
 
 
 ######---DELETES---######
