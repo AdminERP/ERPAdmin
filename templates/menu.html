@@ -48,7 +48,17 @@
           <li><a href="{% url 'listServiceOrder'%}">Ver Ordenes</a></li>
           <li><a href="{% url 'listarCobrar'%}">Ver Cuentas</a></li>
         </ul>
-      </li>      
+      </li>    
+      <li class="treeview">
+        <a href="#"><i class="fa fa-dollar"></i> <span>Cuentas Empresa</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a href="{% url 'listarCuentaEmpresa'%}">Ver Cuentas</a></li>
+        </ul>
+      </li>  
 
     </ul>
     <!-- /.sidebar-menu -->

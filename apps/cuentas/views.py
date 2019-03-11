@@ -190,3 +190,6 @@ def anularCuenta(request):
 		pk = request.POST.get('id')
 		CuentaCobrar.objects.filter(pk=pk).update(estado=False)
 		return redirect('listarCobrar')
+def listarCuentaEmpresa (request):
+	cuentas = CuentaEmpresa.objects.all().order_by('id')
+	return render(request, 'cuentas/listarCuentasEmpresa.html',{'cuentas':cuentas})
