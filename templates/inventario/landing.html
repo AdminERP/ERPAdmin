@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block css %}
+<style>
+  .info-box-number {overflow: hidden; text-overflow: ellipsis;}
+</style>
+{% endblock css %}
+
 {% block titulo %} Inventario{% endblock titulo %}
 {% block titulo_pagina %}Dashboard{% endblock titulo_pagina %}
 
@@ -13,7 +19,7 @@
             <span class="info-box-icon bg-aqua"><i class="fa fa-check-square-o"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-number ">Entradas</span>
+              <span class="info-box-number" >Entradas</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -27,7 +33,7 @@
             <span class="info-box-icon bg-aqua"><i class="fa fa-dropbox"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-number ">Inventario</span>
+              <span class="info-box-number" >Inventario</span>
             </div>
             <!-- /.info-box-content -->
           </div>
