@@ -187,7 +187,7 @@ def crearCuentaCobro(request,pk):
 def anularCuenta(request):
 	print(request.POST)
 	if request.POST:
-		pk = request.POST.get('id')
+		pk = request.POST.get('account_id')
 		CuentaCobrar.objects.filter(pk=pk).update(estado=False)
 		return redirect('listarCobrar')
 def listarCuentaEmpresa (request):
