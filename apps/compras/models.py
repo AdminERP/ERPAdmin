@@ -12,6 +12,8 @@ class Proveedor(models.Model):
     telefono = models.CharField(max_length=10)
     email = models.EmailField()
 
+    def __str__(self):
+        return '%s' % (self.nombre)
 
 class Articulo(models.Model):
     nombre = models.CharField(max_length=50)
@@ -67,10 +69,14 @@ class Cotizacion(models.Model):
 
     # Representa desde 0,00 hasta (10E15)-1,99 en pesos.
     total = models.DecimalField(max_digits=17, decimal_places=2)
-    fecha_realizada = models.DateField(auto_now_add=True)
+    fecha_realizada = models.DateField()
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('compras:cotizaciones_listar', kwargs={'pk': self.solicitud.id})
     # articulos = models.ManyToManyField(Articulo)  # Pendiente tabla intermedia
 
 ###

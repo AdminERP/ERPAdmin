@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from .views import SolicitudList, index, SolicitudCreate, SolicitudUpdate, SolicitudDelete, autorizarSolicitud, rechazarSolicitud, CotizacionList
+from .views import SolicitudList, index, SolicitudCreate, SolicitudUpdate, SolicitudDelete, autorizarSolicitud, rechazarSolicitud, CotizacionList, CotizacionCreate
 
 urlpatterns = [
     path('', index.as_view(), name='index'),
@@ -14,6 +14,7 @@ urlpatterns = [
     path('solicitud/autorizar/<int:pk>', autorizarSolicitud, name='autorizar_solicitud'),
     path('solicitud/rechazar/<int:pk>', rechazarSolicitud, name='rechazar_solicitud'),
     path('cotizacion/listar/<int:pk>', CotizacionList.as_view(), name='cotizaciones_listar'),
+    path('cotizacion/crear/<int:pk>', CotizacionCreate.as_view(), name='cotizaciones_crear'),
     # path('orden/crear', ,name='orden_crear'),
     # path('orden/listar', ,name='orden_listar'),
     # path('orden/detalle/<int:pk>', ,name='orden_detalle'),

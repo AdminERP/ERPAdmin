@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %} 
 
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -52,78 +53,93 @@ Solicitud de Compra #{{solicitud.id}}
                   <div class="panel-group" id="accordion">
                     <div class="panel panel-default">
                       <div class="panel-heading">
-                        <h3 class="panel-title">Cotización #{{cotizacion.codigo}}</h3>
+                        <h3 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#acordion" href="#collapse{{cotizacion.id}}">
+                            Cotización #{{cotizacion.id}} 
+                          </a>
+
+                          <span> Total: ${% widthratio cotizacion.total 1 cotizacion.solicitud.cantidad|intcomma %}</span>
+
+                          {% if cantidad >= 3 %}
+                          <a style="display: inline" href="#crearordencompra" class="btn btn-primary">Seleccionar para orden de compra</a>
+                          {% endif %}
+
+                        </h3>
                       </div>
 
-                      <div class="form-group">
+                      <div id="collapse{{cotizacion.id}}" class="panel-collapse collapse">
                         <div class="form-group row">
                           <div class="col-xs-6">
                             <label for="inputNombre">Nombre Proveedor</label>
-                            <input type="text" class="form-control" id="inputNombre" disabled value={{proveedor.nombre}}>
+                            <input type="text" class="form-control" id="inputNombre" disabled value="{{cotizacion.proveedor.nombre}}">
                           </div>
 
                           <div class="col-xs-3">
                             <label for="inputId">Identificación</label>
-                            <input type="text" class="form-control" id="inputId" disabled value={{proveedor.codigo}}>
+                            <input type="text" class="form-control" id="inputId" disabled value="{{cotizacion.proveedor.email}}">
                           </div>
                         </div>
 
-                        <div class="form-group">
-                          <label for="inputElemento">Elemento</label>
-                          <input type="text" class="form-control" id="inputElemento" disabled value={{articuloscotizacion.articulo.nombre}}>
-                        </div>
-
-                        <div class="form-group">
-                          <label for="inputCantidad">Cantidad</label>
-                          <input type="text" class="form-control" id="inputCantidad" disabled value={{articuloscotizacion.cantidad}}>
+                        <div class="form-group row">
+                          <div class="col-xs-6">
+                            <label for="inputElemento">Elemento</label>
+                            <input type="text" class="form-control" id="inputElemento" disabled value="{{cotizacion.solicitud.articulo.nombre}}">
+                          </div>
+                          <div class="col-xs-3">
+                            <label for="inputCantidad">Cantidad</label>
+                            <input type="number" class="form-control" id="inputCantidad" disabled value="{{cotizacion.solicitud.cantidad}}">
+                          </div>
                         </div>
 
                         <div class="form-group row">
-                          <div class="form-group col-xs-6">
+                          <div class="col-xs-6">
                             <label for="datepicker">Fecha realizada</label>
                             <!-- Date -->
-                            <input type="text" class="form-control pull-right" id="datepicker" disabled value={{cotizacion.fecha_realizada}}>
+                            <input disabled class="form-control pull-right datepicker" value="{{cotizacion.fecha_realizada}}">
                           </div>
                         </div> <!-- group row -->
 
                         <div class="form-group row">
-                          <div class="form-group col-xs-6">
+                          <div class="col-xs-6">
                             <label for="inputValorU">Valor unidad $</label>
-                            <input type="text" class="form-control" id="inputValorU" disabled value={{articuloscotizacion.precio}}>
+                            <input type="text" step="0.01"  class="form-control" id="inputValorU" disabled value="{{cotizacion.total}}">
                           </div>
+                        </div>
 
-                          <div class="form-group col-xs-6">
+                        <div class="form-group row">
+                          <div class="col-xs-6">
                             <label for="inputValorT">Valor Total $</label>
-                            <input type="text" class="form-control pull-right" id="inputValorT" disabled value={{cotizacion.total}}>
+                            <input type="number" class="form-control pull-right" id="inputValorT" disabled value="{% widthratio cotizacion.total 1 cotizacion.solicitud.cantidad %}">
                           </div>
-                        </div> <!-- group row -->
-                      </div>
-                      <!--collapse-->
+                        </div>
+                      </div> <!-- group row -->
                     </div>
-                    <!--panel-->
+                    <!--collapse-->
+                  </div>
+                  <!--panel-->
 
 
-                  </div>
-                  <!--accordion-->
-                  {% endfor %}
-                  {% else %}
-                  <h3>No hay cotizaciones</h3>
-                  {% endif %}
-                  <div class="box-footer text-center">
-                    <a href="#" class="btn btn-success">Nueva Cotización</a>
-                  </div>
+                </div>
+                <!--accordion-->
+                {% endfor %}
+                {% else %}
+                <h3>No hay cotizaciones</h3>
+                {% endif %}
+                <div class="box-footer text-center">
+                  <a href="{% url 'compras:cotizaciones_crear' solicitud.id %}" class="btn btn-success">Nueva Cotización</a>
                 </div>
               </div>
-              <!--tab content-->
             </div>
-          </div> <!-- /.box-body -->
-        </form>
-        <!-- /.box-body -->
-      </div>
-      <!-- /.box -->
+            <!--tab content-->
+          </div>
+      </div> <!-- /.box-body -->
+      </form>
+      <!-- /.box-body -->
     </div>
-  </section>
-  <!-- /.content -->
+    <!-- /.box -->
+</div>
+</section>
+<!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 {% endblock contenido %}

@@ -38,7 +38,7 @@ class SolicitudCompraForm(forms.ModelForm):
             'justificacion' : forms.TextInput(attrs = {'class': 'form-control'}),
             'fecha_esperada' : forms.SelectDateWidget(empty_label = EMPTY_LABEL, months = MESES) ,
             'estado_aprobacion' : Select2Widget(),
-            'cantidad' : forms.NumberInput(attrs = {'class': 'form-control', 'placeholder': 'Ingrese la cantidad de articulos a solicitar'}),
+            'cantidad' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la cantidad de articulos a solicitar'}),
             'articulo' : Select2Widget(),
         }
 
@@ -50,16 +50,19 @@ class CotizacionForm(forms.ModelForm):
         fields = [
             'proveedor',
             'solicitud',
+            'fecha_realizada',
+            'total',
         ]
 
         labels = {
             'proveedor' : 'Proveedor',
+            'fecha_realizada' : 'Fecha de realizacion de la cotizacion ',
             'solicitud' : 'Solicitud',
         }
 
         widgets = {
+            'fecha_realizada' : forms.SelectDateWidget(empty_label = EMPTY_LABEL, months = MESES),
             'proveedor' : Select2Widget(),
-            'solicitud' : Select2Widget(),
         }
 
 

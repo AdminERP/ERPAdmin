@@ -15,8 +15,8 @@ class index(TemplateView):
         usuario = self.request.user
         ###
         # Comentar todas las siguientes lineas excepto la del rol a probar
-        usuario.rol = "operario"
-        # usuario.rol = "jefe_compras"
+        # usuario.rol = "operario"
+        usuario.rol = "jefe_compras"
         # usuario.rol = "gerente"
         ####
         context['usuario'] = usuario
@@ -38,11 +38,19 @@ class SolicitudCreate(CreateView):
         return context
 
 #TODO: proteger vista con login y solo rol jefe_compras    
-class CotizacionCreate(CreateView): 
-    model = Cotizacion 
+class CotizacionCreate(CreateView):
+    model = Cotizacion
     form_class = CotizacionForm
-    #template_name = 
-    success_url = '/'   
+    template_name = 'compras/crear_cotizaciones.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        solicitud = SolicitudCompra.objects.get(pk=self.kwargs['pk'])        
+        context['solicitud'] = solicitud
+        context['usuario'] = usuario
+        return context
+
 
 #TODO: proteger vista con login y solo rol jefe_compras    
 class OrdenCreate(CreateView): 
@@ -103,9 +111,11 @@ class CotizacionList(ListView) :
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
         solicitud = SolicitudCompra.objects.get(pk=self.kwargs['pk'])
+        cantidad = Cotizacion.objects.filter(solicitud=solicitud).count()
         usuario.rol = 'Jefe de Compras'
         context['usuario'] = usuario
         context['solicitud'] = solicitud
+        context['cantidad'] = cantidad
         return context
 
 #TODO: proteger vista con login y rol jefe_compras o gerente   
