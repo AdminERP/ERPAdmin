@@ -1,3 +1,3 @@
 from .categoria import CategoriaModel
-from .datomaestro import DatoMaestroModel
+from .dato import DatoModel
 from .valor import ValorModel

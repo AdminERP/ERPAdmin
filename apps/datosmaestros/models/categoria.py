@@ -4,7 +4,7 @@ from django.db import models
 class CategoriaModel(models.Model):
     """
     CategoriaModel define los diferentes tipos
-    de datos maestro del sistema ERP, lo que
+    de datos maestros del sistema ERP, lo que
     permite agruparlos segun su función.
 
     Las 'categorias' son transversales a todo el

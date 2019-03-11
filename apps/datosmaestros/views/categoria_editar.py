@@ -12,8 +12,9 @@ from apps.datosmaestros.forms import CategoriaForm
 class CategoriaUpdateView(UpdateView):
     """Editar una cateroria."""
     model = CategoriaModel
+    pk_url_kwarg = 'id_categoria'
     form_class = CategoriaForm
-    success_url = reverse_lazy('datosmaestros:listar_categoria')
+    success_url = reverse_lazy('datosmaestros:listar_categorias')
     template_name = 'datosmaestros/categoria_editar.html'
 
     def form_valid(self, form):

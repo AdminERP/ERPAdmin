@@ -5,10 +5,10 @@ from django.views.generic import DeleteView
 from django.http.response import JsonResponse
 
 # App Models
-from apps.datosmaestros.models import CategoriaModel
+from apps.datosmaestros.models import DatoModel
 
-class CategoriaDeleteView(DeleteView):
-    """Eliminar una categoria."""
+class DatoDeleteView(DeleteView):
+    """Eliminar un dato."""
     def delete(self, request, *args, **kwargs):
         """
         Sobrescribimos la funcion 'delete' para realizar
@@ -18,20 +18,25 @@ class CategoriaDeleteView(DeleteView):
         de tipo AJAX.
         """
         id = request.POST['id']
-        categoria = CategoriaModel.objects.get(id = id)
-        categoria.estado = not categoria.estado
-        if categoria.estado:
+        dato = DatoModel.objects.get(id = id)
+        dato.estado = not dato.estado
+        if dato.estado:
             messages.success(
                 self.request,
-                '¡Categoría activada exitosamente!'
+                '¡Dato activado exitosamente!'
             )
         else:
             messages.success(
                 self.request,
-                '¡Categoría desactivada exitosamente!'
+                '¡Dato desactivado exitosamente!'
             )
-        categoria.save()
+        dato.save()
         data = {
-            'url': reverse_lazy('datosmaestros:listar_categorias')
+            'url': reverse_lazy(
+                'datosmaestros:listar_datos',
+                kwargs = {
+                    'id_categoria': self.kwargs['id_categoria']
+                }
+            )
         }
         return JsonResponse(data)

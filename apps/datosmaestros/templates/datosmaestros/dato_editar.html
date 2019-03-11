@@ -7,17 +7,18 @@ Datos Maestros
 {% endblock titulo %}
 
 {% block titulo_pagina %}
-Editar categoria
+Editar dato
 {% endblock titulo_pagina %}
 
 {% block descripcion_pagina %}
-Editar categoria de Datos Maestros
+Editar dato de Datos Maestros
 {% endblock descripcion_pagina %}
 
 {% block miga_pan %}
 <li><a><i class="fa fa-dashboard"></i> Dashboard</a></li>
-<li><a href="{% url 'datosmaestros:listar_categorias' %}">Gestionar categorias</a></li>
-<li class="active">Editar categoria</li>
+<li><a href="{% url 'datosmaestros:listar_categorias' %}">Gestión de categorias</a></li>
+<li><a href="{% url 'datosmaestros:listar_datos' id_categoria %}">Gestión de datos</a></li>
+<li class="active">Editar dato</li>
 {% endblock miga_pan %}
 
 {% block contenido %}
@@ -26,7 +27,7 @@ Editar categoria de Datos Maestros
     <div class="box box-primary">
       <div class="box-header">
         <h3 class="box-title">
-          Editar categoria
+          Editar dato
         </h3>
       </div>
       <div class="box-body">

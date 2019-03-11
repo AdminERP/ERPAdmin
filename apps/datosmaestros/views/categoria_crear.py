@@ -9,7 +9,7 @@ from apps.datosmaestros.forms import CategoriaForm
 class CategoriaCreateView(CreateView):
     """Crea una categoria."""
     form_class = CategoriaForm
-    success_url = reverse_lazy('datosmaestros:listar_categoria')
+    success_url = reverse_lazy('datosmaestros:listar_categorias')
     template_name = 'datosmaestros/categoria_crear.html'
 
     def form_valid(self, form):

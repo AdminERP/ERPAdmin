@@ -2,7 +2,7 @@
 from django import forms
 
 # App Models
-from .models import CategoriaModel
+from apps.datosmaestros.models import CategoriaModel
 
 class CategoriaForm(forms.ModelForm):
     """

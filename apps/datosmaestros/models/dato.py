@@ -6,15 +6,15 @@ TIPOS = (
     ('Excluyentes', 'Excluyentes')
 )
 
-class DatoMaestroModel(models.Model):
+class DatoModel(models.Model):
     """
-    DatoMaestroModel define un grupo de valores que
+    DatoModel define un grupo de valores que
     pertenecen a determinada categoria.
 
-    Un 'dato mestro' tiene uno o mas valores, los cuales
+    Un 'dato' tiene uno o mas valores, los cuales
     pueden ser:
         - Reacionados: son valores que se relacionan entre si,
-            es decir, un dato maestro une conceptos entre
+            es decir, un dato maestro que une conceptos entre
             modulos del sistema ERP.
         - Excluyentes: son valores donde el dato maestro puede
             tomar uno de estos valores, es decir, un dato maestro
@@ -26,6 +26,7 @@ class DatoMaestroModel(models.Model):
     estado = models.BooleanField(default = True)
     categoria = models.ForeignKey(
         'datosmaestros.CategoriaModel',
+        null = True,
         on_delete = models.CASCADE
     )
 

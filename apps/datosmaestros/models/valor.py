@@ -9,8 +9,8 @@ class ValorModel(models.Model):
     nombre = models.CharField(max_length = 20)
     descripcion = models.CharField(max_length = 200)
     estado = models.BooleanField(default = True)
-    dato_maestro = models.ForeignKey(
-        'datosmaestros.DatoMaestroModel',
+    dato = models.ForeignKey(
+        'datosmaestros.DatoModel',
         on_delete = models.CASCADE
     )
 
