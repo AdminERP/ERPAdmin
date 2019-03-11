@@ -1,20 +1,20 @@
 from django import forms
 from django.utils.translation import gettext as _
-from .models import Cotizacion, SolicitudCompra, OrdenCompra
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 
+from .models import Cotizacion, SolicitudCompra, OrdenCompra
 
 
 
-EMPTY_LABEL=("Escoger Año", "Escoger Mes", "Escoger Día")
+EMPTY_LABEL = ("Escoger Año", "Escoger Mes", "Escoger Día")
 MESES = {
     1:_('ene'), 2:_('feb'), 3:_('mar'), 4:_('abr'),
     5:_('may'), 6:_('jun'), 7:_('jul'), 8:_('ago'),
     9:_('sep'), 10:_('oct'), 11:_('nov'), 12:_('dic')
 }
 
-class SolicitudCompraForm (forms.ModelForm): 
-    class Meta: 
+class SolicitudCompraForm(forms.ModelForm):
+    class Meta:
         model = SolicitudCompra
 
         fields = [
@@ -22,8 +22,8 @@ class SolicitudCompraForm (forms.ModelForm):
             'fecha_esperada',
             'estado_aprobacion',
             'articulos',
-        ] 
-        
+        ]
+    
         labels = {
             'justificacion' : 'Justificación',
             'fecha_esperada' : 'Fecha esperada de entrega ',
@@ -39,33 +39,33 @@ class SolicitudCompraForm (forms.ModelForm):
         }
 
 
-class CotizacionForm(forms.ModelForm): 
+class CotizacionForm(forms.ModelForm):
     class Meta:
         model = Cotizacion
 
-        fields= [ 
-            'proveedor', 
+        fields = [ 
+            'proveedor',
             'solicitud',
         ]
 
         labels = {
             'proveedor' : 'Proveedor',
-            'solicitud' : 'Solicitud', 
+            'solicitud' : 'Solicitud',
         }
 
         widgets = {
-            'proveedor' : Select2Widget() ,
-            'solicitud' : Select2Widget(), 
+            'proveedor' : Select2Widget(),
+            'solicitud' : Select2Widget(),
         }
 
 
 
-class OrdenCompraForm(forms.ModelForm): 
-    class Meta: 
+class OrdenCompraForm(forms.ModelForm):
+    class Meta:
 
-        model= OrdenCompra
+        model = OrdenCompra
 
-        fields= [
+        fields = [
             'cotizacion',
             'estado_aprobacion',
             'fecha_esperada',
