@@ -22,7 +22,6 @@ class index(TemplateView):
         context['usuario'] = usuario
         return context
 
-
 ######---CREATES---######
 #TODO: proteger vista con login y rol diferente a gerente
 class SolicitudCreate(CreateView): 
@@ -51,14 +50,20 @@ class CotizacionCreate(CreateView):
         context['usuario'] = usuario
         return context
 
-
 #TODO: proteger vista con login y solo rol jefe_compras    
 class OrdenCreate(CreateView): 
     model = OrdenCompra
-    form_class= OrdenCompraForm
-    #template_name = 
-    success_url= '/'
+    form_class = OrdenCompraForm
+    template_name = 'compras/crear_ordenes.html'
+    success_url = reverse_lazy('compras:orden_listar')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        cotizacion = Cotizacion.objects.get(pk=self.kwargs['pk'])
+        context['cotizacion'] = cotizacion
+        context['usuario'] = usuario
+        return context
 
 ######---CONSULTAS---######
 #TODO: proteger vista con login   
@@ -121,18 +126,23 @@ class CotizacionList(ListView) :
 #TODO: proteger vista con login y rol jefe_compras o gerente   
 class OrdenList(ListView) : 
     model = OrdenCompra 
-    template_name= 'compras/prueba.html'
+    template_name= 'compras/listar_ordenes.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
         ###
         # Comentar todas las siguientes lineas excepto la del rol a probar
-        usuario.rol = "jefe_compras"
-        # usuario.rol = "gerente"
+        # usuario.rol = "jefe_compras"
+        usuario.rol = "gerente"
         ####
         context['usuario'] = usuario
         return context
+    
+    def get_queryset(self):
+        queryset = super(OrdenList, self).get_queryset()
+        queryset = queryset.order_by('estado_aprobacion')
+        return queryset
 
 
 #######---UPDATES---#######
@@ -168,6 +178,19 @@ def rechazarSolicitud(request, pk):
     solicitud.save()
     return redirect('compras:solicitudes')
 
+#TODO: proteger vista con login y rol gerente
+def autorizarOrden(request, pk):
+    orden = OrdenCompra.objects.get(pk=pk)
+    orden.estado_aprobacion = 'aprobado_gerente'
+    orden.save()
+    return redirect('compras:orden_listar')
+
+#TODO: proteger vista con login y rol gerente
+def rechazarOrden(request, pk):
+    orden = OrdenCompra.objects.get(pk=pk)
+    orden.estado_aprobacion = 'rechazada'
+    orden.save()
+    return redirect('compras:orden_listar')
 ######---DELETES---######
 
 class SolicitudDelete(DeleteView):

@@ -95,13 +95,11 @@ class OrdenCompra(models.Model):
     PENDIENTE = 'pendiente'
     APROBADO_GERENTE = 'aprobado_gerente'
     RECHAZADO = 'rechazada'
-    EMITIDA = 'emitida_proveedor'
 
     ESTADOS = [
         (PENDIENTE, 'Pendiente aprobacion'),
         (APROBADO_GERENTE, 'Aprobado gerente'),
         (RECHAZADO, 'Rechazada'),
-        (EMITIDA, 'Emitida al proveedor'),
     ]
 
     cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)

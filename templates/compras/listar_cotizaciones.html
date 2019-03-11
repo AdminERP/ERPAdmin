@@ -61,7 +61,7 @@ Solicitud de Compra #{{solicitud.id}}
                           <span> Total: ${% widthratio cotizacion.total 1 cotizacion.solicitud.cantidad|intcomma %}</span>
 
                           {% if cantidad >= 3 %}
-                          <a style="display: inline" href="#crearordencompra" class="btn btn-primary">Seleccionar para orden de compra</a>
+                          <a style="display: inline" href="{% url 'compras:orden_crear' cotizacion.id %}" class="btn btn-primary">Seleccionar para orden de compra</a>
                           {% endif %}
 
                         </h3>

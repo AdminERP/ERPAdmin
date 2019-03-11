@@ -74,18 +74,15 @@ class OrdenCompraForm(forms.ModelForm):
 
         fields = [
             'cotizacion',
-            'estado_aprobacion',
             'fecha_esperada',
         ]
 
         labels = {
             'cotizacion' : 'Cotización ',
-            'estado_aprobacion' :  'Aprobación de gerencia',
-            'fecha_esperada' : 'Fecha esperada de entrega ',
+            'fecha_esperada' : 'Fecha esperada de entrega del producto',
         }
 
         widgets = {
             'cotizacion' : Select2Widget(),
-            'estado_aprobacion' :  Select2Widget(),
             'fecha_esperada' : forms.SelectDateWidget(empty_label= EMPTY_LABEL, months = MESES) ,
         }
