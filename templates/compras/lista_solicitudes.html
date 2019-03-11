@@ -75,8 +75,8 @@ Solicitudes de Compra
                     {% else %}
                     <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
                     {% endif %}
-                    <a style="display: inline" href="#" class="btn btn-primary">Autorizar Solicitud</a>
-                    <a style="display: inline" href="#" class="btn btn-danger">Rechazar Solicitud</a>
+                    <a style="display: inline" href="{% url 'compras:autorizar_solicitud' solicitud.id %}" class="btn btn-primary">Autorizar Solicitud</a>
+                    <a style="display: inline" href="{% url 'compras:rechazar_solicitud' solicitud.id %}" class="btn btn-danger">Rechazar Solicitud</a>
                   </h3>
 
                 </div>
@@ -162,7 +162,7 @@ Solicitudes de Compra
                       Solucitud #{{solicitud.id}}
                     </a>
                     <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
-                    <a style="display: inline" href="#" class="btn btn-primary">Cotizaciones</a>
+                    <a style="display: inline" href="{% url 'compras:cotizaciones_listar' solicitud.id %}" class="btn btn-primary">Cotizaciones</a>
                   </h3>
 
                 </div>

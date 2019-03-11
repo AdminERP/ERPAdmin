@@ -47,7 +47,7 @@ class CotizacionForm(forms.ModelForm):
     class Meta:
         model = Cotizacion
 
-        fields = [ 
+        fields = [
             'proveedor',
             'solicitud',
         ]

@@ -71,7 +71,7 @@ class Cotizacion(models.Model):
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
-    articulos = models.ManyToManyField(Articulo)  # Pendiente tabla intermedia
+    # articulos = models.ManyToManyField(Articulo)  # Pendiente tabla intermedia
 
 ###
 # class ArticulosCotizacion(models.Model):

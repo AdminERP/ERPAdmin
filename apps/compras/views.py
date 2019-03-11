@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView   
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
+from django.shortcuts import redirect  
 
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
 from .forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
@@ -91,7 +92,21 @@ class SolicitudList(ListView) :
 #TODO: proteger vista con login y rol jefe_compras
 class CotizacionList(ListView) : 
     model = Cotizacion 
-    template_name= 'compras/prueba.html'
+    template_name= 'compras/listar_cotizaciones.html'
+    
+    def get_queryset(self):
+        solicitud = SolicitudCompra.objects.get(pk=self.kwargs['pk'])
+        queryset = Cotizacion.objects.filter(solicitud=solicitud)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usuario = self.request.user
+        solicitud = SolicitudCompra.objects.get(pk=self.kwargs['pk'])
+        usuario.rol = 'Jefe de Compras'
+        context['usuario'] = usuario
+        context['solicitud'] = solicitud
+        return context
 
 #TODO: proteger vista con login y rol jefe_compras o gerente   
 class OrdenList(ListView) : 
@@ -124,6 +139,24 @@ class SolicitudUpdate(UpdateView):
         context['usuario'] = usuario
         return context
 
+#TODO: proteger vista con login y rol jefe_compras
+def autorizarSolicitud(request, pk):
+    solicitud = SolicitudCompra.objects.get(pk=pk)
+
+    if solicitud.estado_aprobacion == 'pendiente':
+        solicitud.estado_aprobacion = 'aprobado_jefe'
+    elif solicitud.estado_aprobacion == 'aprobado_jefe':
+        solicitud.estado_aprobacion = 'aprobado_gerente'
+
+    solicitud.save()
+    return redirect('compras:solicitudes')
+
+#TODO: proteger vista con login y rol jefe_compras
+def rechazarSolicitud(request, pk):
+    solicitud = SolicitudCompra.objects.get(pk=pk)
+    solicitud.estado_aprobacion = 'rechazada'
+    solicitud.save()
+    return redirect('compras:solicitudes')
 
 ######---DELETES---######
 
