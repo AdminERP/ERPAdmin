@@ -1,35 +1,40 @@
 # Django
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import UpdateView
 
 # App Forms
-from apps.datosmaestros.forms import DatoForm
+from apps.datosmaestros.forms import ValorForm
 
 # App Models
-from apps.datosmaestros.models import CategoriaModel, DatoModel
+from apps.datosmaestros.models import CategoriaModel, DatoModel, ValorModel
 
-class DatoCreateView(CreateView):
-    """Crea un dato."""
-    form_class = DatoForm
-    template_name = 'datosmaestros/dato_crear.html'
+class ValorUpdateView(UpdateView):
+    """Editar un valor."""
+    model = ValorModel
+    pk_url_kwarg = 'id_valor'
+    form_class = ValorForm
+    template_name = 'datosmaestros/valor_editar.html'
 
     def get_success_url(self):
         """
         Sobrescribimos la funcion 'get_success_url'
-        para incluir la categoria de los datos en la url.
+        para incluir la categoria y el dato de los
+        valores en la url.
         """
-        return reverse_lazy('datosmaestros:listar_datos', kwargs = {
-            'id_categoria': self.kwargs['id_categoria']
+        return reverse_lazy('datosmaestros:listar_valores', kwargs = {
+            'id_categoria': self.kwargs['id_categoria'],
+            'id_dato': self.kwargs['id_dato']
         })
 
     def get_context_data(self, **kwargs):
         """
         Sobrescribimos la funcion 'get_context_data'
-        para incluir la categoria en el contexto.
+        para incluir la categoria y el dato en el contexto.
         """
-        context = super(DatoCreateView, self).get_context_data(**kwargs)
+        context = super(ValorUpdateView, self).get_context_data(**kwargs)
         context['id_categoria'] = self.kwargs['id_categoria']
+        context['id_dato'] = self.kwargs['id_dato']
         return context
 
     def form_valid(self, form):
@@ -37,13 +42,9 @@ class DatoCreateView(CreateView):
         Sobrescribimos la funcion 'form_valid' para
         agregar soporte a notificaciones.
         """
-        dato = form.save()
-        dato.categoria = CategoriaModel.objects.get(id = self.kwargs['id_categoria'])
-        dato.save()
-
         messages.success(
             self.request,
-            '¡Dato creado exitosamente!'
+            '¡Valor creado exitosamente!'
         )
         return super().form_valid(form)
 

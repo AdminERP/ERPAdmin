@@ -11,7 +11,7 @@ class CategoriaModel(models.Model):
     sistema ERP permitiendo tener una unica
     'fuente de la verdad'.
     """
-    nombre = models.CharField(max_length = 20, unique = True)
+    nombre = models.CharField(max_length = 40, unique = True)
     descripcion = models.CharField(max_length = 200)
     estado = models.BooleanField(default = True)
 

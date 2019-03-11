@@ -11,4 +11,4 @@ class ValorForm(forms.ModelForm):
     """
     class Meta:
         model = ValorModel
-        fields = ('nombre', 'descripcion', 'dato')
+        fields = ('nombre', 'descripcion', 'valor')

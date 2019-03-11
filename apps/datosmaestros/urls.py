@@ -10,7 +10,11 @@ from .views import (
     DatoListView,
     DatoCreateView,
     DatoUpdateView,
-    DatoDeleteView
+    DatoDeleteView,
+    ValorListView,
+    ValorCreateView,
+    ValorUpdateView,
+    ValorDeleteView
 )
 
 app_name = 'datosmaestros'
@@ -55,5 +59,25 @@ urlpatterns = [
         'categorias/<int:id_categoria>/datos/eliminar/',
         DatoDeleteView.as_view(),
         name = 'eliminar_dato'
+    ),
+    path(
+        'categorias/<int:id_categoria>/datos/<int:id_dato>/valores/',
+        ValorListView.as_view(),
+        name = 'listar_valores'
+    ),
+    path(
+        'categorias/<int:id_categoria>/datos/<int:id_dato>/valores/crear/',
+        ValorCreateView.as_view(),
+        name = 'crear_valor'
+    ),
+    path(
+        'categorias/<int:id_categoria>/datos/<int:id_dato>/valores/editar/<int:id_valor>',
+        ValorUpdateView.as_view(),
+        name = 'editar_valor'
+    ),
+    path(
+        'categorias/<int:id_categoria>/datos/<int:id_dato>/valores/eliminar/',
+        ValorDeleteView.as_view(),
+        name = 'eliminar_valor'
     ),
 ]

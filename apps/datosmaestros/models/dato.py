@@ -20,7 +20,7 @@ class DatoModel(models.Model):
             tomar uno de estos valores, es decir, un dato maestro
             puede tomar solo uno de las diferentes opciones (valores).
     """
-    nombre = models.CharField(max_length = 20)
+    nombre = models.CharField(max_length = 40)
     descripcion = models.CharField(max_length = 200)
     tipo = models.CharField(max_length = 20, choices = TIPOS)
     estado = models.BooleanField(default = True)
