@@ -61,8 +61,8 @@ class CotizacionList(ListView) :
     template_name= 'compras/prueba.html'
 
 class SolicitudList(ListView) : 
-    model = SolicitudCompra 
-    template_name= 'compras/lista_solicitudes.html'
+    model = SolicitudCompra
+    template_name = 'compras/lista_solicitudes.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         usuario = self.request.user

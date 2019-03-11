@@ -44,8 +44,8 @@ class SolicitudCompra(models.Model):
 
     solicitante = models.ForeignKey(
         Usuario, on_delete=models.CASCADE, null=True)
-    # Es necesario la tabla intermedia?
-    articulos = models.ManyToManyField(Articulo)
+    cantidad = models.SmallIntegerField()
+    articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s' % (self.id)

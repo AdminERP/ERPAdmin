@@ -42,7 +42,10 @@ Solicitudes de Compra
                     {% else %}
                     <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
                     {% endif %}
+                    <a style="display: inline" href="#" class="btn btn-primary">Modificar Solicitud</a>
+                    <a style="display: inline" href="#" class="btn btn-danger">Eliminar Solicitud</a>
                   </h3>
+        
                 </div>
 
                 <div id="collapse{{solicitud.id}}" class="panel-collapse collapse">
@@ -60,11 +63,9 @@ Solicitudes de Compra
 
                   <div class="form-group row">
                     <div class="col-xs-6">
-                      <label for="inputElemento">Articulos requeridos</label>
+                      <label for="inputElemento">Articulo requerido</label>
                       <ul>
-                        {% for articulo in solicitud.articulos.all %}
-                        <li> {{articulo.nombre}} </li>
-                        {% endfor %}
+                        <li> {{solicitud.articulo.nombre}} - x{{solicitud.cantidad}}</li>
                       </ul>
                     </div>
                   </div>
@@ -100,8 +101,6 @@ Solicitudes de Compra
         </div>
         <div class="box-footer text-center">
           <a href="{% url 'compras:solicitud_crear' %}" class="btn btn-success">Nueva Solicitud</a>
-          <a href="{% url 'compras:solicitud_modificar' %}" class="btn btn-primary">Modificar Solicitud</a>
-          <a href="{% url 'compras:solicitud_eliminar' %}" class="btn btn-danger">Eliminar Solicitud</a>
         </div>            
       </div>      
     </div>
@@ -128,6 +127,7 @@ Solicitudes de Compra
                       </a>
                       <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
                     </h3>
+
                   </div>
   
                   <div id="collapse{{solicitud.id}}" class="panel-collapse collapse">

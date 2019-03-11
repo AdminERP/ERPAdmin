@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import gettext as _
-from django_select2.forms import Select2Widget, Select2MultipleWidget
+from django_select2.forms import Select2Widget
 
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
 
@@ -21,22 +21,25 @@ class SolicitudCompraForm(forms.ModelForm):
             'justificacion',
             'fecha_esperada',
             'estado_aprobacion',
-            'articulos',
-            'solicitante'
+            'articulo',
+            'solicitante',
+            'cantidad',
         ]
     
         labels = {
             'justificacion' : 'Justificación',
             'fecha_esperada' : 'Fecha esperada de entrega ',
             'estado_aprobacion' : 'Estado de aprobación',
-            'articulos' : 'Articulos',
+            'articulo' : 'Articulo',
+            'cantidad': 'Cantidad',
         }
 
         widgets = {
-            'justificacion' : forms.TextInput(attrs= {'class': 'form-control'}),
-            'fecha_esperada' : forms.SelectDateWidget(empty_label= EMPTY_LABEL, months = MESES) ,
+            'justificacion' : forms.TextInput(attrs = {'class': 'form-control'}),
+            'fecha_esperada' : forms.SelectDateWidget(empty_label = EMPTY_LABEL, months = MESES) ,
             'estado_aprobacion' : Select2Widget(),
-            'articulos' : Select2MultipleWidget(),
+            'cantidad' : forms.NumberInput(attrs = {'class': 'form-control', 'placeholder': 'Ingrese la cantidad de articulos a solicitar'}),
+            'articulo' : Select2Widget(),
         }
 
 
