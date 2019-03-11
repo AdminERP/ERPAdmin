@@ -12,6 +12,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="{%  static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{{ form.media.css }}
 {% endblock css %}
 
 
@@ -20,7 +21,10 @@
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Listado de Usuarios</h3>
-            <a type="button" class="btn btn-success" href="{% url 'usuarios:crear_usuario' %}"><i class="fa fa-plus-circle"></i> CREAR USUARIO<div class="ripple-container"></div></a>
+            <a type="button" class="btn btn-success btn-raised" href="{% url 'usuarios:crear_usuario' %}"><i
+                    class="fa fa-plus-circle"></i> CREAR USUARIO
+                <div class="ripple-container"></div>
+            </a>
 
         </div>
         <div class="box-body">
@@ -49,12 +53,12 @@
                     <td>{{ usuario.email }}</td>
                     <td>{{ usuario.telefono }}</td>
                     <td>
-                        {%  if usuario.is_active %} <span class="badge bg-green">Activo</span>
+                        {% if usuario.is_active %} <span class="badge bg-green">Activo</span>
                         {% else %} <span class="badge bg-red">Inactivo</span>
                         {% endif %}
                     </td>
                     <td>
-                        {% if perms.usuario.change_user %}
+                        {% if perms.usuarios.change_usuario %}
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
                                     aria-expanded="false">Acciones
@@ -66,9 +70,17 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'usuarios:editar_usuario' usuario.id %}">Editar Usuario</a></li>
-                                <li><a href="{% url 'usuarios:reestablecer_password' usuario.id %}">Reestablecer Password</a></li>
+                                {% if perms.usuarios.change_password %}
+                                <li><a href="{% url 'usuarios:reestablecer_password' usuario.id %}">Reestablecer
+                                    Password</a></li>
+                                {% endif %}
                                 <li class="divider"></li>
-                                <li><a href="#" class="activate_user" data-id_usuario="{{ usuario.id }}" data-is_active="{{ usuario.is_active }}" data-nombre="{{ usuario.get_full_name }}">{% if usuario.is_active %}Desactivar {% else %}Activar{% endif %} Usuario</a></li>
+                                {% if perms.usuarios.activate_usuario %}
+                                <li><a href="#" class="activate_user" data-id_usuario="{{ usuario.id }}"
+                                       data-is_active="{{ usuario.is_active }}"
+                                       data-nombre="{{ usuario.get_full_name }}" data-row="{{ forloop.counter0 }}">
+                                    {% if usuario.is_active %}Desactivar {% else %}Activar{% endif %} Usuario</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                         {% endif %}
@@ -82,26 +94,27 @@
 </div>
 
 <!--modal-confirmacion-->
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Confirmar</h4>
-			</div>
-			<div class="modal-body">
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+     id="mi-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+            </div>
+            <div class="modal-body">
 
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-warning" id="modal-btn-no">No</button>
-				<button type="button" class="btn btn-success" id="modal-btn-si">Si</button>
-			</div>
-		</div>
-	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" id="modal-btn-no">No</button>
+                <button type="button" class="btn btn-success" id="modal-btn-si">Si</button>
+            </div>
+        </div>
+    </div>
 </div>
 <!--modal-confirmacion-->
 {% endblock contenido %}
-
 
 
 {% block js %}
@@ -111,20 +124,22 @@
 <script type="text/javascript">
     const url_api = '{% url 'usuarios:activar_usuario' %}';
     const token = '{{ csrf_token }}';
+
 </script>
 
 <script>
     $(function () {
-        $('#tabla_usuarios').DataTable({
+       table =  $('#tabla_usuarios').DataTable({
                 responsive: true
             }
         )
     })
+
 </script>
 
 <script type="application/javascript">
 
-    var id_usuario;
+    var id_usuario, fila;
 
 	var modalConfirm = function(callback){
 
@@ -133,6 +148,7 @@
 	    id_usuario = $(this).data('id_usuario');
 	    var is_active = $(this).data('is_active');
 	    var nombre = $(this).data('nombre');
+	    fila = $(this).data('row');
 	    var texto_aux;
 
 	    if(is_active === 'True'){
@@ -164,7 +180,20 @@
 
 	     $.post('{% url 'usuarios:activar_usuario' %}', {"csrfmiddlewaretoken":'{{ csrf_token }}','id_usuario': id_usuario}, function(data){
 
-	         toastr["success"]("Usuario " + data.nombre_usuario + " activado exitosamente!");
+	        var cell = table.cell( {row:fila, column:7} );
+	        var aux_estado, noti;
+
+	        if(data.estado){
+	            cell.data( '<span class="badge bg-green">Activo</span>' );
+	            aux_estado = 'activado';
+	            noti = "success";
+	        }else{
+	            cell.data( '<span class="badge bg-red">Inactivo</span>' );
+	            aux_estado = 'desactivado';
+	            noti = "warning";
+	        }
+
+	        toastr[noti]("Usuario " + data.nombre_usuario +" "+ aux_estado +" exitosamente!");
 
 	     });
 
@@ -173,6 +202,7 @@
           toastr["warning"]("Operacion cancelada!");
 	  }
 	});
-</script>
 
+</script>
+{{ form.media.js }}
 {% endblock js %}

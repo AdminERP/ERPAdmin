@@ -11,7 +11,7 @@
 
 {% block contenido_panel %}
 
-<form method="post" role="form">
+<form method="post" role="form" onsubmit="return validacion()">
      {% csrf_token %}
 
     <div class="row">
@@ -82,5 +82,6 @@
     //Datemask dd/mm/yyyy
     $('#id_fecha_nacimiento').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
 </script>
+<script src="{% static 'dist/js/validacion_crear_usuario.js' %}"></script>
 {% endblock js %}
 

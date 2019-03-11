@@ -8,17 +8,14 @@ from django.contrib.auth import update_session_auth_hash
 
 
 # Dashboard
+@login_required()
 def home(request):
-    if request.user.is_superuser:
-        return render(request, 'usuarios/home.html')
-    else:
-        return render(request, 'usuarios/home_aux.html')
+    return render(request, 'usuarios/home.html')
 
 
 # Crear usuario
-@permission_required('usuario.add_usuario', raise_exception=True)
+@permission_required('usuarios.add_usuario', raise_exception=True)
 def crear_usuario(request):
-
     if request.method == 'POST':
 
         # Crea el formulario a partir de los datos del request
@@ -27,8 +24,17 @@ def crear_usuario(request):
         # Verifica si el formulario es valido de acuerdo a los tipos de datos del form
         if form.is_valid():
 
-            # Guarda la instancia del modelo que referencia el formulario
-            form.save()
+            # Obtiene el cargo
+            cargo = form.cleaned_data['cargo']
+            user = form.save(commit=False)
+
+            # Crea el usuario
+            user.save()
+
+            # Agrega el usuario al grupo y lo guarda
+            user.groups.add(cargo)
+            user.save()
+
             messages.success(request, 'Usuario creado exitosamente')
             return render(request, 'usuarios/crear_usuario.html', {'form': CrearUsuarioForm()})
         else:
@@ -42,14 +48,23 @@ def crear_usuario(request):
 
 
 # Editar usuario
-@permission_required('usuario.change_usuario', raise_exception=True)
+@permission_required('usuarios.change_usuario', raise_exception=True)
 def editar_usuario(request, id_usuario):
     usuario_editar = Usuario.objects.get(id=id_usuario)
     nombre_usuario_editar = usuario_editar.get_full_name()
     if request.method == 'POST':
         form = EditarUsuarioForm(request.POST, instance=usuario_editar)
         if form.is_valid():
-            form.save()
+
+            # Obtiene el cargo
+            cargo = form.cleaned_data['cargo']
+            user = form.save(commit=False)
+
+            # Actualiza el grupo y lo guarda
+            user.groups.clear()
+            user.groups.add(cargo)
+            user.save()
+
             messages.success(request, 'Has modificado el usuario exitosamente!')
             return redirect('usuarios:home')
         else:
@@ -59,7 +74,7 @@ def editar_usuario(request, id_usuario):
     else:
         form = EditarUsuarioForm(instance=usuario_editar)
         return render(request, 'usuarios/editar_usuario.html', {'form': form, 'nombre_usuario_editar':
-                                                                               nombre_usuario_editar})
+            nombre_usuario_editar})
 
 
 # Editar password
@@ -81,7 +96,7 @@ def editar_password(request):
 
 
 # Reestablecer password
-@permission_required('usuario.change_password', raise_exception=True)
+@permission_required('usuarios.change_password', raise_exception=True)
 def reestablecer_password(request, id_usuario):
     usuario_editar = Usuario.objects.get(id=id_usuario)
     nombre_usuario_editar = usuario_editar.get_full_name()
@@ -103,7 +118,7 @@ def reestablecer_password(request, id_usuario):
 
 
 # Activar/Desactivar usuario
-@permission_required('usuario.activate_usuario', raise_exception=True)
+@permission_required('usuarios.activate_usuario', raise_exception=True)
 def activar_usuario(request):
     if request.is_ajax():
         id_usuario = request.POST.get('id_usuario', None)
@@ -114,20 +129,20 @@ def activar_usuario(request):
             else:
                 usuario_editar.is_active = True
             usuario_editar.save()
-            return JsonResponse({'nombre_usuario': usuario_editar.get_full_name()})
+            return JsonResponse({'nombre_usuario': usuario_editar.get_full_name(), 'estado': usuario_editar.is_active})
         except Usuario.DoesNotExist:
             return JsonResponse({'response': 0})
 
 
 # Consultar usuarios
-@permission_required('usuario.view_usuarios', raise_exception=True)
+@permission_required('usuarios.view_usuarios', raise_exception=True)
 def consultar_usuarios(request):
     if request.method == 'GET':
         return render(request, 'usuarios/consultar_usuarios.html', {'usuarios': Usuario.consultar_usuarios()})
 
 
 # Crear cargo
-@permission_required('cargo.add_cargo', raise_exception=True)
+@permission_required('usuarios.add_cargo', raise_exception=True)
 def crear_cargo(request):
     if request.method == 'POST':
         form = CrearCargoForm(request.POST)
@@ -144,7 +159,7 @@ def crear_cargo(request):
 
 
 # Editar cargo
-@permission_required('cargo.change_cargo', raise_exception=True)
+@permission_required('usuarios.change_cargo', raise_exception=True)
 def editar_cargo(request, id_cargo):
     cargo = Cargo.objects.get(id=id_cargo)
     if request.method == 'POST':
@@ -155,14 +170,14 @@ def editar_cargo(request, id_cargo):
             return redirect('usuarios:home')
         else:
             messages.error(request, 'Por favor corrige los errores')
-            return render(request, 'usuarios/crear_cargo.html', {'form': form})
+            return render(request, 'usuarios/editar_cargo.html', {'form': form})
     else:
         form = CrearCargoForm(instance=cargo)
-        return render(request, 'usuarios/crear_cargo.html', {'form': form})
+        return render(request, 'usuarios/editar_cargo.html', {'form': form})
 
 
 # Consultar cargos
-@permission_required('cargo.view_cargos', raise_exception=True)
+@permission_required('usuarios.view_cargos', raise_exception=True)
 def consultar_cargos(request):
     if request.method == 'GET':
         return render(request, 'usuarios/consultar_cargos.html', {'cargos': Cargo.consultar_cargos()})

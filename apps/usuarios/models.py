@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser, Group
 
 
 class Cargo(Group):
-    descripcion = models.TextField(max_length=100)
+    descripcion = models.TextField(max_length=300)
 
     @staticmethod
     def consultar_cargos():
