@@ -22,6 +22,7 @@ class SolicitudCompraForm(forms.ModelForm):
             'fecha_esperada',
             'estado_aprobacion',
             'articulos',
+            'solicitante'
         ]
     
         labels = {
