@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% load staticfiles %}
+{% load bootstrap3 %}
 
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -7,6 +8,16 @@
 <li><a href="{% url 'compras:solicitudes' %}">Solicitudes de compra</a></li>
 <li class="active"><a href="#">Generar Solicitud de compra</a></li>
 {% endblock miga_pan %}
+
+
+{% block css %}
+  <style>
+    .row{
+      padding-left:10px;
+    }
+  </style>
+{% endblock css %}
+  
 
 {% block titulo %}
 Generar Solicitud de Compra
@@ -24,7 +35,7 @@ Generar Solicitud de Compra
         <!-- general form elements -->
         <div class="box box-primary">                      
           <!-- form start -->
-          <form role="form">                                  
+          <form method="POST" role="form"> {% csrf_token %}                                  
             <div class="panel panel-default">   
                 <div class="panel-heading">
                     <h3 class="panel-title">Nueva Solicitud</h3>                  
@@ -35,41 +46,36 @@ Generar Solicitud de Compra
                         <div class="col-xs-6">
                             <label for="inputNombre">Nombre Solicitante</label>
                             <input type="text" class="form-control" id="inputNombre" disabled
-                            placeholder={{solicitud.solicitante}}>                          
+                            placeholder="{{ usuario.get_full_name }}">                          
                         </div>
 
                         <div class="col-xs-6">
                             <label for="inputId">Identificacion</label>
                             <input type="text" class="form-control" id="inputId" disabled 
-                            placeholder={{solicitud.solicitante}}> 
+                            placeholder="{{ usuario.username }}"> 
                         </div>                        
                     </div>
 
-                    <div class="form-group row">
+                    <div class="row">
                         <div class="col-xs-6">
-                            <label for="inputElemento">Elemento requerido</label>
-                            <input type="text" class="form-control" id="inputElemento">                        
-                        </div>
-
-                        <div class="col-xs-6">
+                            {% bootstrap_field form.articulos %}
+                   </div>
+<!-- TODO: Validar cantidad <div class="col-xs-6">
                             <label for="inputCantidad">Cantidad</label>
                             <input type="text" class="form-control" id="inputCantidad">                        
-                        </div>
+                        </div> -->
                     </div>
 
-                    <div class="form-group row">                        
-                        <div class="form-group col-xs-6">
-                            <label for="exampleInputFile">Fecha esperada</label>                  
+                    <div class="row">                        
+                        <div class="col-xs-6">
                             <!-- Date -->                            
-                            <input type="text" class="form-control pull-right" id="datepicker">
+                            {% bootstrap_field form.fecha_esperada %}
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="form-group col-xs-12">
-                            <label for="inputJust">Justificacion</label>
-                            <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50">                          
-                            </textarea>
+                    <div class="row">
+                        <div class=" col-xs-12">
+                            {% bootstrap_field form.justificacion %}
                         </div>
                     </div>
                 </div>
