@@ -88,15 +88,16 @@ class OrdenCompra(models.Model):
 
     PENDIENTE = 'pendiente'
     APROBADO_GERENTE = 'aprobado_gerente'
+    RECHAZADO = 'rechazada'
     EMITIDA = 'emitida_proveedor'
 
     ESTADOS = [
         (PENDIENTE, 'Pendiente aprobacion'),
         (APROBADO_GERENTE, 'Aprobado gerente'),
-        (EMITIDA, 'Emitida al proveedor')
+        (RECHAZADO, 'Rechazada'),
+        (EMITIDA, 'Emitida al proveedor'),
     ]
-    # cotizaciones = models.ManyToManyField(Cotizacion)  # Al menos 3 por orden de compra, una sola elegida.
-    # Elegida tambien puede definirse mediante flag en la relacion.
+
     cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)
 
     fecha_realizada = models.DateField(auto_now_add=True)
@@ -104,4 +105,3 @@ class OrdenCompra(models.Model):
 
     estado_aprobacion = models.CharField(
         max_length=16, choices=ESTADOS, default=PENDIENTE)
-    # gerente_aprobo = models.ForeignKey(User, null=True)
