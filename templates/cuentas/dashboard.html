@@ -28,7 +28,7 @@
 {% block contenido %}
 
     <div class="container-fluid">
-        <h1>Algunas estadísticas!</h1>
+        <h1>Estadísticas</h1>
         <div class="row">
             <div class="col-12 col-md-4">
                 <div class="panel panel-default">
@@ -64,6 +64,7 @@
                 </div>
             </div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-12 col-md-6">
                 <canvas id="grafica1" style="width: 100%;"></canvas>
@@ -73,6 +74,17 @@
             </div>
         </div>
         <!-- /.row -->
+        <hr>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <center><h2>Ingresos</h2></center>
+                <canvas id="grafica3"></canvas>
+            </div>
+            <div class="col-12 col-md-6">
+                <center><h2>Gastos</h2></center>
+                <canvas id="grafica4"></canvas>
+            </div>
+        </div>
     </div>    
     <!-- /.container -->
 {% endblock contenido %}
@@ -102,6 +114,8 @@
 
     graphOne();
     graphTwo();
+    graphThree();
+    graphFour();
     function graphOne(){
         var ctx = $("#grafica1");
         var data = {
@@ -186,6 +200,74 @@
             type: 'bar', 
             data: data,
         });
+    }
+    function graphThree(){
+        var config = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [
+                        60, 40
+                    ],
+                    backgroundColor: [
+                        'blue',
+                        'red',
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Cuentas Cobradas',
+                    'Cuentas Pendientes por Cobrar',
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        };
+
+        var ctx = document.getElementById('grafica3').getContext('2d');
+        new Chart(ctx, config);
+    }
+    function graphFour(){
+        var config = {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [
+                        67, 33
+                    ],
+                    backgroundColor: [
+                        'blue',
+                        'red',
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Cuentas Pagadas',
+                    'Cuentas Pendientes por Pagar',
+                ]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            }
+        };
+
+        var ctx1 = document.getElementById('grafica4').getContext('2d');
+        new Chart(ctx1, config);
     }
 </script>
 {% endblock js %}
