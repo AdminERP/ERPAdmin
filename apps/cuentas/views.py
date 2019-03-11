@@ -7,10 +7,32 @@ from .models import ServiceOrder, CuentaCobrar
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.core import serializers
 from django.views.generic import CreateView
+#chartjs
+from random import randint
+from django.views.generic import TemplateView
+from chartjs.views.lines import BaseLineChartView
+
+
+def index(request):
+	return render(request, 'cuentas/dashboard.html')
+
+class LineChartJSONView(BaseLineChartView):
+    def get_labels(self):
+        """Return 7 labels for the x-axis."""
+        return ["January", "February", "March", "April", "May", "June", "July"]
+
+    def get_providers(self):
+        """Return names of datasets."""
+        return ["Cobros"]
+
+    def get_data(self):
+        """Return 3 datasets to plot."""
+
+        return [[75, 44, 92, 11, 44, 95, 35]]
 
 
 # Create your views here.
-def index (request):
+def create_account (request):
 	if request.POST:
 		form = PaymentAccountForm(request.POST)
 		# return HttpResponse(request)
