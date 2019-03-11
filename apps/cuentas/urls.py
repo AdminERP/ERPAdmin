@@ -6,7 +6,9 @@ from django.urls import path
 from apps.cuentas.views import *
 
 urlpatterns = [
-    path('', index, name='crearCuenta'),
+    #path('', index, name='crearCuenta'),
+    path('', index, name='index'),
+    path('create_account', create_account, name='crearCuenta'),
     path('listarPagar/', listarPagar,  name='listarPagar'),
     path('listarCobrar/', listarCobrar, name='listarCobrar'),
     path('detalles/', listarDetalles, name='detalles'),
@@ -17,4 +19,5 @@ urlpatterns = [
     path('payments/', payments, name='payments'),
     path('payment_details/<pk>', payment_details, name='payment_details'),
     path('createOrder/', createOrder, name='createOrder'),
+    path('dashboard_graph_1/', LineChartJSONView.as_view(), name='dashboard_graph_1'),
 ]

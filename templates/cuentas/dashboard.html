@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Dasboard {% endblock titulo %}
+
+{% block css %}
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+
+{% endblock css %}
+
+{% block titulo_pagina %}{% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Pagar</a></li>
+<li class="active">Ver Cuentas</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}{% endblock titulo_panel %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+        <h1>Algunas estadísticas!</h1>
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <center><h2>INGRESOS</h2></center>
+                        <center><h1>$ 35.550.000</h1></center>
+                    </div>
+                    <div class="panel-footer" style="color: #31708f; background-color: #d9edf7">
+                        IVA: $ 6.754.500
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <center><h2>EGRESOS</h2></center>
+                        <center><h1>$ 23.333.000</h1></center>
+                    </div>
+                    <div class="panel-footer" style="color: #8a6d3b; background-color: #fcf8e3">
+                        IVA: $ 4.433.270
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body" style="color: #fff; background-color: #1ABC9C">
+                        <center><h2>RESULTADO</h2></center>
+                        <center><h1>$ 12.217.000</h1></center>
+                    </div>
+                    <div class="panel-footer" style="color: #fff; background-color: green">
+                        IVA: $ 2.321.230
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <canvas id="grafica1" style="width: 100%;"></canvas>
+            </div>
+            <div class="col-12 col-md-6">
+                <canvas id="grafica2" style="width: 100%;"></canvas>
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>    
+    <!-- /.container -->
+{% endblock contenido %}
+
+{% block js %}
+<!-- DataTables -->
+<script src="{% static 'dist/js/editable-table.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript" src="{% static 'plugins/chartjs/Chart.min.js' %}"></script>
+
+
+<!-- page script -->
+<script>
+    /*$.get('{% url "dashboard_graph_1" %}', function(data) {
+        var ctx = $("#grafica1").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line', data: data
+        });
+    });*/
+
+    graphOne();
+    graphTwo();
+    function graphOne(){
+        var ctx = $("#grafica1");
+        var data = {
+            labels : ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            datasets: [
+                {
+                    label: "Recaudo Mensual",
+                    data:[  
+                        Math.floor(Math.random() * 10000000), 
+                        Math.floor(Math.random() * 10000000), 
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),],
+                    backgroundColor:[
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                        "rgba(63, 191, 63, 0.5)",
+                    ],
+                }
+            ]
+        }
+        new Chart(ctx, {
+            type: 'bar', 
+            data: data,
+        });
+    }
+
+    function graphTwo(){
+        var ctx = $("#grafica2");
+        var data = {
+            labels : ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            datasets: [
+                {
+                    label: "Pago Mensual",
+                    data:[  
+                        Math.floor(Math.random() * 10000000), 
+                        Math.floor(Math.random() * 10000000), 
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),  
+                        Math.floor(Math.random() * 10000000),],
+                    backgroundColor:[
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                        "rgba(25, 62, 184, 0.5)",
+                    ],
+                }
+            ]
+        }
+        new Chart(ctx, {
+            type: 'bar', 
+            data: data,
+        });
+    }
+</script>
+{% endblock js %}
