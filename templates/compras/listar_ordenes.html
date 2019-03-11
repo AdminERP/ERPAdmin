@@ -113,7 +113,8 @@
                     </div> <!--panel-->
 
                     <div class="box-footer text-center">
-                      <button type="submit" class="btn btn-primary">Nueva Cotización</button>
+                      <a href="{% url 'compras:ordencompra_crear' %}" class="btn btn-success">Nueva Orden de Compra</a>
+                      <a href="{% url 'compras:ordencompra_modificar' %}" class="btn btn-primary">Modificar Orden de Compra</a>                      
                     </div> 
                   </div> <!--accordion-->
                 {% endfor %}

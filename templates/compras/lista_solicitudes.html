@@ -99,12 +99,11 @@ Solicitudes de Compra
           <!-- /.box-body -->
         </div>
         <div class="box-footer text-center">
-          <a href="{% url 'compras:solicitud_crear' %}" class="btn btn-primary">Nueva Solicitud</a>
-        </div>
-        <!-- /.box -->
-        <!-- /.box-body -->
-      </div>
-      <!-- /.box -->
+          <a href="{% url 'compras:solicitud_crear' %}" class="btn btn-success">Nueva Solicitud</a>
+          <a href="{% url 'compras:solicitud_modificar' %}" class="btn btn-primary">Modificar Solicitud</a>
+          <a href="{% url 'compras:solicitud_eliminar' %}" class="btn btn-danger">Eliminar Solicitud</a>
+        </div>            
+      </div>      
     </div>
 
     {% if usuario.rol == 'jefe_compras' or usuario.rol == 'gerente' %}

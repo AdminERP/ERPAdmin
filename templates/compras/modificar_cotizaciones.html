@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block miga_pan %}
+<li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+<li><a href="{% url 'compras:index' %}">Compras</a></li>
+<li><a href="{% url 'compras:solicitudes' %}">Solicitudes de compra</a></li>
+<li class="active"><a href="#">Modificar Cotizacion</a></li>
+{% endblock miga_pan %}
+
+{% block titulo_pagina %}
+Generar Cotizacion
+{% endblock titulo_pagina %} 
+
+{% block contenido %}
+  <div class="content-wrapper">       
+    <!-- Main content -->
+    <section class="box">          
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">                      
+          <!-- form start -->
+            <form role="form">                               
+                <div class="panel panel-default">   
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modificar Cotizacion</h3>                  
+                    </div>
+
+                    <div>
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label for="inputNombre">Nombre Proveedor</label>
+                                <input type="text" class="form-control" id="inputNombre" disabled
+                                placeholder={{proveedor.nombre}}>                          
+                            </div>
+
+                            <div class="col-xs-6">
+                                <label for="inputId">Identificacion</label>
+                                <input type="text" class="form-control" id="inputId" disabled 
+                                placeholder={{proveedor.codigo}}> 
+                            </div>                        
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label for="inputElemento">Elemento</label>
+                                <input type="text" class="form-control" id="inputElemento">                        
+                            </div>                       
+
+                            <div class="col-xs-6">
+                                <label for="inputCantidad">Cantidad</label>
+                                <input type="text" class="form-control" id="inputCantidad">                        
+                            </div>   
+                        </div>                     
+
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label for="inputValorU">Valor unidad $</label>
+                                <input type="text" class="form-control" id="inputValorU">                          
+                            </div>
+
+                            <div class="col-xs-3">
+                                <label for="inputValorT">Valor Total $</label>
+                                <input type="text" class="form-control" id="inputValorT"> 
+                            </div>                        
+                        </div>
+
+                        <div class="form-group row">                        
+                            <div class="form-group col-xs-6">
+                                <label for="exampleInputFile">Fecha esperada</label>                  
+                                <!-- Date -->                            
+                                <input type="text" class="form-control pull-right" id="datepicker">
+                            </div>
+                        </div>
+
+                        <div class="form-group col-xs-12">
+                            <label for="inputJust">Justificacion</label>
+                            <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="7" cols="50">                          
+                            </textarea>
+                        </div>  
+                        
+                        <div class="box-footer text-center">
+                            <button type="submit" class="btn btn-success">Modificar Cotizacion</button>
+                            <button type="reset" class="btn btn-danger">Cancelar</button>
+                        </div> 
+                    </div>                                           
+                <!-- panel -->                                               
+                </div>                      
+            <!-- /.box -->            
+            </form>          
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>                  
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% endblock contenido %}
