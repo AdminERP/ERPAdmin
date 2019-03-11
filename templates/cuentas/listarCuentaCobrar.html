@@ -10,7 +10,8 @@
 <link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
 <!-- Date Picker -->
 <link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
-
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 {% endblock css %}
 
 {% block titulo_pagina %} Ver cuentas {% endblock titulo_pagina %}
@@ -36,23 +37,47 @@
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                            <th>Número servicio</th>
+                            <th># Cuenta</th>
                             <th>Servicio prestado</th>
                             <th>Tarifa</th>
                             <th>Costo total</th>
                             <th>Fecha de vencimiento</th>
+                            <th>Cuenta Recaudo</th>
+                            <th>Orden Servicio</th>
+                            <th>Estado</th>
+                            <th>Anular Cuenta</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td>X</td>
-                            </tr>
+                            {% for cuenta in cuentas%}
+                                <tr>
+                                    <td style="text-align: center;">{{cuenta.id}}</td>
+                                    <td>{{cuenta.servicio}}</td>
+                                    <td>{{cuenta.tarifa}}</td>
+                                    <td>{{cuenta.costo_total}}</td>
+                                    <td>{{cuenta.fecha_vencimiento}}</td>
+                                    <td>{{cuenta.cuenta_empresa}}</td>
+                                    <td>{{cuenta.service_order}}</td>
+                                    {% if cuenta.estado == True %}
+                                    <td>Activa</td>
+                                    {% else %}
+                                    <td>Anulada</td>
+                                    {% endif %}
+                                    {% if cuenta.estado == True %}
+                                    <td style="text-align: center;">
+                                        <a href="#" style="color: red;" onclick="nullInvoice('{{cuenta.id}}')">
+                                                <i class="fas fa-ban fa-2x"></i>
+                                            </a>
+                                    </td>
+                                    {% else %}
+                                        <td style="text-align: center;">
+                                        <a href="#" style="color: gray; pointer-events: none">
+                                                <i class="fas fa-ban fa-2x"></i>
+                                            </a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -72,12 +97,12 @@
 {% block js %}
 
 <!-- DataTables -->
-<script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 <!-- SlimScroll -->
-<script src="../../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
 <!-- FastClick -->
-<script src="../../bower_components/fastclick/lib/fastclick.js"></script>
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
 
 <!-- page script -->
 <script>
@@ -92,5 +117,18 @@
             'autoWidth'   : false
           })
         })
+
+
+        function nullInvoice(id){
+            $.ajax({
+                 type:"POST",
+                 url:"/cuentas/anularCuenta/",
+                 data: {id:id, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
+                 success: function(){
+                    location.reload();
+                    
+                }
+            });
+        }
 </script>
 {% endblock js %}

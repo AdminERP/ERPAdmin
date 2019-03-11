@@ -15,14 +15,40 @@
 <li class="active">Crear Orden</li>
 {% endblock miga_pan %}
 
-{% block titulo_panel %}<small>Datos de Factura</small>{% endblock titulo_panel %}
+{% block titulo_panel %}<small>Datos de Orden</small>{% endblock titulo_panel %}
 
 {% block contenido_panel %}
-<form method="POST">
-	{% csrf_token %}
-        {{ form.as_p}}
-        <button type="submit" class="save btn btn-primary">Save</button>
-    </form>
+
+<div class="container-fluid col-md-6">
+	
+	<form method="POST">
+		{% csrf_token %}
+			
+			<div class="form-group">
+				<label>Servicio</label>
+				{{ form.sold_service}}
+			</div>
+			<div class="form-group">
+				<label>Encargado</label>
+				{{ form.employee_id}}
+			</div>
+			<div class="form-group">
+				<label>Comentarios</label>
+				{{ form.comments}}
+			</div>
+			<div class="form-group">
+			<label>Estado</label>
+				{{ form.status}}
+			</div>
+			<div class="form-group">
+				<label>Total</label>
+				{{ form.total}}
+			</div>
+	        <button type="submit" class="save btn btn-primary">Guardar</button>
+	    </form>
+	
+</div>
+
 
 {% endblock contenido_panel %}
 

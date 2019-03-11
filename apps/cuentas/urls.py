@@ -17,4 +17,7 @@ urlpatterns = [
     path('payments/', payments, name='payments'),
     path('payment_details/<pk>', payment_details, name='payment_details'),
     path('createOrder/', createOrder, name='createOrder'),
+    path('listOrders/', listServiceOrder, name='listServiceOrder'),
+    path('crearCuentaCobro/<pk>', crearCuentaCobro, name='crearCuentaCobro'),
+    path('anularCuenta/', anularCuenta, name='anularCuenta'),
 ]

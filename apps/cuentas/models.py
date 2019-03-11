@@ -5,7 +5,8 @@ from enum import Enum
 # Create your models here.
 class CuentaEmpresa(models.Model):
     saldo = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)   
-
+    def __str__(self):
+        return str(self.id)
 class ServiceOrder(models.Model):
     status = models.CharField(max_length=254, null=False)
     sold_service = models.CharField(max_length=254, null=False)
@@ -14,6 +15,8 @@ class ServiceOrder(models.Model):
     total = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return str(self.id)
 
 class CuentaPagar(models.Model):
     ORDER_STATUS = (
@@ -74,8 +77,9 @@ class Payment(models.Model):
 
 class CuentaCobrar(models.Model):
     tarifa = models.IntegerField(null=False, validators=[MinValueValidator(1)])
-    costo_total = models.IntegerField(null=False, validators=[MinValueValidator(1)])
-    Fecha_vencimiento = models.DateTimeField()
-    estado = models.BooleanField()
-    servicio = models.CharField(max_length=50)
+    costo_total = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
+    fecha_vencimiento = models.DateField(null=False)
+    estado = models.BooleanField(True)
+    servicio = models.CharField(max_length=254,null=False)
     cuenta_empresa = models.ForeignKey(CuentaEmpresa, on_delete=models.CASCADE)
+    service_order = models.ForeignKey(ServiceOrder, on_delete=models.CASCADE,null=True)
