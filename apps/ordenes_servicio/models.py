@@ -1,5 +1,6 @@
 from django.db import models
 from apps.usuarios.models import *
+from datetime import datetime
 
 class OrdenServicio(models.Model):
     servicio_vendido = models.CharField(max_length=100) # Datos Mestros
@@ -17,8 +18,10 @@ class OrdenServicio(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, blank=True, null=False,
                                 related_name='cliente_set', verbose_name="Cliente")# Datos Maestros
 
-    comentarios = models.CharField(max_length=255)
+    comentarios = models.TextField(max_length=255)
 
+    fecha_creacion = models.DateTimeField(default=datetime.now, blank=True, verbose_name="Fecha de Creación")
+    fecha_atencion = models.DateTimeField(null=True, verbose_name="Fecha de Atención")
     # Constantes para OrdenServicio
     ASIGNADA = 'AS'
     TRAMITE = 'TR'

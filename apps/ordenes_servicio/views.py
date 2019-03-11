@@ -53,23 +53,42 @@ def manage_options(request, context):
             {"name": "Crear Orden de Servicio", "href": "/ordenes_servicio/crear_orden_servicio/"},
             {"name": "Consultar Ordenes de Servicio", "href": "/ordenes_servicio/consultar_orden_servicio/"}
         ]
+
+        ordenes = OrdenServicio.objects.filter(coordinador=request.user).order_by('-id')
+        context["ordenes_timeline"] = ordenes
+
+        registradas = ordenes.count()
+        tramite = ordenes.filter(estado="TR").count()
+        cerradas = ordenes.filter(estado="CE").count()
+        canceladas = ordenes.filter(estado="CA").count()
         context["boxes"] = [
-            {"title": "Ordenes Registradas", "value": 0, "color": "bg-green", "icon": "ion-bag"},
+            {"title": "Ordenes Registradas", "value": registradas, "color": "bg-purple", "icon": "ion-clipboard"},
+            {"title": "Ordenes en Trámite", "value": tramite, "color": "bg-light-blue-active", "icon": "ion-android-sync"},
+            {"title": "Ordenes Cerradas", "value": cerradas, "color": "bg-green-active", "icon": "ion-checkmark"},
+            {"title": "Ordenes Canceladas", "value": canceladas, "color": "bg-red-active", "icon": "ion-close"},
         ]
+
+
     if request.user.cargo == 'O':
         context["options"] += [
             {"name": "Consultar Ordenes de Servicio", "href": "/ordenes_servicio/consultar_orden_servicio/"}
         ]
 
-        atender = OrdenServicio.objects.filter(estado="AS").filter(encargado=request.user).count()
-        tramite = OrdenServicio.objects.filter(estado="TR").filter(encargado=request.user).count()
-        cerradas = OrdenServicio.objects.filter(estado="CE").filter(encargado=request.user).count()
+        ordenes = OrdenServicio.objects.filter(encargado=request.user).order_by('-id')
+        context["ordenes_timeline"] = ordenes
+
+        atender = ordenes.filter(estado="AS").count()
+        tramite = ordenes.filter(estado="TR").count()
+        cerradas = ordenes.filter(estado="CE").count()
+        canceladas = ordenes.filter(estado="CA").count()
 
         context["boxes"] = [
-            {"title": "Ordenes Por Atender", "value": atender, "color": "bg-yellow", "icon": "ion-folder"},
-            {"title": "Ordenes en Tramite", "value": tramite, "color": "bg-red", "icon": "ion-clock"},
+            {"title": "Ordenes Por Atender", "value": atender, "color": "bg-teal-active", "icon": "ion-folder"},
+            {"title": "Ordenes en Trámite", "value": tramite, "color": "bg-light-blue-active", "icon": "ion-android-sync"},
             {"title": "Ordenes Cerradas", "value": cerradas, "color": "bg-green-active", "icon": "ion-checkmark"},
+            {"title": "Ordenes Canceladas", "value": canceladas, "color": "bg-red-active", "icon": "ion-close"},
         ]
+
 
 @login_required(login_url="/ordenes_servicio/login/")
 def ordenes_welcome(request):

@@ -30,10 +30,12 @@ class OrdenServicioForm(forms.ModelForm):
         }))
     class Meta:
         model = OrdenServicio
-        fields = ('servicio_vendido', 'comentarios', 'cliente', 'encargado', 'valor')
+        fields = ('servicio_vendido', 'comentarios', 'cliente', 'encargado', 'valor', 'fecha_atencion',)
         widgets = {
             'cliente': forms.HiddenInput(),
             'encargado': forms.HiddenInput(),
+            'fecha_atencion':forms.TextInput(attrs={'type':'date'}),
+            'comentarios':forms.Textarea(attrs={'placeholder':'Escriba un comentario'})
         }
 
     def clean(self):
