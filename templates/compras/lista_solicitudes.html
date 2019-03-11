@@ -35,7 +35,13 @@ Solicitudes de Compra
                     <a data-toggle="collapse" data-parent="#acordion" href="#collapse{{solicitud.id}}">
                       Solucitud #{{solicitud.id}}
                     </a>
-                    <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado -->
+                    {% if solicitud.estado_aprobacion == 'pendiente' %}
+                    <i class="fa fa-circle text-yellow"></i> <!-- cambia color con el estado_aprobacion -->
+                    {% elif solicitud.estado_aprobacion == 'rechazada' %}
+                    <i class="fa fa-circle text-red"></i> <!-- cambia color con el estado -->
+                    {% else %}
+                    <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
+                    {% endif %}
                   </h3>
                 </div>
 
