@@ -1,9 +1,10 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
+from django.core.validators import MinLengthValidator
+from django.db import models
 
 
 class Cargo(Group):
-    descripcion = models.TextField(max_length=300)
+    descripcion = models.TextField(max_length=500)
 
     @staticmethod
     def consultar_cargos():
@@ -20,7 +21,8 @@ class Cargo(Group):
 
 
 class Usuario(AbstractUser):
-    cedula = models.CharField(max_length=10)
+    cedula = models.CharField(max_length=10, unique=True,
+                              validators=[MinLengthValidator(8, 'Asegurese que la cédula tenga al menos 8 dígitos')])
     direccion = models.CharField(max_length=50)
     ESTADOS = (
         ('casado', 'Casado'),

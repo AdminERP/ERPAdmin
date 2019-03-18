@@ -3,7 +3,7 @@ let campo_descripcion = $('#id_descripcion');
 
 let contador_error = 0;
 
-var regex = /^([a-zA-ZÁ, ]){3,80}$/i;
+var regex = /^([a-zA-ZÁ,áéíóúnÑ ]){3,80}$/i;
 
 function validar(){
     var nombre = campo_nombre.val();
@@ -36,5 +36,3 @@ function validacion() {
         return false;
     }
 }
-
-

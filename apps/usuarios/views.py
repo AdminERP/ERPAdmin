@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
-from django.http.response import JsonResponse
-from apps.usuarios.forms import *
 from django.contrib import messages
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.forms import SetPasswordForm, PasswordChangeForm
+from django.http.response import JsonResponse
+from django.shortcuts import render, redirect
+
+from apps.usuarios.forms import *
 
 
 # Dashboard
@@ -66,23 +67,23 @@ def editar_usuario(request, id_usuario):
             user.save()
 
             messages.success(request, 'Has modificado el usuario exitosamente!')
-            return redirect('usuarios:home')
+            return redirect('usuarios:consultar_usuarios')
         else:
             messages.error(request, 'Por favor corrige los errores')
-            return render(request, 'usuarios/editar_usuario.html', {'form': form, 'nombre_usuario_editar':
-                nombre_usuario_editar})
+            return render(request, 'usuarios/editar_usuario.html', {'form': form,
+                                                                    'nombre_usuario_editar': nombre_usuario_editar})
     else:
         form = EditarUsuarioForm(instance=usuario_editar)
-        return render(request, 'usuarios/editar_usuario.html', {'form': form, 'nombre_usuario_editar':
-            nombre_usuario_editar})
+        return render(request, 'usuarios/editar_usuario.html', {'form': form,
+                                                                'nombre_usuario_editar': nombre_usuario_editar})
 
 
 # Editar password
 @login_required
 def editar_password(request):
-    form = EditarPasswordForm(user=request.user)
+    form = PasswordChangeForm(user=request.user)
     if request.method == 'POST':
-        form = EditarPasswordForm(user=request.user, data=request.POST)
+        form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
@@ -109,12 +110,11 @@ def reestablecer_password(request, id_usuario):
             return redirect('usuarios:consultar_usuarios')
         else:
             messages.error(request, 'Por favor corrige los errores')
-            return render(request, 'usuarios/reestablecer_password.html', {'form': form,
-                                                                           'nombre_usuario_editar':
-                                                                               nombre_usuario_editar})
+            return render(request, 'usuarios/reestablecer_password.html',
+                          {'form': form, 'nombre_usuario_editar': nombre_usuario_editar})
     else:
-        return render(request, 'usuarios/reestablecer_password.html', {'form': form, 'nombre_usuario_editar':
-            nombre_usuario_editar})
+        return render(request, 'usuarios/reestablecer_password.html',
+                      {'form': form, 'nombre_usuario_editar': nombre_usuario_editar})
 
 
 # Activar/Desactivar usuario
@@ -149,7 +149,7 @@ def crear_cargo(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Cargo creado exitosamente!')
-            return redirect('usuarios:home')
+            return redirect('usuarios:consultar_cargos')
         else:
             messages.error(request, 'Por favor corrige los errores')
             return render(request, 'usuarios/crear_cargo.html', {'form': form})
@@ -162,18 +162,22 @@ def crear_cargo(request):
 @permission_required('usuarios.change_cargo', raise_exception=True)
 def editar_cargo(request, id_cargo):
     cargo = Cargo.objects.get(id=id_cargo)
+    nombre_cargo = cargo.name
+    id_cargo = cargo.id
     if request.method == 'POST':
-        form = CrearCargoForm(request.POST, instance=cargo)
+        form = EditarCargoForm(request.POST, instance=cargo)
         if form.is_valid():
             form.save()
             messages.success(request, 'Cargo modificado exitosamente!')
-            return redirect('usuarios:home')
+            return redirect('usuarios:consultar_cargos')
         else:
             messages.error(request, 'Por favor corrige los errores')
-            return render(request, 'usuarios/editar_cargo.html', {'form': form})
+            return render(request, 'usuarios/editar_cargo.html', {'form': form, 'nombre_cargo': nombre_cargo,
+                                                                  'id_cargo': id_cargo})
     else:
-        form = CrearCargoForm(instance=cargo)
-        return render(request, 'usuarios/editar_cargo.html', {'form': form})
+        form = EditarCargoForm(instance=cargo)
+        return render(request, 'usuarios/editar_cargo.html', {'form': form, 'nombre_cargo': nombre_cargo,
+                                                              'id_cargo': id_cargo})
 
 
 # Consultar cargos

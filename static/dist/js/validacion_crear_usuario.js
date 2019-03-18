@@ -7,7 +7,7 @@ let campo_direccion = $('#id_direccion');
 
 let contador_error = 0;
 
-var regex = /^([a-zA-ZÁ, ]){3,20}$/i;
+var regex = /^([a-zA-ZÁ,áéíóúñÑ ]){3,20}$/i;
 var regex_cedula = /^([0-9]){8,11}$/;
 var regex_correo = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 var regex_telefono = /^([0-9]){7,11}$/;
