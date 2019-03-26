@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %}Editar Cargo{% endblock titulo %}
+{% block miga_pan %}
+	<li><a href="{% url 'usuarios:home' %}"><i class="fa fa-dashboard"></i> DASHBOARD</a></li>
+	<li><a href="{% url 'usuarios:consultar_cargos' %}"><i class="fa fa-dashboard"></i> GESTIÓN CARGOS</a></li>
+	<li class="active">EDITAR CARGO</li>
+{% endblock miga_pan %}
+
+{% block css %}
+	{{ form.media.css }}
+	<style media="screen">
+		.select2-container {
+			width: 100% !important;
+		}
+	</style>
+{% endblock css %}
+
+{% block contenido %}
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="box box-primary">
+				<div class="box-header">
+					<h3 class="box-title">Editar Cargo | {{ nombre_cargo }}</h3>
+				</div>
+				<div class="box-body">
+
+					<form method="post" role="form" onsubmit="return validacion()">
+						{% csrf_token %}
+						{% bootstrap_field form.name %}
+						{% bootstrap_field form.descripcion %}
+						{% bootstrap_field form.permissions %}
+						<input type="hidden" value="{{ id_cargo }}" name="temp_id"/>
+						<button type="submit" class="btn btn-raised btn-success">Guardar Cargo</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock contenido %}
+
+
+{% block js %}
+	{{ form.media.js }}
+	<script src="{% static 'dist/js/validacion_crear_cargo.js' %}"></script>
+{% endblock js %}

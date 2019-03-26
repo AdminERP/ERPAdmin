@@ -15,11 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', TemplateView.as_view(template_name='base.html')), #renderizar la plantilla base
-    path('', include(('apps.compras.urls', 'compras'))), #Borrar al integrar
+    path('', (include('apps.usuarios.urls'))),
     path('compras/', include(('apps.compras.urls', 'compras'), namespace='compras')),
 ]
