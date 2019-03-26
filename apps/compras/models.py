@@ -2,8 +2,8 @@
 
 from django.db import models
 # Se importa el User por defecto en espera de la implentacion del otro grupo
-from django.contrib.auth.models import User as Usuario
-# from apps.usuarios import Usuario
+# from django.contrib.auth.models import User as Usuario
+from apps.usuarios.models import Usuario
 
 
 class Proveedor(models.Model):
@@ -52,18 +52,6 @@ class SolicitudCompra(models.Model):
     def __str__(self):
         return '%s' % (self.id)
 
-    # Estos campos son verdaderamente necesarios?
-    # jefe_aprobo = models.ForeignKey(Usuario, null=True)
-    # gerente_aprobo = models.ForeignKey(Usuario, null=True)
-####
-# class ArticulosSolicitud(models.Model):
-
-#     cantidad = models.SmallIntegerField()
-
-#     solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
-#     articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
-####
-
 
 class Cotizacion(models.Model):
 
@@ -77,17 +65,6 @@ class Cotizacion(models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse('compras:cotizaciones_listar', kwargs={'pk': self.solicitud.id})
-    # articulos = models.ManyToManyField(Articulo)  # Pendiente tabla intermedia
-
-###
-# class ArticulosCotizacion(models.Model):
-
-#     cotizacion = models.ForeignKey(Cotizacion, on_delete=models.CASCADE)
-#     articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
-
-#     cantidad = models.SmallIntegerField()
-#     precio = models.DecimalField(max_digits=15,decimal_places=2)    # Representa desde 0,00 hasta (10E13)-1,99 en pesos.
-###
 
 
 class OrdenCompra(models.Model):
