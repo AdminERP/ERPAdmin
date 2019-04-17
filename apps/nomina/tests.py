@@ -6,7 +6,7 @@ from django.test import Client
 from django.urls import reverse_lazy
 # Create your tests here.
 from apps.employees_and_jobs.models import Job, Employee
-
+import json
 
 class TestGenerar_nomina(TestCase):
     client = Client()
@@ -42,4 +42,8 @@ class TestGenerar_nomina(TestCase):
         response = self.client.post(reverse_lazy('creacion_nomina'))
         print(response)
         print(response.content)
+        response_message = response.json()
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response_message['type'], "success")
+        self.assertTrue("La nomina ha sido registrada correctamente para cada colaborador."
+                        in response_message['message'])

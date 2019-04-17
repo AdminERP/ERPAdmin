@@ -56,6 +56,26 @@ def registrar_evaluacion(request, id=None):
     evaluacion = get_object_or_404(EmployeeEvaluation, id=id)
     preguntas_evaluacion = evaluacion.employee_evaluation_questions.all()
     cantidad_preguntas_evaluacion = preguntas_evaluacion.count()
+
+    greatest = 0
+    average = 0.0
+    lowest = 100000000
+    score_sum = 0
+    try:
+        for employee_question in evaluacion.employee_evaluation_questions.all():
+            score_sum = score_sum + employee_question.score
+            if(greatest<employee_question.score):
+                greatest = employee_question.score
+            if(lowest>employee_question.score):
+                lowest = employee_question.score
+        average = '%.1f'%(score_sum / cantidad_preguntas_evaluacion)
+    except:
+        greatest = 0
+        average = 0.0
+        lowest = 0
+        score_sum = 0
+
+
     question_formset = modelformset_factory(EmployeeEvaluationQuestions, form=RegistrarPreguntasEnEvaluacionForm,
                                             max_num=cantidad_preguntas_evaluacion, extra=cantidad_preguntas_evaluacion)
 
@@ -69,7 +89,12 @@ def registrar_evaluacion(request, id=None):
             messages.error(request, 'Por favor verificar los campos en rojo.')
     else:
         formset = question_formset(queryset=preguntas_evaluacion)
-    return render(request, 'registrar_evaluaciones.html', {'evaluacion':evaluacion, 'formset': formset, 'preguntas': preguntas_evaluacion})
+    return render(request, 'registrar_evaluaciones.html', {'evaluacion':evaluacion, 'formset': formset,
+                                                           'mayor' : greatest,
+                                                           'menor' : lowest,
+                                                           'promedio' : average,
+                                                           'puntuacion' : score_sum,
+                                                           'preguntas': preguntas_evaluacion})
 
 
 def creacion_evaluacion(request, id):
