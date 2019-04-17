@@ -252,6 +252,7 @@
         }
 
 
+
         function payPayroll() {
             $.blockUI({
                 message: '<h4><i class="fa fa-spinner fa-spin"></i> Generando nómina</h4>',
@@ -269,12 +270,12 @@
                 data: {},
                 dataType: 'json'
             }).done(function (data) {
-                toastr["" + data.type]("" + data.message)
+                toastr["" + data.type]("" + data.message);
             }).always(function () {
                 $.unblockUI();
             });
 
-            $("#payroll-modal").hide();
+            $("#payroll-modal").modal('hide');
         }
 
 
