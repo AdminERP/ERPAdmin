@@ -6,6 +6,11 @@
     Listado de nominas
 {% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.css"/>
+{% endblock %}
+
 {% block titulo_pagina %}
     Listado de nominas
 {% endblock %}
@@ -28,7 +33,7 @@
         <!-- /.box-header -->
         <!-- form start -->
         <div class="box-body">
-            <table class="table">
+            <table class="table table-striped table-bordered" id="tabla-nominas">
                 <thead>
                 <tr>
                     <th>Fecha</th>
@@ -38,6 +43,7 @@
                     <th>Impuestos</th>
                     <th>Salario neto</th>
                     <th>Estado</th>
+                    <th>Opciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -55,29 +61,11 @@
                             <td><span class="label label-danger">INACTIVO</span></td>
                         {% endif %}
                         <td>
-                            <div class="btn-group">
-
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                        aria-expanded="false">
-                                    Acciones
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    <div class="ripple-container"></div>
-
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li class="divider"></li>
-                                    {% if nomina.estado %}
-                                        <li><a class="delete-nomina" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                               data-url="{% url 'desactivar_nomina' nomina.id %}">Desactivar</a></li>
-                                    {% else %}
-                                        <li><a class="activate-nomina" href="#" data-toggle="modal" data-target="#activate-modal"
-                                               data-url="{% url 'activar_nomina' nomina.id %}">Activar</a></li>
-                                    {% endif %}
-
-                                </ul>
-                            </div>
-
+                            {% if nomina.estado %}
+                                <a class="delete-nomina btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_nomina' nomina.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                            {% else %}
+                                <a class="activate-nomina btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_nomina' nomina.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -136,6 +124,15 @@
 
 
 {% block js %}
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#tabla-nominas').DataTable();
+        } );
+    </script>
+
     <script type="text/javascript">
 
     var deactivate_url = "";

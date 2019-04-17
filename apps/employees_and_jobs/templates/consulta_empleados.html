@@ -8,6 +8,11 @@
     Listado de empleados
 {% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.css"/>
+{% endblock %}
+
 {% block titulo_pagina %}
     Listado de empleados
 {% endblock %}
@@ -30,13 +35,13 @@
         <!-- /.box-header -->
         <!-- form start -->
         <div class="box-body">
-            <table class="table">
+            <table class="table table-striped table-bordered" id="tabla-empleados">
                 <thead>
                 <tr>
                     <th>Nombre</th>
                     <th>Tipo de Documento</th>
                     <th>Identificacion</th>
-                    <th>Direccion</th>
+                <!--<th>Direccion</th> -->
                     <th>Email</th>
                     <th>Telefono</th>
                 <!--
@@ -58,7 +63,7 @@
                         <td>{{ empleado.name }}</td>
                         <td>{{ empleado.id_type }}</td>
                         <td>{{ empleado.identification }}</td>
-                        <td>{{ empleado.address }}</td>
+                      <!--  <td>{{ empleado.address }}</td> -->
                         <td>{{ empleado.email }}</td>
                         <td>{{ empleado.telephone }}</td>
                     <!--
@@ -182,6 +187,15 @@
 
 {% block js %}
     <script src='{% static 'plugins/blockUI/blockUI.js' %}'></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#tabla-empleados').DataTable();
+        } );
+    </script>
+
     <script type="text/javascript">
 
         var deactivate_url = "";
