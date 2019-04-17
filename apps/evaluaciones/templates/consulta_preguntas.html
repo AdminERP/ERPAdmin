@@ -46,31 +46,12 @@
                             <td><span class="label label-danger">INACTIVO</span></td>
                         {% endif %}
                         <td>
-                            <div class="btn-group">
-
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                        aria-expanded="false">
-                                    Acciones
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    <div class="ripple-container"></div>
-
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{% url 'modificar_pregunta' pregunta.id %}">Consultar/Modificar</a></li>
-
-                                    <li class="divider"></li>
-                                    {% if pregunta.estado %}
-                                        <li><a class="delete-pregunta" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                               data-url="{% url 'desactivar_pregunta' pregunta.id %}">Desactivar</a></li>
-                                    {% else %}
-                                        <li><a class="activate-pregunta" href="#" data-toggle="modal" data-target="#activate-modal"
-                                               data-url="{% url 'activar_pregunta' pregunta.id %}">Activar</a></li>
-                                    {% endif %}
-
-                                </ul>
-                            </div>
-
+                            <a href="{% url 'modificar_pregunta' pregunta.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
+                            {% if pregunta.estado %}
+                                <a class="delete-pregunta btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_pregunta' pregunta.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                            {% else %}
+                                <a class="activate-pregunta btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_pregunta' pregunta.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                            {% endif %}
                         </td>
 
                     </tr>

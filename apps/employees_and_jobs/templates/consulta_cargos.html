@@ -50,32 +50,14 @@
                         {% endif %}
                         <td>{{ cargo.has_vacants|yesno:"Si,No" }}</td>
                         <td>
-                            <div class="btn-group">
+                            <a href="{% url 'modificar_cargo' cargo.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
+                            <a href="{% url 'crear_evaluacion' cargo.id %}" class="btn-icon btn-warning"><span class="glyphicon glyphicon-list-alt" style="color:white"></span></a>
 
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                        aria-expanded="false">
-                                    Acciones
-                                    <span class="caret"></span>
-                                    <span class="sr-only">Toggle Dropdown</span>
-                                    <div class="ripple-container"></div>
-
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{% url 'crear_evaluacion' cargo.id %}">Evaluar</a></li>
-                                    <li><a href="{% url 'modificar_cargo' cargo.id %}">Consultar/Modificar</a></li>
-
-                                    <li class="divider"></li>
-                                    {% if cargo.estado %}
-                                        <li><a class="delete-cargo" href="#" data-toggle="modal" data-target="#deactivate-modal"
-                                               data-url="{% url 'desactivar_cargo' cargo.id %}">Desactivar</a></li>
-                                    {% else %}
-                                        <li><a class="activate-cargo" href="#" data-toggle="modal" data-target="#activate-modal"
-                                               data-url="{% url 'activar_cargo' cargo.id %}">Activar</a></li>
-                                    {% endif %}
-
-                                </ul>
-                            </div>
-
+                            {% if cargo.estado %}
+                                <a class="delete-cargo btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_cargo' cargo.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                            {% else %}
+                                <a class="activate-cargo btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_cargo' cargo.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                            {% endif %}
                         </td>
                         <!--
                 <td><a href="{% url 'modificar_cargo' cargo.id %}">Modificar</a></td>

@@ -49,6 +49,7 @@ class Employee(models.Model):
     account_number = models.CharField(max_length=200, verbose_name="Número de cuenta")
     salary = models.IntegerField(verbose_name="Salario")
     cargo = models.ForeignKey(Job, on_delete=models.CASCADE, verbose_name="Cargo")
+    jefe = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, verbose_name="Jefe Inmediato")
     status = models.BooleanField(default=True, verbose_name="Estado")
 
     def __str__(self):

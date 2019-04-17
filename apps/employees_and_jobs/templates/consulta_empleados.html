@@ -39,10 +39,10 @@
                     <th>Direccion</th>
                     <th>Email</th>
                     <th>Telefono</th>
+                <!--
                     <th>EPS</th>
                     <th>Fondo de pensiones</th>
                     <th>Fondo de cesantias</th>
-                <!--
                     <th>Banco</th>
                     <th>Numero de Cuenta</th> -->
                     <th>Salario</th>
@@ -61,10 +61,10 @@
                         <td>{{ empleado.address }}</td>
                         <td>{{ empleado.email }}</td>
                         <td>{{ empleado.telephone }}</td>
+                    <!--
                         <td>{{ empleado.eps }}</td>
                         <td>{{ empleado.pension_fund }}</td>
                         <td>{{ empleado.severance_fund }}</td>
-                    <!--
                         <td>{{ empleado.bank }}</td>
                         <td>{{ empleado.account_number }}</td> -->
                         <td>{{ empleado.salary }}</td>
@@ -75,38 +75,16 @@
                         {% endif %}
                         {% if action == 'list' %}
                             <td>
-                                <div class="btn-group">
+                                <a href="{% url 'modificar_empleado' empleado.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
+                                <a href="{% url 'crear_evaluacion' empleado.id %}" class="btn-icon btn-warning"><span class="glyphicon glyphicon-list-alt" style="color:white"></span></a>
 
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                            aria-expanded="false">
-                                        Acciones
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                        <div class="ripple-container"></div>
-
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="{% url 'modificar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Consultar/Modificar</a>
-                                        </li>
-                                        <li><a href="{% url 'crear_evaluacion' empleado.id %}"><i class="fa fa-circle-o"></i>Evaluar</a>
-                                        </li>
-
-                                        <li class="divider"></li>
-                                        {% if empleado.status %}
-                                            <li><a class="delete-empleado" href="#" data-toggle="modal"
-                                                   data-target="#deactivate-modal"
-                                                   data-url="{% url 'desactivar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Desactivar</a>
-                                            </li>
-                                        {% else %}
-                                            <li><a class="activate-empleado" href="#" data-toggle="modal"
-                                                   data-target="#activate-modal"
-                                                   data-url="{% url 'activar_empleado' empleado.id %}"><i class="fa fa-circle-o"></i>Activar</a></li>
-                                        {% endif %}
-
-                                    </ul>
-                                </div>
-
+                                {% if empleado.status %}
+                                    <a class="delete-empleado btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_empleado' empleado.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                                {% else %}
+                                    <a class="activate-empleado btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_empleado' empleado.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                                {% endif %}
                             </td>
+
                         {% endif %}
 
                         <!--
