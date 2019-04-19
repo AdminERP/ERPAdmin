@@ -1,6 +1,6 @@
 from django.db import models
 import datetime
-from ..employees_and_jobs.models import Employee
+from ..usuarios.models import Usuario
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
@@ -17,7 +17,7 @@ class Question(models.Model):
 class EmployeeEvaluation(models.Model):
     date = models.DateField(default=datetime.date.today)
     # Until merge Employees
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     estado = models.BooleanField(default=True)
 
     def __str__(self):

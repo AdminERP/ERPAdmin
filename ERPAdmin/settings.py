@@ -22,6 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ')fe6unf30d99vrtse*!ep#d2+y##hyvu@airp923%sk=7u9iwh'
 
+AUTH_USER_MODEL = 'usuarios.Usuario'
+LOGIN_REDIRECT_URL = 'usuarios:home'
+LOGIN_URL = 'usuarios:login'
+LOGOUT_REDIRECT_URL = 'usuarios:login'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -39,9 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_select2',
     'bootstrap3',
-    'apps.employees_and_jobs',
     'apps.evaluaciones',
-    'apps.nomina'
+    'apps.nomina',
+    'apps.usuarios'
 ]
 dependencies = [
     ('ook', '__first__'),

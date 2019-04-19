@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from apps.employees_and_jobs.models import Job, Employee
+from ..usuarios.models import Usuario, Cargo
 from apps.nomina.models import EmployeePayroll, Payroll
 
 from django.core.mail import EmailMultiAlternatives
@@ -15,12 +15,12 @@ def inicio(request):
     return render(request, 'base.html', {})
 
 def payroll_module(request, id=None):
-    return render(request, 'consulta_empleados.html', {'lista_empleados': Employee.objects.all(), 'action': 'payroll'})
+    return render(request, 'usuarios/consultar_usuarios.html', {'usuarios': Usuario.objects.all(), 'action': 'payroll'})
 
 
 
 def create_payroll(request):
-    active_employees = Employee.objects.filter(status=True)
+    active_employees = Usuario.objects.filter(is_active=True)
     payroll_registry = Payroll.objects.create()
     payroll_registry.save()
     sum_payroll = 0
@@ -33,7 +33,7 @@ def create_payroll(request):
             total_error_not_payment = total_error_not_payment + 1
         else:
             try:
-                email(email_to=email_to, name=employee.name, id_type=employee.id_type, id_number=employee.identification,
+                email(email_to=email_to, name=employee.first_name, id_type=employee.id_type, id_number=employee.cedula,
                       gross_salary=gross_salary, tax=tax, net_salary=net_salary, bank=employee.bank, eps=employee.eps,
                       pension_fund=employee.pension_fund, severance_fund=employee.severance_fund,
                       date_payment=payroll_registry.date)

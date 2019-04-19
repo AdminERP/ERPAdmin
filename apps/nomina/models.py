@@ -1,6 +1,6 @@
 from django.db import models
 import datetime
-from ..employees_and_jobs.models import Employee
+from ..usuarios.models import Usuario
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
@@ -12,7 +12,7 @@ class Payroll(models.Model):
 class EmployeePayroll(models.Model):
     payroll = models.ForeignKey(Payroll, on_delete=models.CASCADE)
     # Until merge Employees
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     gross_salary = models.FloatField(default=0.0)
     tax = models.FloatField(default=0.0)
     net_salary = models.FloatField(default=0.0)

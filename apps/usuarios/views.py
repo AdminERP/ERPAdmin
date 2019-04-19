@@ -138,7 +138,7 @@ def activar_usuario(request):
 @permission_required('usuarios.view_usuarios', raise_exception=True)
 def consultar_usuarios(request):
     if request.method == 'GET':
-        return render(request, 'usuarios/consultar_usuarios.html', {'usuarios': Usuario.consultar_usuarios()})
+        return render(request, 'usuarios/consultar_usuarios.html', {'usuarios': Usuario.consultar_usuarios(), 'action': 'list'})
 
 
 # Crear cargo

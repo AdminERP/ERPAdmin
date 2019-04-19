@@ -51,11 +51,11 @@
                             <td><span class="label label-danger">INACTIVO</span></td>
                         {% endif %}
                         <td>
-                            <a href="{% url 'modificar_pregunta' pregunta.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
+                            <a href="{% url 'evaluaciones:modificar_pregunta' pregunta.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
                             {% if pregunta.estado %}
-                                <a class="delete-pregunta btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_pregunta' pregunta.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                                <a class="delete-pregunta btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'evaluaciones:desactivar_pregunta' pregunta.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
                             {% else %}
-                                <a class="activate-pregunta btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_pregunta' pregunta.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                                <a class="activate-pregunta btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'evaluaciones:activar_pregunta' pregunta.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
                             {% endif %}
                         </td>
 

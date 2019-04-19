@@ -21,6 +21,27 @@ class Cargo(Group):
 
 
 class Usuario(AbstractUser):
+
+    IDENTIFICATION_TYPE = (
+        ('CC', 'Cedula de ciudadania'),
+        ('PP', 'Pasaporte')
+    )
+
+    BANK_CHOICE = (
+        ('BANAGRARIO', 'Banco Agrario de Colombia'),
+        ('AVVILLAS', 'Banco AV Villas'),
+        ('BCSC', 'Banco Caja Social'),
+        ('OCCIDENTE', 'Banco de Occidente'),
+        ('POPULAR', 'Banco Popular'),
+        ('BCOLOMBIA', 'Bancolombia'),
+        ('BBVA', 'Banco BBVA'),
+        ('BANBOGOTA', 'Banco de Bogota'),
+        ('CITIBANK', 'Citibank Colombia'),
+        ('COLPATRIA', 'Scotiabank Colpatria'),
+        ('DAVIVIENDA', 'Davivienda')
+    )
+
+    id_type = models.CharField(max_length=2, choices=IDENTIFICATION_TYPE, verbose_name="Tipo de identificación")
     cedula = models.CharField(max_length=10, unique=True,
                               validators=[MinLengthValidator(8, 'Asegurese que la cédula tenga al menos 8 dígitos')])
     direccion = models.CharField(max_length=50)
@@ -33,6 +54,12 @@ class Usuario(AbstractUser):
     estado_civil = models.CharField(choices=ESTADOS, max_length=15, blank=True)
     fecha_nacimiento = models.DateField(null=True)
     telefono = models.CharField(max_length=11)
+    eps = models.CharField(max_length=200, verbose_name="EPS")
+    pension_fund = models.CharField(max_length=200, verbose_name="Fondo de pensiones")
+    severance_fund = models.CharField(max_length=200, verbose_name="Fondo de cesantias")
+    bank = models.CharField(max_length=10, choices=BANK_CHOICE, verbose_name="Banco")
+    account_number = models.CharField(max_length=200, verbose_name="Número de cuenta")
+    salary = models.IntegerField(verbose_name="Salario", null=True)
 
     @staticmethod
     def consultar_usuarios():

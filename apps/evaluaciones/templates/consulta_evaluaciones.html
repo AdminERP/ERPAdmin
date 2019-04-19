@@ -54,11 +54,11 @@
                                 <td><span class="label label-danger">INACTIVO</span></td>
                             {% endif %}
                             <td>
-                                <a href="{% url 'modificar_evaluacion' evaluacion.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
+                                <a href="{% url 'evaluaciones:modificar_evaluacion' evaluacion.id %}" class="btn-icon btn-primary"><span class="glyphicon glyphicon-edit" style="color:white"></span></a>
                                 {% if evaluacion.estado %}
-                                    <a class="delete-pregunta btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_evaluacion' evaluacion.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                                    <a class="delete-pregunta btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'evaluaciones:desactivar_evaluacion' evaluacion.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
                                 {% else %}
-                                    <a class="activate-pregunta btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_evaluacion' evaluacion.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                                    <a class="activate-pregunta btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'evaluaciones:activar_evaluacion' evaluacion.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
                                 {% endif %}
                             </td>
 

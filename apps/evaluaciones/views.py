@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from apps.evaluaciones.forms import *
 from apps.evaluaciones.models import *
-from apps.employees_and_jobs.models import Employee
+from apps.usuarios.models import Usuario
 
 
 def inicio(request):
@@ -24,7 +24,7 @@ def registrar_pregunta(request, id=None):
         if form.is_valid():
             form.save()
             messages.success(request, "La pregunta ha sido guardada correctamente.")
-            return redirect('consultar_pregunta')
+            return redirect('evaluaciones:consultar_pregunta')
         else:
             messages.error(request, 'Por favor verificar los campos en rojo.')
     return render(request, 'registrar_pregunta.html', {'form': form})
@@ -39,7 +39,7 @@ def desactivar_pregunta(request, id):
     pregunta.estado = False
     pregunta.save()
     messages.success(request, "La pregunta ha sido desactivada correctamente del sistema")
-    return redirect('consultar_pregunta')
+    return redirect('evaluaciones:consultar_pregunta')
 
 
 def activar_pregunta(request, id):
@@ -47,7 +47,7 @@ def activar_pregunta(request, id):
     pregunta.estado = True
     pregunta.save()
     messages.success(request, "La pregunta ha sido activado correctamente en el sistema")
-    return redirect('consultar_pregunta')
+    return redirect('evaluaciones:consultar_pregunta')
 
 
 # Evaluations
@@ -84,7 +84,7 @@ def registrar_evaluacion(request, id=None):
         if formset.is_valid():
             formset.save()
             messages.success(request, "La evaluacion ha sido guardada correctamente.")
-            return redirect('consultar_evaluacion')
+            return redirect('evaluaciones:consultar_evaluacion')
         else:
             messages.error(request, 'Por favor verificar los campos en rojo.')
     else:
@@ -98,13 +98,13 @@ def registrar_evaluacion(request, id=None):
 
 
 def creacion_evaluacion(request, id):
-    employee = get_object_or_404(Employee, id=id)
+    employee = get_object_or_404(Usuario, id=id)
     evaluacion = EmployeeEvaluation.objects.create(date=datetime.date.today(),
                                                    employee=employee)
     for pregunta in Question.objects.filter(estado=True):
         EmployeeEvaluationQuestions.objects.create(employeeEvaluationId=evaluacion, questionId=pregunta, score=0,
                                                    observation='')
-    return redirect('registrar_evaluacion', evaluacion.id)
+    return redirect('evaluaciones:registrar_evaluacion', evaluacion.id)
 
 
 def consultar_evaluacion(request):
@@ -116,7 +116,7 @@ def desactivar_evaluacion(request, id):
     evaluacion.estado = False
     evaluacion.save()
     messages.success(request, "La evaluacion ha sido desactivada correctamente del sistema")
-    return redirect('consultar_evaluacion')
+    return redirect('evaluaciones:consultar_evaluacion')
 
 
 def activar_evaluacion(request, id):
@@ -124,4 +124,4 @@ def activar_evaluacion(request, id):
     evaluacion.estado = True
     evaluacion.save()
     messages.success(request, "La evaluacion ha sido activado correctamente en el sistema")
-    return redirect('consultar_evaluacion')
+    return redirect('evaluaciones:consultar_evaluacion')

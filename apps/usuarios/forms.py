@@ -12,7 +12,8 @@ class CrearUsuarioForm(UserCreationForm):
     class Meta:
         model = Usuario
         fields = ('first_name', 'last_name', 'cedula', 'username', 'cargo', 'password1', 'password2',
-                  'fecha_nacimiento', 'telefono', 'email', 'direccion', 'estado_civil', 'is_active')
+                  'fecha_nacimiento', 'telefono', 'email', 'direccion', 'estado_civil', 'is_active',
+                  'eps', 'pension_fund', 'severance_fund', 'bank', 'account_number', 'salary')
         widgets = {
             'cargo': Select2Widget(),
             'estado_civil': Select2Widget(),
@@ -62,7 +63,7 @@ class EditarUsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
         fields = ('first_name', 'last_name', 'username', 'fecha_nacimiento', 'cedula', 'telefono', 'email', 'direccion',
-                  'estado_civil', 'is_active', 'cargo')
+                  'estado_civil', 'is_active', 'cargo', 'eps', 'pension_fund', 'severance_fund', 'bank', 'account_number', 'salary')
         widgets = {
             'cargo': Select2Widget(),
             'estado_civil': Select2Widget(),
