@@ -62,9 +62,9 @@
                         {% endif %}
                         <td>
                             {% if nomina.estado %}
-                                <a class="delete-nomina btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'desactivar_nomina' nomina.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
+                                <a class="delete-nomina btn-icon btn-danger" href="#" data-toggle="modal" data-target="#deactivate-modal" data-url="{% url 'nomina:desactivar_nomina' nomina.id %}"><span class="glyphicon glyphicon-trash" style="color:white">/</span></a>
                             {% else %}
-                                <a class="activate-nomina btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'activar_nomina' nomina.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
+                                <a class="activate-nomina btn-icon btn-success" href="#" data-toggle="modal" data-target="#activate-modal" data-url="{% url 'nomina:activar_nomina' nomina.id %}"><span class="glyphicon glyphicon-check" style="color:white"></span></a>
                             {% endif %}
                         </td>
                     </tr>
