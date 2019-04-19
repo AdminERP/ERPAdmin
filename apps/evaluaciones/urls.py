@@ -4,6 +4,7 @@ from django.urls import path
 from .views import *
 from django.conf.urls import include, url
 
+app_name = 'evaluaciones'
 
 urlpatterns = [
     path('', inicio, name='inicio'),

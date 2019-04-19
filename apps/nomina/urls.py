@@ -3,6 +3,8 @@ from os import name
 from django.urls import path
 from .views import *
 
+app_name = 'nomina'
+
 urlpatterns = [
     path('', inicio, name='inicio'),
     path('modulo-nomina', payroll_module, name='modulo_nomina'),

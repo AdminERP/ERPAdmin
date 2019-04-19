@@ -3,6 +3,8 @@ from os import name
 from django.urls import path
 from .views import *
 
+app_name='employees_and_jobs'
+
 urlpatterns = [
     path('', inicio, name='inicio'),
     path('registrar-cargo', registrar_cargo, name='registrar_cargo'),
