@@ -1,60 +1,50 @@
+from django.contrib.auth.models import AbstractUser, Group
+from django.core.validators import MinLengthValidator
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
 
-class Rol(models.Model):
-    nombre = models.CharField(max_length=40)
-    descripcion = models.CharField(max_length=40)
+class Cargo(Group):
+    descripcion = models.TextField(max_length=500)
 
-    class Meta:
-        verbose_name_plural="Roles"
-
-    def __str__(self):
-        return self.nombre
-
-class Cargo(models.Model):
-    nombre = models.CharField(max_length=40)
-    descripcion = models.CharField(max_length=40)
-    roles = models.ManyToManyField(Rol, blank=True)
+    @staticmethod
+    def consultar_cargos():
+        try:
+            queryset = Cargo.objects.all()
+            return queryset
+        except Cargo.DoesNotExist:
+            return None
 
     class Meta:
-        verbose_name_plural ="Cargos"
+        permissions = (
+            ('view_cargos', 'Puede ver los cargos'),
+        )
 
-    def __str__(self):
-        return self.nombre
 
-class User(AbstractUser):
-    cedula = models.CharField(max_length=10)
-    direccion = models.CharField(max_length=20)
+class Usuario(AbstractUser):
+    cedula = models.CharField(max_length=10, unique=True,
+                              validators=[MinLengthValidator(8, 'Asegurese que la cédula tenga al menos 8 dígitos')])
+    direccion = models.CharField(max_length=50)
     ESTADOS = (
         ('casado', 'Casado'),
         ('soltero', 'Soltero'),
         ('union_libre', 'Unión libre')
     )
-
-    CARGOS = (
-        ('C','Coordinador de Servicios'),
-        ('O','Operario')
-    )
-
-    cargo = models.CharField(max_length=20,choices=CARGOS, blank=True, null=True)
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE, blank=True, null=True, related_name='usuario')
     estado_civil = models.CharField(choices=ESTADOS, max_length=15, blank=True)
     fecha_nacimiento = models.DateField(null=True)
-    telefono = models.CharField(max_length=11, null=True)
+    telefono = models.CharField(max_length=11)
 
-    def __str__(self):
-        return self.get_full_name()
-
-
-class Cliente(models.Model):
-    nombres = models.CharField(max_length=20,null=True, verbose_name="Nombres")
-    apellidos = models.CharField(max_length=20,null=True, verbose_name= "Apellidos")
-    cedula = models.IntegerField(null=True, verbose_name="Cédula")
-    telefono = models.IntegerField(null=True,verbose_name="Teléfono")
-    email = models.CharField(max_length=50,null=True, verbose_name="Correo Electrónico")
+    @staticmethod
+    def consultar_usuarios():
+        try:
+            queryset = Usuario.objects.all()
+            return queryset
+        except Usuario.DoesNotExist:
+            return None
 
     class Meta:
-        verbose_name_plural="Clientes"
-
-    def __str__(self):
-        return self.nombres + " " + self.apellidos;
+        permissions = (
+            ('view_usuarios', 'Puede consultar los usuarios'),
+            ('change_password', 'Puede reestablecer las contraseñas de los usuarios'),
+            ('activate_usuario', 'Puede activar/desactivar usuarios'),
+        )
