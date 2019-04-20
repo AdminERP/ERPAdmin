@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'apps.ordenes_servicio',
     'apps.usuarios',
+    'apps.datosmaestros',
     'django_extensions',
 ]
 
@@ -130,4 +131,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static_collected')
 
-AUTH_USER_MODEL = 'usuarios.User'
+AUTH_USER_MODEL = 'usuarios.Usuario'
