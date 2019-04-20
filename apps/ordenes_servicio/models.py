@@ -1,21 +1,22 @@
 from django.db import models
 from apps.usuarios.models import *
+from apps.datosmaestros.models.dato import DatoModel
 from datetime import datetime
 
 class OrdenServicio(models.Model):
     servicio_vendido = models.CharField(max_length=100) # Datos Mestros
 
-    coordinador = models.ForeignKey(User,
+    coordinador = models.ForeignKey(Usuario,
                                   limit_choices_to={'cargo': 'C'},  # Solo los coordinadores pueden crear
                                   on_delete=models.CASCADE, blank=True, null=False,
                                   related_name='coordinador_set', verbose_name="Coordinador")
 
-    encargado = models.ForeignKey(User,
+    encargado = models.ForeignKey(Usuario,
                                   limit_choices_to={'cargo':'O'}, #Solo los operarios pueden encargarse
                                   on_delete=models.CASCADE, blank=True, null=False,
                                   related_name='encargado_set', verbose_name="Encargado")
 
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, blank=True, null=False,
+    cliente = models.ForeignKey(DatoModel, on_delete=models.CASCADE, blank=True, null=False,
                                 related_name='cliente_set', verbose_name="Cliente")# Datos Maestros
 
     comentarios = models.TextField(max_length=255)
@@ -46,7 +47,7 @@ class OrdenServicio(models.Model):
         verbose_name_plural = "Ordenes de Servicio"
 
     def get_data(usuario):
-        cargo = User.objects.get(id=usuario.id).cargo
+        cargo = Usuario.objects.get(id=usuario.id).cargo
         if cargo == 'C':
             try:
                 ordenes = OrdenServicio.objects.filter(coordinador=usuario.id)

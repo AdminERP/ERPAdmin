@@ -3,7 +3,8 @@ from django.http import HttpResponse, Http404
 from django.contrib import messages
 from .forms import *
 from django.db import models
-from apps.usuarios.models import Cliente # ¿Modelo Cliente va en usuarios?
+from apps.datosmaestros.models.dato import DatoModel
+from apps.datosmaestros.models.categoria import CategoriaModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
@@ -238,7 +239,9 @@ def clientes_autocomplete(request):
     if request.GET.get('q'):
         q = request.GET['q']
         criterio_uno = (models.Q(nombres__icontains=q) | models.Q(apellidos__icontains=q) | models.Q(cedula__icontains=q) | models.Q(telefono__icontains=q) | models.Q(email__icontains=q))
-        data = Cliente.objects.filter(criterio_uno).values_list('cedula', 'nombres', 'apellidos', 'id')[:10]
+        categoria = CategoriaModel.objects.get(nombre = 'clientes')
+        clientes_query = DatoModel.objects.filter(categoria = categoria.id) 
+        data = clientes_query.objects.filter(criterio_uno).values_list('cedula', 'nombres', 'apellidos', 'id')[:10]
         arr = list(data)
         for tupla in arr:
             cedula = str(tupla[0])
