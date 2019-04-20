@@ -36,14 +36,29 @@ Ademas de **psql (PostgreSQL) 9.5.14**
 
 **templates**: Se encuentra el archivo base.html
 
+**templates en las apps**:
+```
+.
+├── apps
+│   ├── mi_app
+│   │   ├── templates
+│   │   │   └── mi_app
+│   │   │       ├── editar.html
+│   │   │       ├── crear.html
+│   │   │       ├── eliminar.html
+│   │   │       ├── consultar.html
+```
+
+
 ## Módulos del proyecto
 
  1. Compras
- 2. Datos maestros, perfles, roles e Inventario
- 3. Cuntas por Pagar
+ 2. Datos maestros, perfiles, roles e Inventario
+ 3. Cuentas por Pagar
  4. Cuentas por Cobrar
  5. Gestión de cuentas contables
  6. Recursos humanos
+ 7. Ordenes de servicio
 
 ## Construido con
 

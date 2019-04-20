@@ -4,8 +4,9 @@
 
 from django.urls import path
 from apps.inventario.views import *
-
+app_name = 'inventario'
 urlpatterns = [
+
     path('', index, name='landingInventario'),
     path('entradas', entradas, name='entradas'),
     path('entradasRegistradas', entradasRegistradas, name='entradasRegistradas'),

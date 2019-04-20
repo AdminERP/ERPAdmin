@@ -3,16 +3,18 @@ from django.contrib import messages
 from django.http.response import JsonResponse
 from apps.inventario.models import *
 from apps.inventario.forms import *
-
+from django.contrib.auth.decorators import permission_required
 # Create your views here.
-
+@permission_required('inventario.add_entrada', raise_exception=True)
 def index (request):
-    return render(request, 'inventario/landing.html')
+    return render(request, 'landing.html')
 
+@permission_required('inventario.add_entrada', raise_exception=True)
 def entradas (request):
     ordenes = OrdenCompra.listarNoAtendidas()
-    return render(request, 'inventario/entrada.html', {'ordenes': ordenes})
+    return render(request, 'entrada.html', {'ordenes': ordenes})
 
+@permission_required('inventario.change_entrada', raise_exception=True)
 def entradasRegistradas (request):
     ordenes = OrdenCompra.listarAtendidas()
     ordenes = list(ordenes)
@@ -21,8 +23,9 @@ def entradasRegistradas (request):
         entrada = Entrada.objects.get(ordenCompra = orden)
         listaEntradas.append(entrada)
     lista = zip(ordenes, listaEntradas)
-    return render(request, 'inventario/entradasRegistradas.html', {'ordenes': lista})
+    return render(request, 'entradasRegistradas.html', {'ordenes': lista})
 
+@permission_required('inventario.change_entrada', raise_exception=True)
 def editarEntrada(request, idEntrada, idOrden):
     entrada = Entrada.objects.get(id = idEntrada)
     form = RegistroEntrada (instance = entrada)
@@ -40,16 +43,16 @@ def editarEntrada(request, idEntrada, idOrden):
                 inventario.estado = False
                 inventario.save()
             messages.success(request, 'Entrada registrada exitosamente')
-            return redirect('entradasRegistradas')
+            return redirect('inventario:entradasRegistradas')
         else:
             messages.error(request, 'Por favor corrige los errores')
-    return render(request, 'inventario/editarEntrada.html', {'form': form, 'entrada': entrada, 'orden': idOrden})
+    return render(request, 'editarEntrada.html', {'form': form, 'entrada': entrada, 'orden': idOrden})
 
-
+@permission_required('inventario.add_salida', raise_exception=True)
 def inventario (request):
     inventario = Inventario.listar()
-    return render(request, 'inventario/inventario.html', {'inventario': inventario})
-
+    return render(request, 'bodega.html', {'inventario': inventario})
+@permission_required('inventario.add_entrada', raise_exception=True)
 def registroEntrada(request, idOrden):
     orden = OrdenCompra.objects.get(id = idOrden)
     form = RegistroEntrada()
@@ -66,22 +69,21 @@ def registroEntrada(request, idOrden):
             objeto.save()
 
             messages.success(request, 'Entrada registrada exitosamente')
-            return redirect('entradas')
+            return redirect('inventario:entradas')
         else:
             messages.error(request, 'Por favor corrige los errores')
             form = RegistroEntrada()
-            return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden})
+            return render(request, 'registrarEntrada.html', {'form': form, 'orden': orden})
 
-    return render(request, 'inventario/registrarEntrada.html', {'form': form, 'orden': orden})
-
+    return render(request, 'registrarEntrada.html', {'form': form, 'orden': orden})
+@permission_required('inventario.add_salida', raise_exception=True)
 def salidas(request):
     salidas = Inventario.listarSalidas()
-    return render(request, 'inventario/salidas.html', {'salidas' : salidas})
-
+    return render(request, 'salidas.html', {'salidas' : salidas})
+@permission_required('inventario.add_salida', raise_exception=True)
 def salida(request):
     if request.is_ajax():
         id = request.POST.get('id', None)
-        # Validar cuando un curso no exista.
         try:
             salida = Salida(entrada_id=id)
             salida.save()

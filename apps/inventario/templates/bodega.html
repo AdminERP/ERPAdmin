@@ -21,7 +21,7 @@
 
 {% endblock miga_pan %}
 {% block titulo_panel %}
-<a href="{% url 'salidas' %}" type="button" class="btn bg-purple margin">Salidas Registradas<div class="ripple-container"></div></a>
+<a href="{% url 'inventario:salidas' %}" type="button" class="btn bg-purple margin">Salidas Registradas<div class="ripple-container"></div></a>
  {% endblock titulo_panel %}
 
 {% block contenido_panel %}
@@ -104,7 +104,7 @@
     modal.find('.modal-body .cantidad').text(cantidad)
     modal.find('.modal-body .id').text(id)
     $('#salida').click(function(){
-      $.post("{% url 'salida' %}", {"csrfmiddlewaretoken":'{{ csrf_token }}', 'id': id},
+      $.post("{% url 'inventario:salida' %}", {"csrfmiddlewaretoken":'{{ csrf_token }}', 'id': id},
       function (data){
         window.location.href=data.url;
       });

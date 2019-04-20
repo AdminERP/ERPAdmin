@@ -29,9 +29,6 @@ h4 {
 
 {% endblock miga_pan %}
 
-{% block titulo_panel %}
-<a href="{% url 'entradas' %}" type="button" class="btn bg-purple margin">Volver a Entradas<div class="ripple-container"></div></a>
- {% endblock titulo_panel %}
 
 {% block contenido_panel %}
 
@@ -71,7 +68,7 @@ h4 {
                   </a>
               </td>
               <td class="sorting_1 text-center" tabindex="0">{{ entrada.fecha }}</td>
-              <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'editarEntrada' entrada.id orden.id %}" type="button" class="btn btn-block btn-info">Editar</a>
+              <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'inventario:editarEntrada' entrada.id orden.id %}" type="button" class="btn btn-block btn-info">Editar</a>
 
 
     {% endfor %}
