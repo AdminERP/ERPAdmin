@@ -45,6 +45,11 @@ class OrdenServicio(models.Model):
 
     class Meta:
         verbose_name_plural = "Ordenes de Servicio"
+        permissions = (
+            ("operate_ordenservicio", "Can operate orden servicio"),
+            ("cancel_ordenservicio", "Can cancel orden servicio"),
+            ("list_ordenservicio", "Can list orden servicio"),
+        )
 
     def get_data(usuario):
         cargo = Usuario.objects.get(id=usuario.id).cargo

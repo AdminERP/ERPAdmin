@@ -106,7 +106,8 @@ def gtfo(request):
 def crear_orden_servicio(request):
     usuario = request.user
     # Validar que el usuario sea un coordinador de servicios
-    if usuario.cargo == "C":
+    print(usuario.get_all_permissions())
+    if usuario.has_perm('ordenes_servicio.add_ordenservicio'):
         if request.method == 'POST':
             form = OrdenServicioForm(request.POST)
             if form.is_valid():
@@ -137,7 +138,7 @@ def aceptar_orden_servicio(request):
             orden_servicio_aux = OrdenServicio.objects.get(id=id)
             usuario = request.user
             encargado = usuario.encargado_set.all().filter(id=id).count() == 1
-            if usuario.cargo == "O" and encargado:
+            if usuario.has_perm('ordenes_servicio.operate_ordenservicio') and encargado:
                 orden_servicio_aux.estado = "TR"
                 orden_servicio_aux.save()
                 messages.success(request, 'Orden de Servicio Aceptada')
@@ -157,7 +158,7 @@ def cerrar_orden_servicio(request):
             orden_servicio_aux = OrdenServicio.objects.get(id=id)
             usuario = request.user
             encargado = usuario.encargado_set.all().filter(id=id).count() == 1
-            if usuario.cargo == "O" and encargado:
+            if usuario.has_perm('ordenes_servicio.operate_ordenservicio') and encargado:
                 orden_servicio_aux.estado = "CE"
                 orden_servicio_aux.save()
                 messages.success(request, 'Orden de Servicio Cerrada')
@@ -179,7 +180,7 @@ def cancelar_orden_servicio(request):
         except:
             return JsonResponse({'success': False})
         pertenece_a_usuario =  request.user.encargado_set.all().filter(id=id).count() == 1
-        if request.user.cargo == "C" or (request.user.cargo == "O" and pertenece_a_usuario):
+        if request.user.has_perm('ordenes_servicio.cancel_ordenservicio') or (request.user.has_perm('ordenes_servicio.operate_ordenservicio') and pertenece_a_usuario):
             error = False
             if(orden_servicio_aux.estado == "CA"):
                 messages.error(request, "No se puede cancelar una orden de servicio ya cancelada")
@@ -205,7 +206,7 @@ def cancelar_orden_servicio(request):
 @login_required(login_url="/ordenes_servicio/login/")
 def consultar_orden_servicio(request):
     usuario = request.user
-    if usuario.cargo == "C" or usuario.cargo == "O":
+    if usuario.has_perm('ordenes_servicio.list_ordenservicio'):
         context ={'ordenes': listar_ordenes(usuario)}
         manage_options(request,context)
         return render(request, 'ordenes_servicio/consultar_orden_servicio.html', context)
@@ -238,17 +239,16 @@ def clientes_autocomplete(request):
     json = []
     if request.GET.get('q'):
         q = request.GET['q']
-        criterio_uno = (models.Q(nombres__icontains=q) | models.Q(apellidos__icontains=q) | models.Q(cedula__icontains=q) | models.Q(telefono__icontains=q) | models.Q(email__icontains=q))
         categoria = CategoriaModel.objects.get(nombre = 'clientes')
-        clientes_query = DatoModel.objects.filter(categoria = categoria.id) 
-        data = clientes_query.objects.filter(criterio_uno).values_list('cedula', 'nombres', 'apellidos', 'id')[:10]
+        clientes_query = DatoModel.objects.filter(categoria = categoria.id).distinct()
+        data =clientes_query.filter(valormodel__valor__icontains=q).values_list('id')[:10]
         arr = list(data)
         for tupla in arr:
-            cedula = str(tupla[0])
-            nombre = tupla[1]
-            apellidos = tupla[2]
-            id = tupla[3]
-            json.append({'id': id, 'text':cedula + ' - ' + nombre + ' ' + apellidos})
+            id = tupla[0]
+            cedula = DatoModel.objects.get(id=id).valormodel_set.all().get(nombre="cedula").valor
+            nombres = DatoModel.objects.get(id=id).valormodel_set.all().get(nombre="nombres").valor
+            apellidos = DatoModel.objects.get(id=id).valormodel_set.all().get(nombre="apellidos").valor
+            json.append({'id': id, 'text':cedula + ' - ' + nombres + ' ' + apellidos})
     return JsonResponse(json, safe=False, json_dumps_params={'ensure_ascii':False})
 
 @login_required(login_url="/ordenes_servicio/login/")
