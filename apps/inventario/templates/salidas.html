@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style>
+ .btn {border:1px solid transparent; margin: 0px; border-color:#00acd6; padding: 5px;}
+ .bg-purple {
+    background-color: #2196f3 !important;
+}
+</style>
+
+{% endblock css %}
+
+{% block titulo %} Salidas{% endblock titulo %}
+{% block titulo_pagina %}Salidas{% endblock titulo_pagina %}
+
+{% block miga_pan %}
+
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+  <li><a href="/inventario/list"><i class="fa fa-dashboard"></i> Inventrario</a></li>
+  <li class="active">Salidas</li>
+
+{% endblock miga_pan %}
+
+{% block titulo_panel %}
+<a href="{% url 'inventario:inventario' %}" type="button" class="btn bg-purple margin">Volver a Inventario<div class="ripple-container"></div></a>
+ {% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<table id="tabla" cellspacing="0" width="100%" style="width: 100%;" aria-describedby="demo-dt-basic_info" class="table table-striped table-bordered dataTable no-footer dtr-inline">
+          <thead>
+            <tr>
+              <th class="text-center">ID</th>
+              <th class="text-center">Articulo</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-center">Codigo Entrada</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for articulo in salidas %}
+
+          <tr role="row" class="even">
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.id }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.articulo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.cantidad }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ articulo.entrada.id}}</td>
+    {% endfor %}
+                    </tbody>
+
+        </table>
+
+{% endblock contenido_panel %}
+
+{% block pie_panel %}
+
+{% endblock pie_panel %}
+{% block js %}
+<script>
+  $(function () {
+    $('#tabla').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true
+    })
+  })
+</script>
+{% endblock js %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+
+{% block titulo %} Editar Entrada{% endblock titulo %}
+{% block titulo_pagina %}Editar Entrada{% endblock titulo_pagina %}
+
+{% block css %}
+
+<style>
+ .form-group .checkbox label, .form-group .radio label, .form-group label {color: black;}
+</style>
+
+{% endblock css %}
+
+{% block miga_pan %}
+
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+  <li><a href="/inventario/entradas"><i class="fa fa-dashboard"></i> Entradas</a></li>
+  <li><a href="/inventario/entradasRegistradas"><i class="fa fa-dashboard"></i> Entradas Registradas</a></li>
+  <li class="active">Editar Entrada</li>
+
+{% endblock miga_pan %}
+
+{% block titulo_panel %} Editar Entrada #{{ entrada.id }} {% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+ <form method="post">
+    {% csrf_token %}
+      <div class="col-md-12">
+          {% bootstrap_field form.condicion %}
+      </div>
+      <div class="col-md-12">
+          {% bootstrap_field form.comentario %}
+      </div>
+
+      <input type="hidden" id="ordenCompra" name="ordenCompra" value="{{ orden }}">
+
+      <div class="col-md-12">
+          <button type="submit" class="btn btn-success">Confirmar</button>
+          <a href="{% url 'inventario:entradas' %}" type="button" class="btn btn-danger">Cancelar</a>
+      </div>
+</form>
+
+{% endblock contenido_panel %}
+
+{% block pie_panel %}
+
+{% endblock pie_panel %}

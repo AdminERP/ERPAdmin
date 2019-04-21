@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style>
+  .info-box-number {overflow: hidden; text-overflow: ellipsis;}
+</style>
+{% endblock css %}
+
+{% block titulo %} Inventario{% endblock titulo %}
+{% block titulo_pagina %}Dashboard{% endblock titulo_pagina %}
+
+
+{% block miga_pan %}
+
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+
+{% endblock miga_pan %}
+
+{% block contenido_panel %}
+
+<a href="/inventario/entradas">
+
+
+<div class="col-md-3 col-sm-6 col-xs-12 btn">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-check-square-o"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-number" >Entradas</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+</a>
+
+<a href="/inventario/list">
+<div class="col-md-3 col-sm-6 col-xs-12 btn">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-dropbox"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-number" >Inventario</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+</a>
+
+{% endblock contenido_panel %}
