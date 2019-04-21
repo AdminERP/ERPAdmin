@@ -92,6 +92,14 @@ class OrdenCompra(models.Model):
     estado_aprobacion = models.CharField(
         max_length=16, choices=ESTADOS, default=PENDIENTE)
     
+    def send_notification(self):
+        if self.estado_aprobacion == 'aprobado_gerente':
+            # TODO generar pdf con la informacion de la orden y enviarla por email
+            pass
+        elif self.estado_aprobacion == 'rechazada':
+            # TODO enviar correo al solicitante y al jefe de compras informando que se rechazo
+            pass
+
     class Meta:
         permissions = (
             ("autorizar_orden", "Puede autorizar una orden"),
