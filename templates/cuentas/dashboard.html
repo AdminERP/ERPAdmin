@@ -26,7 +26,7 @@
 {% block titulo_panel %}{% endblock titulo_panel %}
 
 {% block contenido %}
-
+{% if perms.cuentas %}
     <div class="container-fluid">
         <h1>Estadísticas</h1>
         <div class="row">
@@ -85,7 +85,8 @@
                 <canvas id="grafica4"></canvas>
             </div>
         </div>
-    </div>    
+    </div> 
+    {% endif %}   
     <!-- /.container -->
 {% endblock contenido %}
 

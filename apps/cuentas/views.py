@@ -159,6 +159,7 @@ def listarDetalles (request):
 	return render(request, 'cuentas/listarDetalles.html')
 
 def createOrder(request):
+	print (request.POST);
 	if request.POST:
 		form = ServiceOrderForm(request.POST)
 		if form.is_valid():

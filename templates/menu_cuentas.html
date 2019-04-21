@@ -17,23 +17,31 @@
     </div>
 
     <!-- Sidebar Menu -->
+    
     <ul class="sidebar-menu" data-widget="tree">
-      <li class="header">HEADER</li>
+
+      <li class="header">Contabilidad</li>
       <!-- Optionally, you can add icons to the links -->
+
       <li class="treeview">
         <a href="#"><i class="fas fa-tachometer-alt"></i> <span>Home</span></a>
         <ul class="treeview-menu">
           <li><a href="{% url 'index' %}">Dashboard</a></li>
         </ul>
       </li>
-
+      {% if perms.cuentas %}
       <li class="treeview">
         <a href="#"><i class="fa fa-dollar"></i> <span>Cuentas por Pagar</span>
         <ul class="treeview-menu">
-
+           {% if perms.cuentas.add_CuentaPagar %}
           <li><a href="{% url 'crearCuenta'%}">Crear Cuenta</a></li>
+          {% endif %}
+          {% if perms.cuentas.view_CuentaPagar %}
           <li><a href="{% url 'listarPagar'%}">Ver Cuentas</a></li>
+          {% endif %}
+           {% if perms.cuentas.add_Payment %}
           <li><a href="{% url 'payments'%}">Pagos</a></li>
+          {% endif %}
         </ul>
       </li>
       
@@ -45,8 +53,12 @@
         </a>
         <ul class="treeview-menu">
           <li><a href="{% url 'createOrder'%}">Crear Ordenes</a></li>
+          {% if perms.cuentas.view_ServiceOrder %}
           <li><a href="{% url 'listServiceOrder'%}">Ver Ordenes</a></li>
+          {% endif %}
+          {% if perms.cuentas.view_CuentaCobrar %}
           <li><a href="{% url 'listarCobrar'%}">Ver Cuentas</a></li>
+          {% endif %}
         </ul>
       </li>    
       <li class="treeview">
@@ -56,11 +68,14 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          {% if perms.cuentas.view_CuentaEmpresa %}
           <li><a href="{% url 'listarCuentaEmpresa'%}">Ver Cuentas</a></li>
+          {% endif %}
         </ul>
       </li>  
-
+      {% endif %}
     </ul>
+    
     <!-- /.sidebar-menu -->
   </section>
   <!-- /.sidebar -->
