@@ -14,7 +14,7 @@ from apps.usuarios.forms import *
 from django.http import HttpResponseRedirect, JsonResponse
 
 def to_login(request):
-    return redirect('/ordenes_servicio/login')
+    return redirect('/')
 
 # Create your views here.
 def ordenes_login(request):
@@ -91,7 +91,7 @@ def manage_options(request, context):
         ]
 
 
-@login_required(login_url="/ordenes_servicio/login/")
+@login_required(login_url="/")
 def ordenes_welcome(request):
     context = {}
     manage_options(request,context)
@@ -102,7 +102,7 @@ def gtfo(request):
     logout(request)
     return redirect("/ordenes_servicio/login/")
 
-@login_required(login_url="/ordenes_servicio/login/")
+@login_required(login_url="/")
 def crear_orden_servicio(request):
     usuario = request.user
     # Validar que el usuario sea un coordinador de servicios
@@ -130,7 +130,7 @@ def crear_orden_servicio(request):
         messages.error(request, 'No estas autorizado para realizar esta acción')
         return redirect('/ordenes_servicio/')
 
-@login_required(login_url="/ordenes_servicio/login/")
+@login_required(login_url="/")
 def aceptar_orden_servicio(request):
     if request.is_ajax():
         id = request.GET.get('orden_id', None)
@@ -150,7 +150,7 @@ def aceptar_orden_servicio(request):
             return JsonResponse({'orden_id': 0})
 
 
-@login_required(login_url="/ordenes_servicio/login/")
+@login_required(login_url="/")
 def cerrar_orden_servicio(request):
     if request.is_ajax():
         id = request.GET.get('orden_id', None)
@@ -170,7 +170,7 @@ def cerrar_orden_servicio(request):
             return JsonResponse({'orden_id': 0})
 
 
-@login_required(login_url="/ordenes_servicio/login/")
+@login_required(login_url="/")
 def cancelar_orden_servicio(request):
     if request.is_ajax():
         id = request.GET.get('orden_id', None)
@@ -203,7 +203,7 @@ def cancelar_orden_servicio(request):
             messages.error(request, 'No estas autorizado para realizar esta acción')
             return JsonResponse({'success': False})
 
-@login_required(login_url="/ordenes_servicio/login/")
+@login_required(login_url="/")
 def consultar_orden_servicio(request):
     usuario = request.user
     if usuario.has_perm('ordenes_servicio.list_ordenservicio'):
