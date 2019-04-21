@@ -1,0 +1,42 @@
+{% load static %}
+
+{% block nav_custom_menu %}
+<div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+        {% block header_dropdowns %}
+        {% if request.user.is_authenticated %}
+        <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
+                <span class="hidden-xs">{% firstof request.user.get_short_name request.user.get_username %}</span>
+            </a>
+            <ul class="dropdown-menu">
+                {% block user_header %}
+                <li class="user-header">
+                    <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                    <p>
+                        {% firstof request.user.get_short_name request.user.get_first_name %}
+                        <small>Member since {{ request.user.date_joined }}</small>
+                    </p>
+                </li>
+                {% endblock %}
+
+                <!-- Menu Footer-->
+                {% block menu_footer %}
+                <li class="user-footer">
+                    <div class="btn-group">
+                        
+                        <a href="{% block logout_url %}/ordenes_servicio/logout/{% endblock %}"
+                           class="btn btn-default btn-block btn-flat">Salir</a>
+                    </div>
+                    <!--<div class="pull-right"></div>-->
+                </li>
+                {% endblock %}
+
+            </ul>
+        </li>
+        {% endif %}
+        {% endblock header_dropdowns %}
+    </ul>
+</div>
+{% endblock nav_custom_menu %}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """ERPAdmin URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -20,5 +21,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cuentas/',include('apps.cuentas.urls'), name = 'cuentas'),
+    path('', include('apps.usuarios.urls', namespace = 'usuarios')),
+    path('datos-maestros/', include('apps.datosmaestros.urls', namespace = 'datosmaestros')),
+    path('ordenes_servicio/',  include('apps.ordenes_servicio.urls')),
 
 ]

@@ -23,21 +23,20 @@
 
     <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <!--datatable-->
-    <link rel="stylesheet" type="text/css" href="{% static 'plugins/DataTables/datatables.min.css' %}"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     {{ form.media.css }}
     {% block css %}{% endblock css %}
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
     <!-- Main Header -->
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="{% url 'usuarios:home' %}" class="logo">
+        <a href="index2.html" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">E<b>R</b>P</span>
             <!-- logo for regular state and mobile devices -->
@@ -51,12 +50,11 @@
                 <span class="sr-only">Toggle navigation</span>
             </a>
             <!-- Navbar Right Menu -->
-            {% include 'control_bar.html' %}
+            {% include 'ordenes_servicio/header_options.html' %}
         </nav>
     </header>
 
-    {% include 'menu_cuentas.html' %}
-
+    {% include "ordenes_servicio/sidebar.html" %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -73,8 +71,6 @@
                     <li class="active">Here</li>
                 {% endblock miga_pan %}
             </ol>
-
-
         </section>
 
         <!-- Main content -->
@@ -83,12 +79,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="box box-primary">
-
-                            <div class="box-header with-border">
-                                <h2 class="box-title">
-                                    {% block titulo_panel %}{% endblock titulo_panel %}
-                                </h2>
-
+                            <div class="box-header">
+                                <h3 class="box-title"></h3>
                             </div>
                             <div class="box-body">
                                 {% block contenido_panel %}{% endblock contenido_panel %}
@@ -140,8 +132,6 @@
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
-<!--datatable-->
-<script type="text/javascript" src="{% static 'plugins/DataTables/datatables.min.js' %}"></script>
 {{ form.media.js }}
 
 <script>
@@ -154,7 +144,8 @@
                     "preventDuplicates": true,
                     "showEasing": "swing",
                     "extendedTimeOut": 30000,
-                    "timeOut": 4000
+                    "timeOut": 4000,
+                    "positionClass": "toast-bottom-right"
                 }
                 toastr["{{ msg.tags }}"]("{{ msg }}")
             }, 500);
