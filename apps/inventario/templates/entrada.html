@@ -32,7 +32,6 @@
               <th class="text-center">ID</th>
               <th class="text-center">Articulo</th>
               <th class="text-center">Cantidad</th>
-              <th class="text-center">Precio</th>
                 <th class="text-center">Proeevedor</th>
                 <th class="text-center">Total</th>
                 <th class="text-center">Fecha de llegada</th>
@@ -42,17 +41,16 @@
           <tbody>
 
           {% for orden in ordenes %}
-
+              {% if orden.estado_aprobacion == 'APROBADO_GERENTE'  %}
           <tr role="row" class="even">
               <td class="sorting_1 text-center" tabindex="0">{{ orden.id }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.articulo }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.cantidad }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.precio }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.proveedores }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.total }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.tiempo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.solicitud.articulo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.solicitud.cantidad }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.proveedor }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.total }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.fecha_esperada }}</td>
               <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'inventario:registroEntrada' orden.id %}" type="button" class="btn btn-block btn-info">Generar Entrada</a>
-
+{% endif %}
 
     {% endfor %}
                     </tbody>

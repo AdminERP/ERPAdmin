@@ -4,6 +4,10 @@ apps/*/migrations/
 *.log
 *.pot
 *.pyc
-media
+media/
 .idea
 db.sqlite3
+venv/
+myenv/
+.vscode/
+

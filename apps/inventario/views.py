@@ -3,7 +3,10 @@ from django.contrib import messages
 from django.http.response import JsonResponse
 from apps.inventario.models import *
 from apps.inventario.forms import *
+from apps.compras.models import *
 from django.contrib.auth.decorators import permission_required
+from django.db import models
+
 # Create your views here.
 @permission_required('inventario.add_entrada', raise_exception=True)
 def index (request):
@@ -11,8 +14,13 @@ def index (request):
 
 @permission_required('inventario.add_entrada', raise_exception=True)
 def entradas (request):
+
     ordenes = OrdenCompra.listarNoAtendidas()
-    return render(request, 'entrada.html', {'ordenes': ordenes})
+
+    return render(request, 'entrada.html', {'ordenes': ordenes, })
+
+
+
 
 @permission_required('inventario.change_entrada', raise_exception=True)
 def entradasRegistradas (request):
@@ -52,9 +60,10 @@ def editarEntrada(request, idEntrada, idOrden):
 def inventario (request):
     inventario = Inventario.listar()
     return render(request, 'bodega.html', {'inventario': inventario})
+
 @permission_required('inventario.add_entrada', raise_exception=True)
 def registroEntrada(request, idOrden):
-    orden = OrdenCompra.objects.get(id = idOrden)
+    orden = OrdenCompra.objects.select_related('cotizacion').select_related('solicitud').get(id = idOrden)
     form = RegistroEntrada()
 
     if request.method == 'POST':
@@ -64,7 +73,7 @@ def registroEntrada(request, idOrden):
             nuevaEntrada = form.save()
 
             objeto = Inventario.objects.create(
-            articulo = orden.articulo, cantidad = orden.cantidad, entrada = nuevaEntrada
+            articulo = orden.solicitud.articulo.nombre, cantidad = orden.solicitud.cantidad, entrada = nuevaEntrada
             )
             objeto.save()
 
@@ -76,10 +85,12 @@ def registroEntrada(request, idOrden):
             return render(request, 'registrarEntrada.html', {'form': form, 'orden': orden})
 
     return render(request, 'registrarEntrada.html', {'form': form, 'orden': orden})
+
 @permission_required('inventario.add_salida', raise_exception=True)
 def salidas(request):
     salidas = Inventario.listarSalidas()
     return render(request, 'salidas.html', {'salidas' : salidas})
+
 @permission_required('inventario.add_salida', raise_exception=True)
 def salida(request):
     if request.is_ajax():

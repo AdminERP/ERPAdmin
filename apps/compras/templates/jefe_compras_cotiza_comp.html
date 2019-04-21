@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block miga_pan %}
+  <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  <li><a href="#">Compras</a></li>
+  <li class="active">Solicitudes de Compra</li>
+  <li class="active">Cotizaciones</li>
+{% endblock miga_pan %}
+
+{% block contenido %}
+<div class="content-wrapper">
+  <!-- Main content -->
+  <section class="box">          
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="box box-primary">            
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form role="form">
+          <div class="box-body">
+            <!-- Panel colapsable --> 
+            <div class="container col-md-12">   
+              <div class="form-group row">
+                <div class="col-xs-6">
+                  <label for="inputNombre">Nombre</label>
+                  <input type="text" class="form-control" id="inputNombre" placeholder="Emilia" disabled>
+                </div>
+
+                <div class="col-xs-3">
+                  <label for="inputId">Identificación</label>
+                  <input type="text" class="form-control" id="inputId" disabled
+                    placeholder={{solicitud.usuario.codigo}}>
+                </div>
+
+                <div class="col-xs-3">
+                  <label for="inputNombre">Cargo</label>
+                  <input type="text" class="form-control" id="inputNombre" disabled
+                    placeholder="Jefe de Compras">
+                </div>
+              </div> 
+
+              <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#cotizaciones">Cotizaciones</a></li>
+                <li><a data-toggle="tab" href="#ordenes">Órdenes de compra</a></li>                    
+              </ul>
+              
+              <div class="tab-content">
+                {% if cotizaciones %}
+                {% for cotizacion in cotizaciones %}
+                  <div id="cotizaciones" class="tab-pane fade in active">                      
+                    <div class="panel-group" id="accordion">  
+
+                      <div class="panel panel-default">                                                                      
+                        <div class="panel-heading">
+                          <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#acordion" href="#collapse1">
+                              Cotización #{{cotizacion.codigo}}
+                            </a>
+                          </h3>                  
+                        </div>
+
+                        <div id="collapse1" class="panel-collapse collapse">
+                          <div class="form-group row">
+                            <div class="col-xs-6">
+                              <label for="inputNombre">Nombre Proveedor</label>
+                              <input type="text" class="form-control" id="inputNombre" disabled
+                                placeholder={{proveedor.nombre}}> 
+                                <!--proveedor no tiene nombre en el diagram ER-->
+                            </div>
+
+                            <div class="col-xs-3">
+                              <label for="inputId">Identificación</label>
+                              <input type="text" class="form-control" id="inputId" disabled
+                                placeholder={{proveedor.codigo}}>
+                            </div>                          
+                          </div>
+
+                          <div class="form-group">
+                            <label for="inputElemento">Elemento</label>
+                            <input type="text" class="form-control" id="inputElemento" disabled
+                              placeholder={{articuloscotizacion.articulo.nombre}}>
+                          </div>                        
+
+                          <div class="form-group">
+                            <label for="inputCantidad">Cantidad</label>
+                            <input type="text" class="form-control" id="inputCantidad" disabled
+                              placeholder={{articuloscotizacion.cantidad}}>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha realizada</label>                  
+                              <!-- Date -->                              
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder={{cotizacion.fecha_realizada}}>
+                            </div>
+                          </div> <!-- group row -->
+
+                          <div class="form-group row">                              
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorU">Valor unidad $</label>
+                              <input type="text" class="form-control" id="inputValorU" disabled
+                                placeholder={{articuloscotizacion.precio}}>
+                            </div> 
+
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorT">Valor Total $</label>       
+                              <input type="text" class="form-control pull-right" id="inputValorT" disabled
+                                placeholder={{cotizacion.total}}>
+                            </div>                            
+                          </div> <!-- group row --> 
+
+                        </div> <!--collapse-->   
+
+                      </div> <!--panel-->
+
+                      <div class="box-footer text-center">
+                        <button type="submit" class="btn btn-primary">Nueva Cotización</button>
+                      </div> 
+                    </div> <!--accordion-->
+                  {% endfor %}
+                  {% else %}
+                    <h3>No hay cotizaciones</h3>
+                  {% endif %}
+                </div> <!--tab 1-->  
+                
+                <div id="ordenes" class="tab-pane fade">
+                  {% if ordenes %}
+                  {% for orden in ordenes %}
+                    <div class="panel-group" id="accordion">                                       
+                      <div class="panel panel-default">   
+
+                        <div class="panel-heading">
+                          <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#acordion" href="#collapse2">
+                              Orden de compra #{{orden_compra.codigo}}
+                            </a>
+                          </h3>                  
+                        </div>
+
+                        <div id="collapse2" class="panel-collapse collapse">
+                          <div class="form-group row">
+
+                            <div class="col-xs-6">
+                              <label for="inputNombre">Nombre Proveedor</label>
+                              <input type="text" class="form-control" id="inputId" disabled
+                                placeholder="Proveedor">                      
+                            </div>
+
+                            <div class="col-xs-3">
+                              <label for="inputId">Identificación</label>
+                              <input type="text" class="form-control" id="inputId" disabled
+                                placeholder={{orden_compra.cotizacion.proveedor.codigo}}>
+                            </div>                          
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="col-xs-6">
+                              <label for="inputEmail">Email</label>
+                              <input type="text" class="form-control" id="inputEmail" placeholder="xyz@mail.com" disabled>
+                            </div>
+
+                            <div class="col-xs-3">
+                              <label for="inputDir">Dirección</label>
+                              <input type="text" class="form-control" id="inputDir" placeholder="calle 9 # 32" disabled>
+                            </div>                          
+                          </div>
+
+                          <div class="form-group">
+                            <label for="inputElemento">Elemento</label>
+                            <input type="text" class="form-control" id="inputElemento" disabled
+                              placeholder={{orden_compra.cotizacion.articulo.nombre}}>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="inputCantidad">Cantidad</label>
+                            <input type="text" class="form-control" id="inputCantidad" disabled
+                              placeholder={{orden_compra.cotizacion.articulo.cantidad}}>
+                          </div>
+
+                          <div class="form-group row">
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha</label>                  
+                              <!-- Date -->                              
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder="17/09/2018">
+                            </div>
+
+                            <div class="form-group col-xs-6">
+                              <label for="datepicker">Fecha de llegada</label>                  
+                              <!-- Date -->                            
+                              <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                placeholder="20/09/2018">
+                            </div>
+                          </div> <!-- group row -->
+
+                          <div class="form-group row">                              
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorU">Valor unidad $</label>
+                              <input type="text" class="form-control" id="inputValorU" disabled
+                                placeholder="800.000">
+                            </div> 
+
+                            <div class="form-group col-xs-6">
+                              <label for="inputValorT">Valor Total $</label>       
+                              <input type="text" class="form-control pull-right" id="inputValorT" disabled
+                                placeholder="1'600.000">
+                            </div>
+                          </div> <!-- group row --> 
+
+                        </div> <!--collapse-->  
+
+                      </div> <!--panel-->
+                      <div class="box-footer text-center">                          
+                        <button type="submit" class="btn btn-primary">Nueva Orden</button>
+                      </div> 
+
+                    </div>  
+                  {% endfor %}   
+                {% else %}                 
+                  <h3>No hay ordenes de comra</h3>
+                {% endif %}
+                </div> <!-- tab 2 -->
+              </div> <!--tab content-->
+            </div>
+          </div> <!-- /.box-body -->            
+        </form>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>                  
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock contenido %}

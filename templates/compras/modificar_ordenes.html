@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block miga_pan %}
+  <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  <li><a href="#">Compras</a></li>
+  <li class="active">Solicitudes de Compra</li>
+  <li class="active">Cotizaciones</li>
+{% endblock miga_pan %}
+
+{% block contenido %}
+<div class="content-wrapper">
+  <!-- Main content -->
+  <section class="box">          
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="box box-primary">            
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form role="form">
+          <div class="box-body">
+            <!-- Panel colapsable --> 
+            <div class="container col-md-12">   
+              <div class="form-group row">
+                <div class="col-xs-6">
+                  <label for="inputNombre">Nombre</label>
+                  <input type="text" class="form-control" id="inputNombre" 
+                    value={{usario.nombre}} disabled>
+                </div>
+
+                <div class="col-xs-3">
+                  <label for="inputId">Identificación</label>
+                  <input type="text" class="form-control" id="inputId" disabled
+                    value={{usuario.codigo}}>
+                </div>
+
+                <div class="col-xs-3">
+                  <label for="inputNombre">Cargo</label>
+                  <input type="text" class="form-control" id="inputNombre" disabled
+                  value={{usuario.rol}}>
+                </div>
+              </div> 
+                            
+              <div class="tab-content">
+                <div id="cotizaciones" class="tab-pane fade in active">                      
+                  <div class="panel-group" id="accordion">  
+                    <div class="panel panel-default">                                                                      
+                      <div class="panel-heading">
+                        <h3 class="panel-title">Orden de Compra #{{ordencompra.codigo}}</h3>                  
+                      </div>
+
+                      <div class="form-group">
+                        <div class="form-group row">
+                          <div class="col-xs-6">
+                            <label for="inputNombre">Nombre Proveedor</label>
+                            <input type="text" class="form-control" id="inputNombre" disabled
+                                value={{proveedor.nombre}}> 
+                          </div>
+
+                          <div class="col-xs-3">
+                            <label for="inputId">Identificación</label>
+                            <input type="text" class="form-control" id="inputId" disabled
+                              value={{proveedor.codigo}}>
+                          </div>                          
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="inputElemento">Elemento</label>
+                                {% bootstrap_field form.articulos %}
+                            </div>                        
+
+                            <div class="form-group">
+                                <label for="inputCantidad">Cantidad</label>
+                                <input type="text" class="form-control" id="inputCantidad" disabled
+                                    value={{articuloscotizacion.cantidad}}>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="form-group col-xs-6">
+                                <label for="datepicker">Fecha realizada</label>                  
+                                <!-- Date -->                              
+                                <input type="text" class="form-control pull-right" id="datepicker" disabled
+                                    value={{ordencompra.fecha_realizada}}>
+                            </div>
+
+                            <div class="form-group col-xs-6">
+                                <label for="datepicker">Fecha esperada</label>                  
+                                <!-- Date -->                              
+                                {% bootstrap_field form.fecha_esperada %}
+                            </div>
+                        </div> <!-- group row -->
+
+                        <div class="form-group row">                              
+                          <div class="form-group col-xs-6">
+                            <label for="inputValorU">Valor unidad $</label>
+                            <input type="text" class="form-control" id="inputValorU" disabled
+                            value={{articuloscotizacion.precio}}>
+                          </div> 
+
+                          <div class="form-group col-xs-6">
+                            <label for="inputValorT">Valor Total $</label>       
+                            <input type="text" class="form-control pull-right" id="inputValorT" disabled
+                              value={{cotizacion.total}}>
+                          </div>                            
+                        </div> 
+                        
+                      </div> <!--collapse-->   
+                    </div> <!--panel-->
+
+                    <div class="box-footer text-center">
+                      <button type="submit" class="btn btn-success">Modificar Cotización</button>
+                      <button type="reset" class="btn btn-danger">Cancelar</button>
+                    </div> 
+                  </div> <!--accordion-->
+                </div>                                
+              </div> <!--tab content-->
+            </div>
+          </div> <!-- /.box-body -->            
+        </form>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>                  
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock contenido %}

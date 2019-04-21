@@ -1,0 +1,30 @@
+{% extends 'lista_solicitudes.html' %}
+
+<div class="content-wrapper">  
+    <!-- Main content -->
+    <section class="box">          
+      <div class="col-md-12">
+        <div class="form-group row">
+          <div class="col-xs-6">
+            <label for="inputNombre">Nombre</label>
+            <input type="text" class="form-control" id="inputNombre" disabled
+              placeholder="Emilia">
+          </div>
+        
+          <div class="col-xs-3">
+            <label for="inputId">Identificación</label>
+            <input type="text" class="form-control" id="inputId" disabled
+              placeholder="2468">
+          </div>
+        
+          <div class="col-xs-3">
+            <label for="inputNombre">Cargo</label>
+            <input type="text" class="form-control" id="inputNombre" disabled
+              placeholder="Jefe de Compras">
+          </div>
+        </div>  <!-- datos del jefe de compras -->
+        {% block contenido %}
+        {% endblock contenido %}                      
+      </div>                  
+    </section> <!-- /.content -->
+  </div>          

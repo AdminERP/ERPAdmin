@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('inventario/',include('apps.inventario.urls'), name = 'inventario'),
     path('', (include('apps.usuarios.urls'))),
+    path('compras/', include(('apps.compras.urls', 'compras'), namespace='compras')),
 ]
