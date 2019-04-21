@@ -1,0 +1,27 @@
+{% extends 'listar_solicitudes.html' %}
+
+<div class="content-wrapper">  
+  <!-- Main content -->
+  <section class="box">          
+    <div class="col-md-12">
+      <div class="form-group row">
+        <div class="col-xs-6">
+          <label for="inputNombre">Nombre</label>
+          <input type="text" class="form-control" id="inputNombre" placeholder="Olivia" disabled>
+        </div>
+
+        <div class="col-xs-3">
+          <label for="inputId">Identificación</label>
+          <input type="text" class="form-control" id="inputId" placeholder="1357" disabled>
+        </div>
+
+        <div class="col-xs-3">
+          <label for="inputNombre">Cargo</label>
+          <input type="text" class="form-control" id="inputNombre" placeholder="Gerente general" disabled>
+        </div>                
+      </div>
+      {% block contenido %}
+      {% endblock contenido %}                      
+    </div>                  
+  </section> <!-- /.content -->
+</div>                      

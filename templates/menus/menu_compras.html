@@ -1,0 +1,26 @@
+<li class="header">COMPRAS</li>
+<!-- Optionally, you can add icons to the links -->
+{% if perms.compras.view_ordencompra %}
+<li class="treeview">
+    <a href="#"><i class="fa fa-shopping-cart"></i> <span>COMPRAS</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+        </span>
+    </a>
+    <ul class="treeview-menu">
+
+        <li><a href="{% url 'compras:solicitudes' %}"><i class="glyphicon glyphicon-open-file"></i> <span>Solicitudes de
+                    compra</span></a>
+        </li>
+        <li><a href="{% url 'compras:orden_listar' %}"><i class="fa fa-shopping-basket"></i> <span>Ordenes
+                    de compra</span></a>
+        </li>
+
+    </ul>
+</li>
+{% else %}
+<li class="active"><a href="{% url 'compras:solicitudes' %}"><i class="fa fa-shopping-cart"></i>
+        <span>Compras</span></a>
+</li>
+
+{% endif %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block miga_pan %}
+<li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+<li><a href="{% url 'compras:index' %}">Compras</a></li>
+<li class="active"><a href="{% url 'compras:solicitudes' %}">Solicitudes de compra</a></li>
+{% endblock miga_pan %}
+
+{% block titulo %}Gestión de Solicitudes de Compras{% endblock titulo %}
+
+{% block contenido %}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group" align="center">
+                        <h1>¿Seguro que desea borrar la Solicitud #{{object.id}}? </h1> <br>
+                    </div>
+                    <form class="forms-sample" method="post">{% csrf_token %}
+                        <input class="btn btn-danger" type="submit" value="Confirmar Borrado">
+                        <a style="padding: 0.56rem 1.375rem; width: 178px" href="{% url 'compras:solicitudes' %}" class="btn btn-primary">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

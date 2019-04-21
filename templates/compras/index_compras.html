@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+
+{% block titulo %}Módulo de Compras{% endblock titulo %}
+
+{% block miga_pan %}
+<li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+<li class="active"><a href="{% url 'compras:index' %}">Compras</a></li>
+{% endblock miga_pan %}
+
+{% block contenido %}
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{% url 'compras:solicitudes' %}">
+        <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-open-file"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Solicitudes de Compra</span>
+                <!-- TODO: Contar las solicitudes -->
+                <span class="info-box-number">5</span>
+
+                <!-- TODO: Ver que progreso se puede medir -->
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+                <span class="progress-description">
+                    Solicitudes aprobadas: 1
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+    </a>
+    <!-- /.info-box -->
+</div>
+
+
+{% if usuario.cargo.name == 'jefecompras' or  usuario.cargo.name == 'gerente' %}
+
+    
+
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <a href="{% url 'compras:orden_listar' %}">
+        <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Ordenes de Compra</span>
+                <!-- TODO: Contar las ordenes -->
+                <span class="info-box-number">0</span>
+
+                <!-- TODO: Ver que progreso se puede medir -->
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+                <span class="progress-description">
+                    Ordenes completadas: 
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+    </a>
+    <!-- /.info-box -->
+</div>
+
+{% endif %}
+
+    
+{% endblock contenido %}

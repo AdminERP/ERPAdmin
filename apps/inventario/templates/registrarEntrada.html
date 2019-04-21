@@ -33,16 +33,14 @@
                   <th>Precio</th>
                   <th>Cantidad</th>
                   <th>Proveedor</th>
-                  <th>Total</th>
                   <th>Tiempo</th>
                 </tr>
                 <tr>
-                  <td>{{ orden.articulo }}</td>
-                  <td>{{ orden.precio }}</td>
-                  <td>{{ orden.cantidad }}</td>
-                  <td>{{ orden.proveedores }}</td>
-                  <td>{{ orden.total }}</td>
-                  <td>{{ orden.tiempo }}</td>
+                  <td>{{ orden.solicitud.articulo }}</td>
+                  <td>{{ orden.cotizacion.total }}</td>
+                  <td>{{ orden.solicitud.cantidad }}</td>
+                  <td>{{ orden.cotizacion.proveedor }}</td>
+                  <td>{{ orden.fecha_esperada }}</td>
                 </tr>
               </tbody></table>
             </div>

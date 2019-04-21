@@ -51,6 +51,13 @@ class CuentaPagar(models.Model):
             'total':self.total
         }
 
+    class Meta:
+        permissions = (
+            ('view_cuentaspagar', 'Puede ver las cuentas por pagar'),
+            ('add_cuentaspagar', 'Puede agregar cuentas por pagar'),
+            ('change_cuentaspagar', 'Puede actualizar cuentas por pagar'),
+        )
+
 class Item(models.Model):
     name = models.CharField(max_length=254, null=False)
     value = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
@@ -75,6 +82,13 @@ class Payment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        permissions = (
+            ('view_payments', 'Puede ver pagos'),
+            ('add_payments', 'Puede agregar pagos'),
+            ('change_payments', 'Puede actualizar pagos'),
+        )
+
 class CuentaCobrar(models.Model):
     tarifa = models.IntegerField(null=False, validators=[MinValueValidator(1)])
     costo_total = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
@@ -83,3 +97,10 @@ class CuentaCobrar(models.Model):
     servicio = models.CharField(max_length=254,null=False)
     cuenta_empresa = models.ForeignKey(CuentaEmpresa, on_delete=models.CASCADE)
     service_order = models.ForeignKey(ServiceOrder, on_delete=models.CASCADE,null=True)
+
+    class Meta:
+        permissions = (
+            ('view_cuentascobrar', 'Puede ver las cuentas por cobrar'),
+            ('add_cuentascobrar', 'Puede agregar cuentas por cobrar'),
+            ('change_cuentascobrar', 'Puede actualizar cuentas por cobrar'),
+        )

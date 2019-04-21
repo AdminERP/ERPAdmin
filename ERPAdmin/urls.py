@@ -24,6 +24,5 @@ urlpatterns = [
     path('datos-maestros/', include('apps.datosmaestros.urls', namespace = 'datosmaestros')),
     path('ordenes_servicio/',  include('apps.ordenes_servicio.urls')),
     path('inventario/',include('apps.inventario.urls'), name = 'inventario'),
-
+    path('compras/', include(('apps.compras.urls', 'compras'), namespace='compras')),
 ]
-
