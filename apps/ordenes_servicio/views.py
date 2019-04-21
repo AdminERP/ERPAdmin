@@ -250,18 +250,3 @@ def clientes_autocomplete(request):
             apellidos = DatoModel.objects.get(id=id).valormodel_set.all().get(nombre="apellidos").valor
             json.append({'id': id, 'text':cedula + ' - ' + nombres + ' ' + apellidos})
     return JsonResponse(json, safe=False, json_dumps_params={'ensure_ascii':False})
-
-@login_required(login_url="/ordenes_servicio/login/")
-def crear_cliente(request):
-    if request.user.is_superuser:
-        context = {"form": CrearClienteForm}
-        manage_options(request,context)
-        return render(request,"usuarios/crear_cliente.html",context)
-
-@login_required(login_url="/ordenes_servicio/login/")
-def consultar_clientes(request):
-    if request.user.is_superuser:
-        context = {"clientes": Cliente.objects.all()}
-        manage_options(request,context)
-        return render(request,"usuarios/consultar_clientes.html",context)
-
