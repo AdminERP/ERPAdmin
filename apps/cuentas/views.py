@@ -1,3 +1,4 @@
+from django.template.loader import render_to_string
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PaymentAccountForm, ItemForm, ServiceOrderForm, CuentaCobroForm
 from django.http import HttpResponse
@@ -7,6 +8,7 @@ from .models import ServiceOrder, CuentaCobrar
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.core import serializers
 from django.views.generic import CreateView
+from django.core.mail import EmailMessage
 #chartjs
 from random import randint
 from django.views.generic import TemplateView
@@ -159,7 +161,6 @@ def listarDetalles (request):
 	return render(request, 'cuentas/listarDetalles.html')
 
 def createOrder(request):
-	print (request.POST);
 	if request.POST:
 		form = ServiceOrderForm(request.POST)
 		if form.is_valid():
@@ -177,6 +178,18 @@ def crearCuentaCobro(request,pk):
 		print(form)
 		if form.is_valid():
 			cuenta = form.save()
+			body = render_to_string('cuentas/email_content.html', {
+	                'servicio': cuenta.servicio,
+	                'tarifa': cuenta.tarifa,
+	                'costo': cuenta.costo_total,
+	                'fecha_vencimiento':cuenta.fecha_vencimiento ,
+	            	},
+	        	)
+			email_message = EmailMessage(subject='Mensaje de usuario',
+				body=body,
+				to=['jhon.orobio@correounivalle.edu.co'],)
+			email_message.content_subtype = 'html'
+			email_message.send()
 			return redirect('listarCobrar')
 		else:
 			return render(request, 'cuentas/listserviceorder.html', {'form':form})
