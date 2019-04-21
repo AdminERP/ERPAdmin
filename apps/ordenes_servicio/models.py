@@ -7,12 +7,14 @@ class OrdenServicio(models.Model):
     servicio_vendido = models.CharField(max_length=100) # Datos Mestros
 
     coordinador = models.ForeignKey(Usuario,
-                                  limit_choices_to={'cargo': 'C'},  # Solo los coordinadores pueden crear
-                                  on_delete=models.CASCADE, blank=True, null=False,
-                                  related_name='coordinador_set', verbose_name="Coordinador")
+                                    # Solo los coordinadores pueden crear
+                                    limit_choices_to= {"groups__name":"ordenes_servicio.add_ordenservicio"},
+                                    on_delete=models.CASCADE, blank=True, null=False,
+                                    related_name='coordinador_set', verbose_name="Coordinador")
 
     encargado = models.ForeignKey(Usuario,
-                                  limit_choices_to={'cargo':'O'}, #Solo los operarios pueden encargarse
+                                  # Solo los operarios pueden encargarse
+                                  limit_choices_to={'groups__name':'ordenes_servicio.execute_ordenservicio'},
                                   on_delete=models.CASCADE, blank=True, null=False,
                                   related_name='encargado_set', verbose_name="Encargado")
 
@@ -20,7 +22,6 @@ class OrdenServicio(models.Model):
                                 related_name='cliente_set', verbose_name="Cliente")# Datos Maestros
 
     comentarios = models.TextField(max_length=255)
-
     fecha_creacion = models.DateTimeField(default=datetime.now, blank=True, verbose_name="Fecha de Creación")
     fecha_atencion = models.DateTimeField(null=True, verbose_name="Fecha de Atención")
     # Constantes para OrdenServicio
@@ -46,25 +47,27 @@ class OrdenServicio(models.Model):
     class Meta:
         verbose_name_plural = "Ordenes de Servicio"
         permissions = (
-            ("operate_ordenservicio", "Can operate orden servicio"),
-            ("cancel_ordenservicio", "Can cancel orden servicio"),
-            ("list_ordenservicio", "Can list orden servicio"),
+            ('execute_ordenservicio',"Puede Atender una Orden de Servicio"),
+            ('close_ordenservicio', "Puede Cerrar una Orden de Servicio"),
+            ("cancel_ordenservicio", "Puede Cancelar una Orden de Servicio"),
+            ("view_ordenservicio", "Puede Ver Ordenes de Servicio"),
         )
 
     def get_data(usuario):
-        cargo = Usuario.objects.get(id=usuario.id).cargo
-        if cargo == 'C':
-            try:
-                ordenes = OrdenServicio.objects.filter(coordinador=usuario.id)
-                return ordenes
-            except OrdenServicio.DoesNotExist:
-                return None
-        elif cargo == 'O':
-            try:
-                ordenes = OrdenServicio.objects.filter(encargado=usuario.id)
-                return ordenes
-            except OrdenServicio.DoesNotExist:
-                return None
+        if isinstance(usuario,Usuario):
+            if usuario.has_perm("ordenes_servicio.add_ordenservicio"):
+                try:
+                    ordenes = OrdenServicio.objects.filter(coordinador=usuario.id)
+                    return ordenes
+                except OrdenServicio.DoesNotExist:
+                    return None
+            elif usuario.has_perm("ordenes_servicio.execute_ordenservicio"):
+                try:
+                    ordenes = OrdenServicio.objects.filter(encargado=usuario.id)
+                    return ordenes
+                except OrdenServicio.DoesNotExist:
+                    return None
+        return None
 
     def __str__(self):
         return "Orden de servicio: "+str(self.id)

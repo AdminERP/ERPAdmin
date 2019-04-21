@@ -4,12 +4,11 @@ from apps.ordenes_servicio.views import *
 app_name = 'ordenes_servicio'
 
 urlpatterns = [
-    path('',to_login,name="to_login"),
-    path('login/', ordenes_login, name="Login"),
+    path('',to_welcome,name="to_welcome"),
     path('logout/', gtfo, name="Logout"),
     path('welcome/', ordenes_welcome, name="Welcome"),
-    path('crear_cliente/',crear_cliente,name="Crear Cliente"),
-    path('consultar_clientes/',consultar_clientes,name="Consultar Clientes"),
+    #path('crear_cliente/',crear_cliente,name="Crear Cliente"),
+    #path('consultar_clientes/',consultar_clientes,name="Consultar Clientes"),
     path('crear_orden_servicio/', crear_orden_servicio, name='crear_orden_servicio'),
     path('consultar_orden_servicio/', consultar_orden_servicio, name='consultar_orden_servicio'),
     path('api/cancelar_orden_servicio', cancelar_orden_servicio, name='cancelar_orden_servicio'),

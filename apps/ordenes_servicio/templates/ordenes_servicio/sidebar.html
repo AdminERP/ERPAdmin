@@ -22,13 +22,22 @@
                 {% block nav_links_outer %}
                     <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li>
                     {% block nav_links %}
-                        {% for option in options %}
-                            <li>
-                                <a href="{{ option.href }}">
-                                    <i class="fa fa-circle-o"></i> <span>{{ option.name }}</span>
-                                </a>
-                            </li>
-                        {% endfor %}
+                        <li><a href="/home">
+                            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                        </a></li>
+                        <li><a href="{% url 'ordenes_servicio:Welcome' %}">
+                            <i class="fa fa-circle-o"></i> <span>Inicio</span>
+                        </a></li>
+                        {% if perms.ordenes_servicio.add_ordenservicio %}
+                            <li><a href="{% url 'ordenes_servicio:crear_orden_servicio' %}">
+                                <i class="fa fa-circle-o"></i> <span>Crear Orden de Servicio</span>
+                            </a></li>
+                        {% endif %}
+                        {% if perms.ordenes_servicio.view_ordenservicio %}
+                            <li><a href="{% url 'ordenes_servicio:consultar_orden_servicio' %}">
+                                <i class="fa fa-circle-o"></i> <span>Consultar Ordenes de Servicio</span>
+                            </a></li>
+                        {% endif %}
                     {% endblock nav_links %}
                 {% endblock nav_links_outer %}
             </ul>

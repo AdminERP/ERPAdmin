@@ -8,3 +8,4 @@ media
 .idea
 db.sqlite3
 .env/
+apps/ordenes_servicio/fixtures/*
