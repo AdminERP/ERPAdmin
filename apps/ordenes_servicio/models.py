@@ -8,13 +8,13 @@ class OrdenServicio(models.Model):
 
     coordinador = models.ForeignKey(Usuario,
                                     # Solo los coordinadores pueden crear
-                                    limit_choices_to= {"groups__name":"ordenes_servicio.add_ordenservicio"},
+                                    limit_choices_to= {'cargo__permissions__codename':"add_ordenservicio"},
                                     on_delete=models.CASCADE, blank=True, null=False,
                                     related_name='coordinador_set', verbose_name="Coordinador")
 
     encargado = models.ForeignKey(Usuario,
                                   # Solo los operarios pueden encargarse
-                                  limit_choices_to={'groups__name':'ordenes_servicio.execute_ordenservicio'},
+                                  limit_choices_to={'cargo__permissions__codename':'execute_ordenservicio'},
                                   on_delete=models.CASCADE, blank=True, null=False,
                                   related_name='encargado_set', verbose_name="Encargado")
 
