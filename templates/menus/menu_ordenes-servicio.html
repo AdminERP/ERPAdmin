@@ -8,9 +8,9 @@
           </span>
     </a>
     <ul class="treeview-menu">
-        {% if perms.ordenes_servicio.add_orden_servicio %}<li><a href="{% url 'ordenes_servicio:Welcome' %}">Inicio</a></li>{% endif %}
-        {% if perms.ordenes_servicio.add_orden_servicio %}<li><a href="{% url 'ordenes_servicio:crear_orden_servicio' %}">Crear orden</a></li>{% endif %}
-        {% if perms.ordenes_servicio.add_orden_servicio %}<li><a href="{% url 'ordenes_servicio:consultar_orden_servicio' %}">Consultar ordenes</a></li>{% endif %}
+        {% if perms.ordenes_servicio.list_ordenservicio %}<li><a href="{% url 'ordenes_servicio:Welcome' %}">Inicio</a></li>{% endif %}
+        {% if perms.ordenes_servicio.add_ordenservicio %}<li><a href="{% url 'ordenes_servicio:crear_orden_servicio' %}">Crear orden</a></li>{% endif %}
+        {% if perms.ordenes_servicio.list_ordenservicio %}<li><a href="{% url 'ordenes_servicio:consultar_orden_servicio' %}">Consultar ordenes</a></li>{% endif %}
     </ul>
 </li>
 {% endif %}
