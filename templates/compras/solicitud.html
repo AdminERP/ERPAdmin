@@ -7,13 +7,13 @@
                 Solucitud #{{solicitud.id}}
               </a>
               {% if solicitud.estado_aprobacion == 'pendiente' %}
-              <i class="fa fa-circle text-grey"></i> <!-- cambia color con el estado_aprobacion -->
+              <i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-grey"></i> <!-- cambia color con el estado_aprobacion -->
               {% elif solicitud.estado_aprobacion == 'rechazada' %}
-              <i class="fa fa-circle text-red"></i> <!-- cambia color con el estado -->
+              <i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-red"></i> <!-- cambia color con el estado -->
               {% elif solicitud.estado_aprobacion == 'aprobado_jefe' %}
-              <i class="fa fa-circle text-orange"></i> <!-- cambia color con el estado -->
+              <i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-orange"></i> <!-- cambia color con el estado -->
               {% else %}
-              <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
+              <i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
               {% endif %}
               {% if solicitud.estado_aprobacion == 'pendiente' %}
               <a style="display: inline" href="{% url 'compras:solicitud_edit' solicitud.id %}" class="btn btn-primary">Modificar Solicitud</a>

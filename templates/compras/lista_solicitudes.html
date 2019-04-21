@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
+
+{% block css %}
+<style>
+  #flotante {
+    position: absolute;
+    display: none;
+    font-family: Arial;
+    font-size: 0.8em;
+    width: 280px;
+    border: 1px solid #808080;
+    background-color: #f1f1f1;
+    padding: 5px;
+  }
+
+  ul {
+    list-style: none;
+  }
+</style>
+{% endblock css %}
+
+
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
 <li><a href="{% url 'compras:index' %}">Compras</a></li>
@@ -75,8 +96,10 @@ Solicitudes de Compra
                     {% else %}
                     <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
                     {% endif %}
-                    <a style="display: inline" href="{% url 'compras:autorizar_solicitud' solicitud.id %}" class="btn btn-primary">Autorizar Solicitud</a>
-                    <a style="display: inline" href="{% url 'compras:rechazar_solicitud' solicitud.id %}" class="btn btn-danger">Rechazar Solicitud</a>
+                    <a style="display: inline" href="{% url 'compras:autorizar_solicitud' solicitud.id %}"
+                      class="btn btn-primary">Autorizar Solicitud</a>
+                    <a style="display: inline" href="{% url 'compras:rechazar_solicitud' solicitud.id %}"
+                      class="btn btn-danger">Rechazar Solicitud</a>
                   </h3>
 
                 </div>
@@ -85,12 +108,14 @@ Solicitudes de Compra
                   <div class="form-group row">
                     <div class="col-xs-6">
                       <label for="inputNombre">Nombre Solicitante</label>
-                      <input type="text" class="form-control" id="inputNombre" disabled value="{{solicitud.solicitante.get_full_name}}">
+                      <input type="text" class="form-control" id="inputNombre" disabled
+                        value="{{solicitud.solicitante.get_full_name}}">
                     </div>
 
                     <div class="col-xs-3">
                       <label for="inputId">Identificacion</label>
-                      <input type="text" class="form-control" id="inputId" disabled placeholder={{solicitud.solicitante}}>
+                      <input type="text" class="form-control" id="inputId" disabled
+                        placeholder={{solicitud.solicitante}}>
                     </div>
                   </div>
 
@@ -162,7 +187,8 @@ Solicitudes de Compra
                       Solucitud #{{solicitud.id}}
                     </a>
                     <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
-                    <a style="display: inline" href="{% url 'compras:cotizaciones_listar' solicitud.id %}" class="btn btn-primary">Cotizaciones</a>
+                    <a style="display: inline" href="{% url 'compras:cotizaciones_listar' solicitud.id %}"
+                      class="btn btn-primary">Cotizaciones</a>
                   </h3>
 
                 </div>
@@ -171,12 +197,14 @@ Solicitudes de Compra
                   <div class="form-group row">
                     <div class="col-xs-6">
                       <label for="inputNombre">Nombre Solicitante</label>
-                      <input type="text" class="form-control" id="inputNombre" disabled value="{{solicitud.solicitante.get_full_name}}">
+                      <input type="text" class="form-control" id="inputNombre" disabled
+                        value="{{solicitud.solicitante.get_full_name}}">
                     </div>
 
                     <div class="col-xs-3">
                       <label for="inputId">Identificacion</label>
-                      <input type="text" class="form-control" id="inputId" disabled placeholder={{solicitud.solicitante}}>
+                      <input type="text" class="form-control" id="inputId" disabled
+                        placeholder={{solicitud.solicitante}}>
                     </div>
                   </div>
 
@@ -226,7 +254,57 @@ Solicitudes de Compra
     {% endif %}
 
   </section>
+  <div id="flotante">
+    <h4>Estados: </h4>
+    <ul>
+      <li>
+        <i class="fa fa-circle text-grey"></i>Pendiente Aprobación
+      </li>
+      <li>
+        <i class="fa fa-circle text-red"></i>Rechazado
+      </li>
+      <li>
+        <i class="fa fa-circle text-orange"></i>Aprobado Jefe Inmediato
+      </li>
+      <li>
+        <i class="fa fa-circle text-green"></i>Aprobado Gerente
+      </li>
+    </ul>
+  </div>
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 {% endblock contenido %}
+
+
+{% block js %}
+<script>
+  function mensaje(event) {
+    margin = 5;
+
+    var tempX = 0;
+    var tempY = 0;
+
+    document.captureEvents(Event.MOUSEMOVE);
+    tempX = event.pageX;
+    tempY = event.pageY;
+
+    if (tempX < 0) {
+      tempX = 0;
+    }
+    if (tempY < 0) {
+      tempY = 0;
+    }
+
+    // Posicionamos la capa flotante
+    document.getElementById('flotante').style.top = (tempY + margin) + "px";
+    document.getElementById('flotante').style.left = (tempX + margin) + "px";
+    document.getElementById('flotante').style.display = 'block';
+    return;
+  }
+
+  function quitM(event) {
+    $("#flotante").hide()
+  }
+</script>
+{% endblock js %}
