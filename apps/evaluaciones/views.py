@@ -1,17 +1,18 @@
 from django.contrib import messages
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import permission_required, login_required
 
 # Create your views here.
 from apps.evaluaciones.forms import *
 from apps.evaluaciones.models import *
 from apps.usuarios.models import Usuario
 
-
+@login_required()
 def inicio(request):
     return render(request, 'base.html', {})
 
-
+@permission_required('evaluaciones.add_employeeevaluation', raise_exception=True)
 def registrar_pregunta(request, id=None):
     pregunta = None
     if id:
@@ -29,11 +30,11 @@ def registrar_pregunta(request, id=None):
             messages.error(request, 'Por favor verificar los campos en rojo.')
     return render(request, 'registrar_pregunta.html', {'form': form})
 
-
+@permission_required('evaluaciones.view_questions', raise_exception=True)
 def consultar_pregunta(request):
     return render(request, 'consulta_preguntas.html', {'lista_preguntas': Question.objects.all()})
 
-
+@permission_required('evaluaciones.activate_question', raise_exception=True)
 def desactivar_pregunta(request, id):
     pregunta = get_object_or_404(Question, id=id)
     pregunta.estado = False
@@ -41,7 +42,7 @@ def desactivar_pregunta(request, id):
     messages.success(request, "La pregunta ha sido desactivada correctamente del sistema")
     return redirect('evaluaciones:consultar_pregunta')
 
-
+@permission_required('evaluaciones.activate_question', raise_exception=True)
 def activar_pregunta(request, id):
     pregunta = get_object_or_404(Question, id=id)
     pregunta.estado = True
@@ -51,7 +52,7 @@ def activar_pregunta(request, id):
 
 
 # Evaluations
-
+@permission_required('evaluaciones.add_employeeevaluation', raise_exception=True)
 def registrar_evaluacion(request, id=None):
     evaluacion = get_object_or_404(EmployeeEvaluation, id=id)
     preguntas_evaluacion = evaluacion.employee_evaluation_questions.all()
@@ -97,6 +98,7 @@ def registrar_evaluacion(request, id=None):
                                                            'preguntas': preguntas_evaluacion})
 
 
+@permission_required('evaluaciones.add_employeeevaluation', raise_exception=True)
 def creacion_evaluacion(request, id):
     employee = get_object_or_404(Usuario, id=id)
     evaluacion = EmployeeEvaluation.objects.create(date=datetime.date.today(),
@@ -107,10 +109,12 @@ def creacion_evaluacion(request, id):
     return redirect('evaluaciones:registrar_evaluacion', evaluacion.id)
 
 
+@permission_required('evaluaciones.view_employeeevaluation', raise_exception=True)
 def consultar_evaluacion(request):
     return render(request, 'consulta_evaluaciones.html', {'lista_evaluaciones': EmployeeEvaluation.objects.all()})
 
 
+@permission_required('evaluaciones.activate_employeeevaluation', raise_exception=True)
 def desactivar_evaluacion(request, id):
     evaluacion = get_object_or_404(Question, id=id)
     evaluacion.estado = False
@@ -118,7 +122,7 @@ def desactivar_evaluacion(request, id):
     messages.success(request, "La evaluacion ha sido desactivada correctamente del sistema")
     return redirect('evaluaciones:consultar_evaluacion')
 
-
+@permission_required('evaluaciones.activate_employeeevaluation', raise_exception=True)
 def activar_evaluacion(request, id):
     evaluacion = get_object_or_404(Question, id=id)
     evaluacion.estado = True

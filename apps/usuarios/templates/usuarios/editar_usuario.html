@@ -44,9 +44,9 @@
 		<div class="col-sm-4">
 			{% bootstrap_field form.cargo %}
 		</div>
-		<div class="col-sm-4">
-			{% bootstrap_field form.email %}
-		</div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.jefe %}
+        </div>
 	</div>
 
     <div class="row">
@@ -91,11 +91,14 @@
 	</div>
 
 	<div class="row">
-		<div class="col-sm-6">
+        <div class="col-sm-4">
+			{% bootstrap_field form.email %}
+		</div>
+		<div class="col-sm-4">
 			{% bootstrap_field form.estado_civil %}
 		</div>
 		<div class="clearfix"></div>
-		<div class="col-sm-6">
+		<div class="col-sm-4">
 			{% bootstrap_field form.is_active %}
 		</div>
 	</div>

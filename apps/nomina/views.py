@@ -5,12 +5,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from ..usuarios.models import Usuario, Cargo
 from apps.nomina.models import EmployeePayroll, Payroll
+from django.contrib.auth.decorators import permission_required, login_required
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.conf import settings
 
 # Create your views here.
+@login_required()
 def inicio(request):
     return render(request, 'base.html', {})
 
@@ -18,7 +20,7 @@ def payroll_module(request, id=None):
     return render(request, 'usuarios/consultar_usuarios.html', {'usuarios': Usuario.objects.all(), 'action': 'payroll'})
 
 
-
+@permission_required('nomina.add_payroll', raise_exception=True)
 def create_payroll(request):
     active_employees = Usuario.objects.filter(is_active=True)
     payroll_registry = Payroll.objects.create()
@@ -28,12 +30,13 @@ def create_payroll(request):
     for employee in active_employees:
         try:
             email_to, gross_salary, tax, net_salary = register_payroll_individual(employee, payroll_registry)
-        except:
-            print("Hubo un error con registro de nomina de " + employee.name)
+        except Exception as e:
+            print(e)
+            print("Hubo un error con registro de nomina de " + employee.get_full_name())
             total_error_not_payment = total_error_not_payment + 1
         else:
             try:
-                email(email_to=email_to, name=employee.first_name, id_type=employee.id_type, id_number=employee.cedula,
+                email(email_to=email_to, name=employee.get_full_name(), id_type=employee.id_type, id_number=employee.cedula,
                       gross_salary=gross_salary, tax=tax, net_salary=net_salary, bank=employee.bank, eps=employee.eps,
                       pension_fund=employee.pension_fund, severance_fund=employee.severance_fund,
                       date_payment=payroll_registry.date)
@@ -55,7 +58,6 @@ def create_payroll(request):
 
     return JsonResponse(send_data)
 
-
 def register_payroll_individual(employee,payroll_registry):
     tax_calculation = employee.salary * 0.3
     net_salary = employee.salary - tax_calculation
@@ -65,7 +67,7 @@ def register_payroll_individual(employee,payroll_registry):
     #employee_payroll.save()
     return employee.email, employee_payroll.gross_salary, employee_payroll.tax, employee_payroll.net_salary
 
-
+@permission_required('nomina.activate_payroll', raise_exception=True)
 def deactivate_payroll(request, id):
     employee_payroll = get_object_or_404(EmployeePayroll, id=id)
     employee_payroll.estado = False
@@ -73,7 +75,7 @@ def deactivate_payroll(request, id):
     messages.success(request, "La nomina del empleado ha sido desactivada correctamente del sistema")
     return redirect('consultar_nomina')
 
-
+@permission_required('nomina.activate_payroll', raise_exception=True)
 def activate_payroll(request, id):
     employee_payroll = get_object_or_404(EmployeePayroll, id=id)
     employee_payroll.estado = True
@@ -81,7 +83,7 @@ def activate_payroll(request, id):
     messages.success(request, "La nomina del empleado ha sido activada correctamente en el sistema")
     return redirect('consultar_nomina')
 
-
+@permission_required('nomina.view_payroll', raise_exception=True)
 def payroll_consult(request):
     return render(request, 'consult_payroll.html', {'lista_nomina': EmployeePayroll.objects.all()})
 

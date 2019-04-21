@@ -13,6 +13,12 @@ class Question(models.Model):
     def __str__(self):
         return self.question_statement
 
+    class Meta:
+        permissions = (
+            ('view_questions', 'Puede consultar las preguntas'),
+            ('activate_question', 'Puede activar/desactivar preguntas'),
+        )
+
 
 class EmployeeEvaluation(models.Model):
     date = models.DateField(default=datetime.date.today)
@@ -22,6 +28,12 @@ class EmployeeEvaluation(models.Model):
 
     def __str__(self):
         return "%s %s" % (self.employee, self.date)
+
+    class Meta:
+        permissions = (
+            ('view_employeeevaluation', 'Puede consultar las evaluaciones de empleados'),
+            ('activate_employeeevaluation', 'Puede activar/desactivar evaluaciones de empleados'),
+        )
 
 
 class EmployeeEvaluationQuestions(models.Model):
@@ -33,3 +45,4 @@ class EmployeeEvaluationQuestions(models.Model):
 
     def __str__(self):
         return "%s %s %s %s" % (self.employeeEvaluationId, self.questionId, self.score, self.observation)
+

@@ -60,11 +60,19 @@ class Usuario(AbstractUser):
     bank = models.CharField(max_length=10, choices=BANK_CHOICE, verbose_name="Banco")
     account_number = models.CharField(max_length=200, verbose_name="Número de cuenta")
     salary = models.IntegerField(verbose_name="Salario", null=True)
+    jefe = models.ForeignKey('self', on_delete=models.PROTECT, null=True, blank=True, verbose_name="Jefe Inmediato")
 
     @staticmethod
     def consultar_usuarios():
         try:
             queryset = Usuario.objects.all()
+            return queryset
+        except Usuario.DoesNotExist:
+            return None
+
+    def consultar_subordinados(id_jefe):
+        try:
+            queryset = Usuario.objects.filter(jefe__id=id_jefe)
             return queryset
         except Usuario.DoesNotExist:
             return None
@@ -75,3 +83,6 @@ class Usuario(AbstractUser):
             ('change_password', 'Puede reestablecer las contraseñas de los usuarios'),
             ('activate_usuario', 'Puede activar/desactivar usuarios'),
         )
+
+    def __str__(self):
+        return self.get_full_name()
