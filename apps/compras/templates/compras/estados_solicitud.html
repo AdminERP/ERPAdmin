@@ -1,0 +1,9 @@
+{% if solicitud.estado_aprobacion == 'pendiente' %}
+<i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-grey"></i> 
+{% elif solicitud.estado_aprobacion == 'rechazada' %}
+<i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-red"></i> 
+{% elif solicitud.estado_aprobacion == 'aprobado_jefe' %}
+<i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-orange"></i> 
+{% else %}
+<i onmouseout="quitM(event)" onmouseover="mensaje(event)"class="fa fa-circle text-green"></i> 
+{% endif %}
