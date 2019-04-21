@@ -177,7 +177,7 @@ def operadores_autocomplete(request):
     if request.GET.get('q'):
         q = request.GET['q']
         criterio_uno = (models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q))
-        perm = Permission.objects.get(codename='operate_ordenservicio')
+        perm = Permission.objects.get(codename='execute_ordenservicio')
         criterio_dos = models.Q(cargo__permissions=perm)
         data = Usuario.objects.filter((criterio_uno & criterio_dos) | (criterio_uno & models.Q(is_superuser=True))).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
         arr = list(data)
