@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
+
+{% block titulo %}Módulo de Compras{% endblock titulo %}
+
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
 <li class="active"><a href="{% url 'compras:index' %}">Compras</a></li>
 {% endblock miga_pan %}
-{% block titulo %}Módulo de Compras{% endblock titulo %}
-
 
 {% block contenido %}
 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -33,7 +34,7 @@
 </div>
 
 
-{% if usuario.rol == 'jefe_compras' or  usuario.rol == 'gerente' %}
+{% if usuario.cargo.name == 'jefecompras' or  usuario.cargo.name == 'gerente' %}
 
     
 

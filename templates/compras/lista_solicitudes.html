@@ -18,7 +18,7 @@ Solicitudes de Compra
 <div class="content-wrapper">
   <!-- Main content -->
   <section class="box">
-    {% if usuario.rol != 'gerente' %}
+    {% if usuario.cargo.name != 'gerente' %}
     <div class="col-md-12">
       <!-- general form elements -->
       <div class="box box-primary">
@@ -44,7 +44,7 @@ Solicitudes de Compra
     </div>
     {% endif %}
 
-    {% if usuario.rol != "operario" %}
+    {% if usuario.cargo.name != "empleado" %}
 
     <div class="col-md-12">
       <!-- general form elements -->
@@ -139,7 +139,7 @@ Solicitudes de Compra
     </div>
     {% endif %}
 
-    {% if usuario.rol == "jefe_compras" %}
+    {% if usuario.cargo.name == "jefecompras" %}
 
     <div class="col-md-12">
       <!-- general form elements -->

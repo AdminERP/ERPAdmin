@@ -1,11 +1,9 @@
 """ Modelos propios modulo Compras """
 
 from django.db import models
-# Se importa el User por defecto en espera de la implentacion del otro grupo
-# from django.contrib.auth.models import User as Usuario
 from apps.usuarios.models import Usuario
 
-
+# TODO: Integrar con modulo de datos maestros y traer esta info de alli
 class Proveedor(models.Model):
     nombre = models.CharField(max_length=50)
     direccion = models.CharField(max_length=50)
@@ -15,6 +13,7 @@ class Proveedor(models.Model):
     def __str__(self):
         return '%s' % (self.nombre)
 
+# TODO: Integrar con modulo de datos maestros y traer esta info de alli
 class Articulo(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=150)
@@ -48,6 +47,12 @@ class SolicitudCompra(models.Model):
         Usuario, on_delete=models.CASCADE, null=True)
     cantidad = models.SmallIntegerField()
     articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
+
+    class Meta:
+        permissions = (
+            ("autorizar_solicitud", "Puede autorizar una solicitud"),
+            ("rechazar_solicitud", "Puede rechazar una solicitud"),
+        )
 
     def __str__(self):
         return '%s' % (self.id)
@@ -86,3 +91,9 @@ class OrdenCompra(models.Model):
 
     estado_aprobacion = models.CharField(
         max_length=16, choices=ESTADOS, default=PENDIENTE)
+    
+    class Meta:
+        permissions = (
+            ("autorizar_orden", "Puede autorizar una orden"),
+            ("rechazar_orden", "Puede rechazar una orden"),
+        )
