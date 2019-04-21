@@ -5,7 +5,7 @@ from apps.datosmaestros.models.dato import DatoModel
 from apps.datosmaestros.models.categoria import CategoriaModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import Permission
 
 #autocomplete
 from apps.usuarios.models import *
@@ -177,8 +177,9 @@ def operadores_autocomplete(request):
     if request.GET.get('q'):
         q = request.GET['q']
         criterio_uno = (models.Q(cedula__icontains=q) | models.Q(first_name__icontains=q) | models.Q(last_name__icontains=q))
-        criterio_dos = models.Q(cargo="O") # Tiene que ser operario
-        data = Usuario.objects.filter(criterio_uno & criterio_dos).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
+        perm = Permission.objects.get(codename='operate_ordenservicio')
+        criterio_dos = models.Q(cargo__permissions=perm)
+        data = Usuario.objects.filter((criterio_uno & criterio_dos) | (criterio_uno & models.Q(is_superuser=True))).values_list('cedula', 'first_name', 'last_name', 'id')[:10]
         arr = list(data)
         for tupla in arr:
             cedula = tupla[0]
