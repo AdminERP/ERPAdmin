@@ -1,3 +1,4 @@
+ERPAdmin/settings.py
 apps/*/migrations/
 **/__pycache__/
 *.log
