@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load evaluaciones_tags %}
+
+
+
+{% block titulo %}
+    Registrar pregunta
+{% endblock %}
+
+{% block titulo_pagina %}
+    Registro de preguntas
+{% endblock %}
+
+{% block descripcion_pagina %}
+    Ingresar preguntas de evaluación de desempeño de la empresa
+{% endblock descripcion_pagina %}
+
+{% block miga_pan %}
+    <li><a href="#"><i class="fa fa-dashboard"></i> Preguntas</a></li>
+    <li class="active">Registro de evaluaciones de desempeño</li>
+{% endblock miga_pan %}
+
+{% block contenido %}
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Registro de evaluaciones de desempeño</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <form method="POST">{% csrf_token %}
+            <div class="box-body">
+                <br>Fecha de evaluación: {{ evaluacion.date }}
+                <br>
+                <br>Colaborador: {{ evaluacion.employee | upper}}
+
+
+                <div class="row">
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>{{ puntuacion }}</h3>
+
+                                <p>Puntuación</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>{{ mayor }}<sup style="font-size: 20px"></sup></h3>
+
+                                <p>Mayor resultado</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>{{ menor }}</h3>
+
+                                <p>Menor resultado</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>{{ promedio }}</h3>
+
+                                <p>Promedio de puntuación</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+
+
+
+                <br> Preguntas:
+                <br>
+                {% for formulario in formset %}
+                    {% with pregunta_evaluacion=preguntas|index:forloop.counter0 %}
+                        {{ pregunta_evaluacion.questionId.question_statement }}
+                        {% bootstrap_field formulario.score %}
+                        {% if formulario.score.errors %}
+
+                            <div class="alert alert-danger alert-dismissible">
+                                {{ formulario.score.errors }}
+                            </div>
+                        {% endif %}
+                        {% bootstrap_field formulario.observation %}
+                        {% if formulario.observation.errors %}
+                            <div class="alert alert-danger alert-dismissible">
+                                {{ formulario.observation.errors }}
+                            </div>
+                        {% endif %}
+                        {% for hidden in formulario.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    {% endwith %}
+                {% endfor %}
+                {{ formset.management_form }}
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Registrar evaluación</button>
+            </div>
+        </form>
+    </div>
+
+
+
+{% endblock %}

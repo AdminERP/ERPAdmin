@@ -11,4 +11,4 @@ myenv/
 .vscode/
 
 .env/
-ERPAdmin/settings.py
+ERPAdmin/settings*
