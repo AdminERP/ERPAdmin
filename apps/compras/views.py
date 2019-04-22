@@ -101,7 +101,12 @@ class CotizacionList(LoginRequiredMixin, ListView) :
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
         solicitud = SolicitudCompra.objects.get(pk=self.kwargs['pk'])
-        cantidad = Cotizacion.objects.filter(solicitud=solicitud).count()
+        cotizaciones = Cotizacion.objects.filter(solicitud=solicitud)
+        # try:
+            # ordenes = OrdenCompra.objects.filter(cotizacion_in=cotizaciones)
+        # except expression as identifier:
+            # pass
+        cantidad = cotizaciones.count()
         context['usuario'] = usuario
         context['solicitud'] = solicitud
         context['cantidad'] = cantidad
