@@ -2,6 +2,8 @@
 
 from django.db import models
 from apps.usuarios.models import Usuario
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
 
 # TODO: Integrar con modulo de datos maestros y traer esta info de alli
 class Proveedor(models.Model):
@@ -92,13 +94,7 @@ class OrdenCompra(models.Model):
     estado_aprobacion = models.CharField(
         max_length=16, choices=ESTADOS, default=PENDIENTE)
     
-    def send_notification(self):
-        if self.estado_aprobacion == 'aprobado_gerente':
-            # TODO generar pdf con la informacion de la orden y enviarla por email
-            pass
-        elif self.estado_aprobacion == 'rechazada':
-            # TODO enviar correo al solicitante y al jefe de compras informando que se rechazo
-            pass
+    
 
     class Meta:
         permissions = (

@@ -3,6 +3,9 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, T
 from django.shortcuts import redirect  
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
+from easy_pdf.rendering import render_to_pdf
 
 
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
@@ -160,6 +163,7 @@ def autorizarOrden(request, pk):
     orden = OrdenCompra.objects.get(pk=pk)
     orden.estado_aprobacion = 'aprobado_gerente'
     orden.save()
+    send_aprov_notification(orden) 
     return redirect('compras:orden_listar')
 
 @permission_required('compras.rechazar_orden')
@@ -167,7 +171,39 @@ def rechazarOrden(request, pk):
     orden = OrdenCompra.objects.get(pk=pk)
     orden.estado_aprobacion = 'rechazada'
     orden.save()
+    send_reject_notification()
     return redirect('compras:orden_listar')
+
+def send_aprov_notification(orden):
+        #cuenta: servicioalcliente.compraserp@gmail.com
+        #pass: compras123
+        # TODO generar pdf con la informacion de la orden y considerar proveedor como dato maestro
+        email = EmailMessage( 
+            subject = 'Aprobación de Compra',
+            body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
+            from_email = settings.EMAIL_HOST_USER,
+            to = ['daniel.bueno@correounivalle.edu.co', orden.cotizacion.proveedor.email ],
+        )
+        send_pdf = render_to_pdf(
+        'compras/send.html',
+        {'cotizacion': orden.cotizacion,},
+        )
+        email.attach('cotización.pdf', send_pdf , 'application/pdf')
+        email.send()
+
+# TODO enviar correo al solicitante y al jefe de compras informando que se rechazo
+def send_reject_notification(): 
+    pass
+
+
+def create_pdf(): 
+    return render_to_pdf(
+        'compras/send.html',
+        {'any_context_item_to_pass_to_the_template': context_value,},
+)
+...
+    #.attach('file.pdf', post_pdf, 'application/pdf')
+
 ######---DELETES---######
 
 class SolicitudDelete(LoginRequiredMixin, DeleteView):
