@@ -69,7 +69,8 @@ class Usuario(AbstractUser):
             return queryset
         except Usuario.DoesNotExist:
             return None
-
+            
+    @staticmethod
     def consultar_subordinados(id_jefe):
         try:
             queryset = Usuario.objects.filter(jefe__id=id_jefe)

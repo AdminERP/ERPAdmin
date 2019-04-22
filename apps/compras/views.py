@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import permission_required
 from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
 from easy_pdf.rendering import render_to_pdf
+
 from apps.datosmaestros.models import ValorModel
-
-
+from apps.usuarios.models import Usuario
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
 from .forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
 # Create your views here.
@@ -75,9 +75,14 @@ class SolicitudList(LoginRequiredMixin, ListView) :
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
 
-        if usuario.cargo.name != "operario" and usuario.cargo.name != "gerente":
+        if usuario.cargo.name != "empleado" and usuario.cargo.name != "gerente":
             #TODO: consultar los empleados a cargo para filtrar las solicitudes
-            solicitudes_autorizar = SolicitudCompra.objects.filter(estado_aprobacion='pendiente')
+            subordinados = []
+            sub_query = Usuario.consultar_subordinados(usuario.id)
+            for sub in sub_query:
+                subordinados.append(sub.id)
+
+            solicitudes_autorizar = SolicitudCompra.objects.filter(estado_aprobacion='pendiente', solicitante_id__in=subordinados)
             context['solicitudes_autorizar'] = solicitudes_autorizar
 
             if usuario.cargo.name == 'jefecompras':

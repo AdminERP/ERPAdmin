@@ -7,7 +7,7 @@ from .views import SolicitudList, index, SolicitudCreate, SolicitudUpdate, Solic
 
 urlpatterns = [
     path('', index.as_view(), name='index'),
-    path('solicitud/crear', permission_required('compras.add_solicitudcompra')(SolicitudCreate.as_view()), name='solicitud_crear'),
+    path('solicitud/crear', SolicitudCreate.as_view(), name='solicitud_crear'),
     path('solicitud/', SolicitudList.as_view(), name='solicitudes'),
     path('solicitud/listar', SolicitudList.as_view(), name='solicitudes_listar'),
     path('solicitud/editar/<int:pk>', SolicitudUpdate.as_view(), name='solicitud_edit'),
