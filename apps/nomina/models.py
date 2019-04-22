@@ -11,7 +11,6 @@ class Payroll(models.Model):
 
     class Meta:
         permissions = (
-            ('view_payroll', 'Puede consultar las nominas que se han realizado'),
             ('activate_payroll', 'Puede activar/desactivar nominas ejecutadas'),
         )
 
@@ -26,7 +25,6 @@ class EmployeePayroll(models.Model):
 
     class Meta:
         permissions = (
-            ('view_employeepayroll', 'Puede consultar las nominas de cada empleado'),
             ('activate_employeeepayroll', 'Puede activar/desactivar nominas de cada empleado'),
         )
 

@@ -30,7 +30,7 @@ def registrar_pregunta(request, id=None):
             messages.error(request, 'Por favor verificar los campos en rojo.')
     return render(request, 'registrar_pregunta.html', {'form': form})
 
-@permission_required('evaluaciones.view_questions', raise_exception=True)
+@permission_required('evaluaciones.view_question', raise_exception=True)
 def consultar_pregunta(request):
     return render(request, 'consulta_preguntas.html', {'lista_preguntas': Question.objects.all()})
 
