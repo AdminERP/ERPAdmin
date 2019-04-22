@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block titulo %}
+Datos Maestros
+{% endblock titulo %}
+
+{% block titulo_pagina %}
+Gestión de valores
+{% endblock titulo_pagina %}
+
+{% block descripcion_pagina %}
+Gestiona los valores de Datos Maestros
+{% endblock descripcion_pagina %}
+
+{% block miga_pan %}
+<li><a><i class="fa fa-dashboard"></i> Dashboard</a></li>
+<li><a href="{% url 'datosmaestros:listar_categorias' %}">Gestión de categorias</a></li>
+<li><a href="{% url 'datosmaestros:listar_datos' categoria.id %}">Gestión de datos</a></li>
+<li class="active">Gestión de valores</li>
+{% endblock miga_pan %}
+
+{% block css %}
+<link rel="stylesheet" href="{%  static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock css %}
+
+{% block contenido %}
+<div class="col-md-12">
+  <div class="box box-primary">
+    <div class="box-header">
+      <h3 class="box-title">
+        Listado de valores
+        | Categoría: <strong>{{ categoria.nombre }}</strong>
+        | Dato: <strong>{{ dato.nombre }}</strong>
+      </h3>
+      <a type="button" class="btn btn-success" href="{% url 'datosmaestros:crear_valor' id_categoria=categoria.id id_dato=dato.id %}"><i class="fa fa-plus-circle"></i> Crear valor<div class="ripple-container"></div></a>
+    </div>
+    <div class="box-body">
+      <table id="tabla_datos" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Valor</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for valor in valores %}
+          <tr>
+            <td>{{ valor.nombre }}</td>
+            <td>{{ valor.descripcion }}</td>
+            <td>{{ valor.valor }}</td>
+            <td>
+              {%  if valor.estado %}
+              <span class="badge bg-green">Activo</span>
+              {% else %}
+              <span class="badge bg-red">Inactivo</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  Acciones
+                  <span class="fa fa-caret-down"></span>
+                  <div class="ripple-container"><div class="ripple ripple-on" style="left: 49px; top: 30px; background-color: rgba(0, 0, 0, 0.87); transform: scale(15.1524);"></div></div>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="{% url 'datosmaestros:editar_valor' id_categoria=categoria.id id_dato=dato.id id_valor=valor.id %}">Editar</a>
+                  </li>
+                  <li>
+                    <a href="#modal-detalle" data-toggle="modal"
+                    data-nombre="{{ valor.nombre }}"
+                    data-descripcion="{{ valor.descripcion }}"
+                    data-valor="{{ valor.valor }}"
+                    data-estado="{% if valor.estado %} Activo {% else %} Inactivo {% endif %}">
+                    Detalle</a>
+                  </li>
+                  <li>
+                    <a href="#modal-eliminar" data-toggle="modal"
+                    data-id="{{ valor.id }}"
+                    data-nombre="{{ valor.nombre }}"
+                    data-estado="{% if valor.estado %} Desactivar {% else %} Activar {% endif %}">
+                    {% if valor.estado %} Desactivar {% else %} Activar {% endif %}</a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal-detalle" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+        <h3 class="modal-title">Detalle de valor</h3>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h5>Nombre: </h5><p class="nombre"></p>
+            <h5>Descripción: </h5><p class="descripcion"></p>
+            <h5>Valor: </h5><p class="valor"></p>
+            <h5>Estado: </h5><p class="estado"></p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-success" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal-eliminar" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+        <h3 class="modal-title">
+          <span class="estado"></span>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p>
+              ¿Esta seguro que desea <span class="estado"></span> el valor: <span class="nombre"></span>?
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-success" type="button">Cancelar</button>
+        <button id="eliminar" class="btn btn-danger" type="button">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock contenido %}
+
+{% block js %}
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script>$(function () { $('#tabla_datos').DataTable({ responsive: true }) })</script>
+<script>
+$('#modal-detalle').on('show.bs.modal', function (event) {
+  var info = $(event.relatedTarget)
+  var nombre = info.data('nombre')
+  var descripcion = info.data('descripcion')
+  var estado = info.data('estado')
+  var valor = info.data('valor')
+  var modal = $(this)
+  modal.find('.modal-body .nombre').text(nombre)
+  modal.find('.modal-body .descripcion').text(descripcion)
+  modal.find('.modal-body .estado').text(estado)
+  modal.find('.modal-body .valor').text(valor)
+});
+$('#modal-eliminar').on('shown.bs.modal', function (event) {
+  var info = $(event.relatedTarget)
+  var id = info.data('id')
+  var nombre = info.data('nombre')
+  var estado = info.data('estado')
+  var modal = $(this)
+  modal.find('.modal-title .estado').text(estado)
+  modal.find('.modal-body .nombre').text(nombre)
+  modal.find('.modal-body .estado').text(estado)
+  $('#eliminar').click(function () {
+    $.post(
+      "{% url 'datosmaestros:eliminar_valor' id_categoria=categoria.id id_dato=dato.id %}",
+      { "csrfmiddlewaretoken":'{{ csrf_token }}', "id": id },
+      function (data) {
+        window.location.href = data.url;
+      }
+    );
+  });
+});
+</script>
+{% endblock js %}
