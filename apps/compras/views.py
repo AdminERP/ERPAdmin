@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
 from easy_pdf.rendering import render_to_pdf
+from apps.datosmaestros.models import ValorModel
 
 
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
@@ -190,15 +191,19 @@ def send_aprov_notification(orden):
         #cuenta: servicioalcliente.compraserp@gmail.com
         #pass: compras123
         # TODO generar pdf con la informacion de la orden y considerar proveedor como dato maestro
+
+        dato = orden.cotizacion.proveedor 
+        valor_email = ValorModel.objects.filter(dato=dato , nombre = 'email')
+
         email = EmailMessage( 
             subject = 'Aprobación de Compra',
             body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
             from_email = settings.EMAIL_HOST_USER,
-            to = ['daniel.bueno@correounivalle.edu.co', orden.cotizacion.proveedor.email ],
+            to = ['daniel.bueno@correounivalle.edu.co', valor_email],
         )
         send_pdf = render_to_pdf(
         'compras/send.html',
-        {'cotizacion': orden.cotizacion,},
+        {'cotizacion': orden.cotizacion ,},
         )
         email.attach('cotización.pdf', send_pdf , 'application/pdf')
         email.send()
@@ -208,11 +213,11 @@ def send_reject_notification():
     pass
 
 
-def create_pdf(): 
-    return render_to_pdf(
-        'compras/send.html',
-        {'any_context_item_to_pass_to_the_template': context_value,},
-)
+# def create_pdf(): 
+#     return render_to_pdf(
+#         'compras/send.html',
+#         {'any_context_item_to_pass_to_the_template': context_value,},
+# )
 ...
     #.attach('file.pdf', post_pdf, 'application/pdf')
 
