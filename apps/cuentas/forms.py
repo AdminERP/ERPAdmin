@@ -1,7 +1,7 @@
 from django import forms
 
 from .models import CuentaPagar, Item, ServiceOrder, CuentaCobrar
-from apps.datosmaestros.models import DatoModel, CategoriaModel
+from apps.datosmaestros.models import DatoModel, CategoriaModel, ValorModel
 from apps.compras.models import OrdenCompra
 from apps.inventario.models import Entrada
 
@@ -14,7 +14,13 @@ class PaymentAccountForm(forms.ModelForm):
 
         categoria = CategoriaModel.objects.get(nombre="Proveedores")
         orders = CuentaPagar.ordenesParaContabilizar()
-        self.fields['supplier'].queryset = DatoModel.objects.filter(categoria=categoria)
+        suppliers = DatoModel.objects.filter(categoria=categoria)
+        suppliers_ids = []
+        for supplier in suppliers:
+            suppliers_ids.append(supplier.id)
+        suppliers_values = ValorModel.objects.filter(dato_id__in=suppliers_ids, nombre='nombre')
+        
+        self.fields['supplier'].queryset = suppliers_values
         self.fields['order'].queryset = orders
 
         if instance and instance.pk:

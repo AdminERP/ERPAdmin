@@ -96,9 +96,9 @@
                             <option value="">----------</option>
                             {% for supplier in form.fields.supplier.queryset %}    
                             <option 
-                            value = "{{ supplier.id }}"
+                            value = "{{ supplier.dato_id }}"
                             {% if form.supplier.value == supplier.id %} selected {% endif %}>
-                            Proveedor {{supplier.id}}
+                            {{supplier.valor}}
                             </option>
                             {% endfor %}
                         </select>
