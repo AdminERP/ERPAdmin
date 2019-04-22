@@ -3,7 +3,7 @@ from django.utils.translation import gettext as _
 from django_select2.forms import Select2Widget
 
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
-
+from apps.datosmaestros.models import DatoModel, CategoriaModel
 
 
 EMPTY_LABEL = ("Escoger Año", "Escoger Mes", "Escoger Día")
@@ -41,6 +41,11 @@ class SolicitudCompraForm(forms.ModelForm):
             'cantidad' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese la cantidad de articulos a solicitar'}),
             'articulo' : Select2Widget(),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        categoria = CategoriaModel.objects.get(nombre="Articulos")
+        self.fields['articulo'].queryset = DatoModel.objects.filter(categoria=categoria)
 
 
 class CotizacionForm(forms.ModelForm):
@@ -64,6 +69,11 @@ class CotizacionForm(forms.ModelForm):
             'fecha_realizada' : forms.SelectDateWidget(empty_label = EMPTY_LABEL, months = MESES),
             'proveedor' : Select2Widget(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        categoria = CategoriaModel.objects.get(nombre="Proveedores")
+        self.fields['proveedor'].queryset = DatoModel.objects.filter(categoria=categoria)
 
 
 
