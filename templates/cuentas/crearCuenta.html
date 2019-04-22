@@ -51,7 +51,7 @@
                             <strong>{{ form.order.errors }}</strong>
                         </span>
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label>Proveedor</label>
                         <select 
 
@@ -86,6 +86,24 @@
                         </select>
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ form.supplier_id.errors }}</strong>
+                        </span>
+                    </div>-->
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select 
+                            name="supplier"
+                            class="form-control {% if form.supplier_id.errors %} is-invalid {% endif %}">
+                            <option value="">----------</option>
+                            {% for supplier in form.fields.supplier.queryset %}    
+                            <option 
+                            value = "{{ supplier.id }}"
+                            {% if form.supplier.value == supplier.id %} selected {% endif %}>
+                            Proveedor {{supplier.id}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.supplier.errors }}</strong>
                         </span>
                     </div>
                     <div class="form-group">
@@ -245,7 +263,21 @@
         </div>
     </div>
 </div>
-
+{% if form.errors %}
+    <!-- Error messaging -->
+    <div id="errors">
+        <div class="inner">
+            <p>There were some errors in the information you entered. Please correct the following:</p>
+            {{ form.non_field_errors }}
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <!-- /Error messaging -->
+{% endif %}
 {% endblock contenido_panel %}
 
 {% block js %}

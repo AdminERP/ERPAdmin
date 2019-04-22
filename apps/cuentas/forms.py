@@ -1,18 +1,26 @@
 from django import forms
 
 from .models import CuentaPagar, Item, ServiceOrder, CuentaCobrar
+from apps.datosmaestros.models import DatoModel, CategoriaModel
+from apps.compras.models import OrdenCompra
+from apps.inventario.models import Entrada
 
 class PaymentAccountForm(forms.ModelForm):
-    orders = CuentaPagar.ordenesParaContabilizar()
-    order = forms.ModelChoiceField(orders)
+    # order = forms.ModelChoiceField(orders)
+
     def __init__(self, *args, **kwargs):
         super(PaymentAccountForm, self).__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
 
+        categoria = CategoriaModel.objects.get(nombre="Proveedores")
+        orders = CuentaPagar.ordenesParaContabilizar()
+        self.fields['supplier'].queryset = DatoModel.objects.filter(categoria=categoria)
+        self.fields['order'].queryset = orders
+
         if instance and instance.pk:
             del self.fields['order']
             del self.fields['invoice']
-            del self.fields['supplier_id']
+            del self.fields['supplier']
             
     class Meta:
         model = CuentaPagar
@@ -23,7 +31,7 @@ class PaymentAccountForm(forms.ModelForm):
     		'term_date',
     		'status',
     		'order',
-    		'supplier_id')
+    		'supplier')
 
 class ItemForm(forms.ModelForm):
     class Meta:
