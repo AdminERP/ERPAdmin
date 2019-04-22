@@ -193,13 +193,13 @@ def send_aprov_notification(orden):
         # TODO generar pdf con la informacion de la orden y considerar proveedor como dato maestro
 
         dato = orden.cotizacion.proveedor 
-        valor_email = ValorModel.objects.filter(dato=dato , nombre = 'email')
+        valor_email = ValorModel.objects.filter(dato=dato , nombre = 'email').get().valor
 
         email = EmailMessage( 
             subject = 'Aprobación de Compra',
             body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
             from_email = settings.EMAIL_HOST_USER,
-            to = ['daniel.bueno@correounivalle.edu.co', valor_email],
+            to = [valor_email],
         )
         send_pdf = render_to_pdf(
         'compras/send.html',
