@@ -11,3 +11,5 @@ db.sqlite3
 venv/
 myenv/
 .vscode/
+ERPAdmin/settings.py
+

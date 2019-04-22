@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from enum import Enum
+from apps.inventario.models import Entrada
+from apps.compras.models import OrdenCompra
 
 # Create your models here.
 class CuentaEmpresa(models.Model):
@@ -32,7 +34,9 @@ class CuentaPagar(models.Model):
     term_date = models.DateField(null=False)
     # status = models.BooleanField(null=False)
     status = models.CharField(max_length=1, choices=ORDER_STATUS)
-    order_id = models.IntegerField(null=False, validators=[MinValueValidator(1)])
+    #order_id = models.IntegerField(null=False, validators=[MinValueValidator(1)])
+    #order_id = models.ForeignKey(OrdenCompra, null=False, blank=False, on_delete=models.CASCADE)
+    order = models.ForeignKey(OrdenCompra, null=False, blank=False, on_delete=models.CASCADE)
     supplier_id = models.IntegerField(null=False, validators=[MinValueValidator(1)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -46,10 +50,29 @@ class CuentaPagar(models.Model):
             'invoice_date':self.invoice_date,
             'term_date':self.term_date,
             'status':self.status,
-            'order_id':self.order_id,
+            'order':self.order.id,
             'supplier_id':self.supplier_id,
             'total':self.total
         }
+    @staticmethod
+    def ordenesParaContabilizar():
+        try:
+            entradas = Entrada.objects.all()
+            entradas_orders_ids = []
+            for entrada in entradas:
+                if entrada.condicion == True:
+                    entradas_orders_ids.append(entrada.ordenCompra.id)
+            orders = OrdenCompra.objects.filter(id__in=entradas_orders_ids)
+
+            cuentas = CuentaPagar.objects.filter(status__in=[2,3,4])
+            cuentas_orders_ids = []
+            for cuenta in cuentas:
+                cuentas_orders_ids.append(cuenta.order.id)
+            orders1 = orders.exclude(id__in=cuentas_orders_ids)
+            return orders1
+
+        except OrdenCompra.DoesNotExist:
+            return None
 
     class Meta:
         permissions = (

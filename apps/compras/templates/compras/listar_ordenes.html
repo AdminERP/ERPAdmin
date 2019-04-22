@@ -45,7 +45,7 @@ Ordenes de Compra
                           {% elif orden.estado_aprobacion == 'aprobado_gerente' %}
                           <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
                           {% endif %}
-                          {% if usuario.rol == 'gerente' and orden.estado_aprobacion == 'pendiente' %}
+                          {% if usuario.cargo.name == 'gerente' and orden.estado_aprobacion == 'pendiente' %}
                           <a style="display: inline" href="{% url 'compras:autorizar_orden' orden.id %}" class="btn btn-primary">Aprobar Orden</a>
                           <a style="display: inline" href="{% url 'compras:rechazar_orden' orden.id %}" class="btn btn-danger">Rechazar Orden</a>
                           {% endif %}

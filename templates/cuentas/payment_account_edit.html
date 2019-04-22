@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
-{% load humanize %}
 
 {% block titulo %} Editar Cuenta{% endblock titulo %}
 
@@ -37,37 +36,16 @@
                     <div class="form-group">
                         <label>Orden de compra</label>
                         <select 
-                            name="order_id" 
-                            class="form-control {% if form.order_id.errors %} is-invalid {% endif %}">
-                            <option value="0">Seleccione --</option>
+                        name="order"
+                        class="form-control {% if form.order.errors %} is-invalid {% endif %}"
+                        disabled>
                             <option 
-                                value="1"
-                                {% if form.order_id.value == 1 %} selected {% endif %}>
-                                001
-                            </option>
-                            <option 
-                                value="2"
-                                {% if form.order_id.value == 2 %} selected {% endif %}>
-                                002
-                            </option>
-                            <option 
-                                value="3"
-                                {% if form.order_id.value == 3 %} selected {% endif %}>
-                                003
-                            </option>
-                            <option 
-                                value="4"
-                                {% if form.order_id.value == 4 %} selected {% endif %}>
-                                004
-                            </option>
-                            <option 
-                                value="5"
-                                {% if form.order_id.value == 5 %} selected {% endif %}>
-                                005
+                            value = "{{ form.instance.order.id }}">
+                            Orden {{ form.instance.order.id }}
                             </option>
                         </select>
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ form.order_id.errors }}</strong>
+                            <strong>{{ form.order.errors }}</strong>
                         </span>
                     </div>
                     <div class="form-group">
@@ -75,37 +53,30 @@
                         <select 
 
                             name="supplier_id"
-                            class="form-control {% if form.supplier_id.errors %} is-invalid {% endif %}">
-                            <option value="0">Seleccione --</option>
+                            class="form-control {% if form.supplier_id.errors %} is-invalid {% endif %}"
+                            disabled>
                             <option 
-                                value="1" 
-                                {% if form.supplier_id.value == 1 %} selected {% endif %}>
-                                Proveedor 1
-                            </option>
-                            <option 
-                                value="2"
-                                {% if form.supplier_id.value == 2 %} selected {% endif %}>
-                                Proveedor 2
-                            </option>
-                            <option 
-                                value="3"
-                                {% if form.supplier_id.value == 3 %} selected {% endif %}>
-                                Proveedor 3
-                            </option>
-                            <option 
-                                value="4"
-                                {% if form.supplier_id.value == 4 %} selected {% endif %}>
-                                Proveedor 4
-                            </option>
-                            <option 
-                                value="5"
-                                {% if form.supplier_id.value == 5 %} selected {% endif %}>
-                                Proveedor 5
+                            value = "{{ form.instance.supplier_id }}">
+                            Proveedor {{ form.instance.supplier_id }}
                             </option>
                         </select>
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ form.supplier_id.errors }}</strong>
                         </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Factura</label>
+                        <input 
+                            name="invoice" 
+                            class="form-control {% if form.invoice.errors %} is-invalid {% endif %}"
+                            id="invoice"
+                            value="{{ form.instance.invoice }}"
+                            autocomplete="off"
+                            disabled>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.invoice.errors }}</strong>
+                        </span>
+                        <!-- /.input group -->
                     </div>
                     <div class="form-group">
                         <label>Fecha de Factura</label>
@@ -259,7 +230,21 @@
         </div>
     </div>
 </div>
-
+{% if form.errors %}
+    <!-- Error messaging -->
+    <div id="errors">
+        <div class="inner">
+            <p>There were some errors in the information you entered. Please correct the following:</p>
+            {{ form.non_field_errors }}
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <!-- /Error messaging -->
+{% endif %}
 {% endblock contenido_panel %}
 
 {% block js %}

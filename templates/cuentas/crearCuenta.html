@@ -36,37 +36,19 @@
                     <div class="form-group">
                         <label>Orden de compra</label>
                         <select 
-                            name="order_id" 
-                            class="form-control {% if form.order_id.errors %} is-invalid {% endif %}">
-                            <option value="0">Seleccione --</option>
+                        name="order"
+                        class="form-control {% if form.order.errors %} is-invalid {% endif %}">
+                            <option value="">-----------</option>
+                            {% for order in form.fields.order.queryset %}    
                             <option 
-                                value="1"
-                                {% if form.order_id.value == "1"%} selected {% endif %}>
-                                001
+                            value = "{{ order.id }}"
+                            {% if form.order.value == order.id %} selected {% endif %}>
+                            Orden {{order.id}}
                             </option>
-                            <option 
-                                value="2"
-                                {% if form.order_id.value == "2"%} selected {% endif %}>
-                                002
-                            </option>
-                            <option 
-                                value="3"
-                                {% if form.order_id.value == "3"%} selected {% endif %}>
-                                003
-                            </option>
-                            <option 
-                                value="4"
-                                {% if form.order_id.value == "4"%} selected {% endif %}>
-                                004
-                            </option>
-                            <option 
-                                value="5"
-                                {% if form.order_id.value == "5"%} selected {% endif %}>
-                                005
-                            </option>
+                            {% endfor %}
                         </select>
                         <span class="invalid-feedback" role="alert">
-                            <strong>{{ form.order_id.errors }}</strong>
+                            <strong>{{ form.order.errors }}</strong>
                         </span>
                     </div>
                     <div class="form-group">

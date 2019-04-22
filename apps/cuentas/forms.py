@@ -3,6 +3,17 @@ from django import forms
 from .models import CuentaPagar, Item, ServiceOrder, CuentaCobrar
 
 class PaymentAccountForm(forms.ModelForm):
+    orders = CuentaPagar.ordenesParaContabilizar()
+    order = forms.ModelChoiceField(orders)
+    def __init__(self, *args, **kwargs):
+        super(PaymentAccountForm, self).__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+
+        if instance and instance.pk:
+            del self.fields['order']
+            del self.fields['invoice']
+            del self.fields['supplier_id']
+            
     class Meta:
         model = CuentaPagar
         fields = (
@@ -11,7 +22,7 @@ class PaymentAccountForm(forms.ModelForm):
     		'invoice_date',
     		'term_date',
     		'status',
-    		'order_id',
+    		'order',
     		'supplier_id')
 
 class ItemForm(forms.ModelForm):

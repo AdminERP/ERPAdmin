@@ -88,7 +88,7 @@ Generar Cotizacion a solicitud de Compra #{{solicitud.id}}
                         {% endfor %}
                         <div class="box-footer text-center">
                             <button type="submit" class="btn btn-success">Guardar Cotizacion</button>
-                            <button type="reset" class="btn btn-danger">Cancelar</button>
+                            <a href="{% url 'compras:cotizaciones_listar' solicitud.id %}" class="btn btn-danger">Cancelar</a>
                         </div>
 
                         <!-- panel -->

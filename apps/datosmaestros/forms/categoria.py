@@ -11,4 +11,4 @@ class CategoriaForm(forms.ModelForm):
     """
     class Meta:
         model = CategoriaModel
-        fields = ('nombre', 'descripcion')
+        fields = ('nombre', 'descripcion', 'administrador')

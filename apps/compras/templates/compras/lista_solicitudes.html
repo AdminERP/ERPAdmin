@@ -87,15 +87,8 @@ Solicitudes de Compra
                     <a data-toggle="collapse" data-parent="#acordion" href="#collapse{{solicitud.id}}">
                       Solucitud #{{solicitud.id}}
                     </a>
-                    {% if solicitud.estado_aprobacion == 'pendiente' %}
-                    <i class="fa fa-circle text-grey"></i> <!-- cambia color con el estado_aprobacion -->
-                    {% elif solicitud.estado_aprobacion == 'rechazada' %}
-                    <i class="fa fa-circle text-red"></i> <!-- cambia color con el estado -->
-                    {% elif solicitud.estado_aprobacion == 'aprobado_jefe' %}
-                    <i class="fa fa-circle text-orange"></i> <!-- cambia color con el estado -->
-                    {% else %}
-                    <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
-                    {% endif %}
+                    {% include 'compras/estados_solicitud.html' %}
+
                     <a style="display: inline" href="{% url 'compras:autorizar_solicitud' solicitud.id %}"
                       class="btn btn-primary">Autorizar Solicitud</a>
                     <a style="display: inline" href="{% url 'compras:rechazar_solicitud' solicitud.id %}"
@@ -186,7 +179,7 @@ Solicitudes de Compra
                     <a data-toggle="collapse" data-parent="#acordion" href="#collapse{{solicitud.id}}">
                       Solucitud #{{solicitud.id}}
                     </a>
-                    <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
+                    {% include 'compras/estados_solicitud.html' %}
                     <a style="display: inline" href="{% url 'compras:cotizaciones_listar' solicitud.id %}"
                       class="btn btn-primary">Cotizaciones</a>
                   </h3>
