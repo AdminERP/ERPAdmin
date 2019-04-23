@@ -1,0 +1,17 @@
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django_select2',
+    'bootstrap3',
+    'apps.cuentas',
+    'django.contrib.humanize',
+    'apps.ordenes_servicio',
+    'apps.usuarios',
+    'apps.datosmaestros',
+    'apps.inventario',
+    'apps.compras',
+]
