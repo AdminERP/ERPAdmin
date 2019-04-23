@@ -37,7 +37,7 @@
                         <center><h1 id="ingresos"></h1></center>
                     </div>
                     <div class="panel-footer" style="color: #31708f; background-color: #d9edf7">
-                        IVA: $ 6.754.500
+                        <span id="ingresos-iva"></span>
                     </div>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                         <center><h2>EGRESOS</h2></center>
                         <center><h1 id="egresos"></h1></center>
                     </div>
-                    <div class="panel-footer" style="color: #8a6d3b; background-color: #fcf8e3">
+                    <div class="panel-footer" style="color: #8a6d3b; background-color: #fcf8e3" id="egresos-iva">
                         IVA: $ 4.433.270
                     </div>
                 </div>
@@ -56,23 +56,23 @@
                 <div class="panel panel-default">
                     <div class="panel-body" style="color: #fff; background-color: #1ABC9C">
                         <center><h2>RESULTADO</h2></center>
-                        <center><h1>$ 12.217.000</h1></center>
+                        <center><h1 id="resultado">$ 12.217.000</h1></center>
                     </div>
                     <div class="panel-footer" style="color: #fff; background-color: green">
-                        IVA: $ 2.321.230
+                        IVA: $ 0
                     </div>
                 </div>
             </div>
         </div>
         <hr>
-        <div class="row">
+        <!--<div class="row">
             <div class="col-12 col-md-6">
                 <canvas id="grafica1" style="width: 100%;"></canvas>
             </div>
             <div class="col-12 col-md-6">
                 <canvas id="grafica2" style="width: 100%;"></canvas>
             </div>
-        </div>
+        </div>-->
         <!-- /.row -->
         <hr>
         <div class="row">
@@ -113,10 +113,10 @@
         });
     });*/
 
-    graphOne();
-    graphTwo();
-    graphThree();
-    graphFour();
+    //graphOne();
+    //graphTwo();
+    //graphThree();
+    //graphFour();
     function graphOne(){
         var ctx = $("#grafica1");
         var data = {
@@ -202,13 +202,41 @@
             data: data,
         });
     }
+
+    var c_cobradas = 0;
+    var c_no_cobradas = 0;
+    var c_pagadas = 0;
+    var c_no_pagadas = 0;
+
+    function estado_cuentas(Uname,UIDfield,Table, sourceID, callback){
+        $.when($.ajax({
+            url: 'estado_cuentas/',
+            success: function(respuesta) {
+
+            },
+            error: function() {
+                console.log("No se ha podido obtener la información");
+            }
+        })).done(function(respuesta) {
+            c_pagadas = respuesta.c_pagadas;
+            c_no_pagadas = respuesta.c_no_pagadas;
+            c_cobradas = respuesta.c_cobradas;
+            c_no_cobradas = respuesta.c_no_cobradas;
+            graphThree();
+            graphFour();
+        });
+    }
+
+    estado_cuentas();
+
+
     function graphThree(){
         var config = {
             type: 'doughnut',
             data: {
                 datasets: [{
                     data: [
-                        60, 40
+                        c_cobradas, c_no_cobradas
                     ],
                     backgroundColor: [
                         'blue',
@@ -242,7 +270,7 @@
             data: {
                 datasets: [{
                     data: [
-                        67, 33
+                        c_pagadas, c_no_pagadas
                     ],
                     backgroundColor: [
                         'blue',
@@ -274,16 +302,29 @@
     $.ajax({
         url: 'balances/',
         success: function(respuesta) {
-            if(respuesta.ingresos.total__sum != null){
-                $("#ingresos").text("$"+respuesta.ingresos.total__sum);
+            var ingresos = 0;
+            var egresos = 0;
+            if(respuesta.ingresos.costo_total__sum != null){
+                ingresos = Number.parseFloat(respuesta.ingresos.costo_total__sum);
+                $("#ingresos").text("$"+ingresos);
+                $("#ingresos-iva").text("IVA: $ "+ingresos*0.19);
             }else{
-                $("#ingresos").text("$0");
+                $("#ingresos").text("$ 0");
+                $("#ingresos-iva").text("IVA: $ "+ 0*0.19);
             }
-            if(respuesta.egresos.costo_total__sum != null){
-                $("#egresos").text("$"+respuesta.egresos.costo_total__sum);
+            if(respuesta.egresos.total__sum != null){
+                egresos = Number.parseFloat(respuesta.egresos.total__sum);
+                $("#egresos").text("$ "+egresos);
+                $("#egresos-iva").text("IVA: $ "+egresos*0.19);
             }else{
-                $("#egresos").text("$0");
+                $("#egresos").text("$ 0");
+                $("#egresos-iva").text("IVA: $ "+ 0*0.19);
             }
+
+            var resultado = ingresos-egresos;
+
+            $("#resultado").text("$ "+resultado);
+
         },
         error: function() {
             console.log("No se ha podido obtener la información");

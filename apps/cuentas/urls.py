@@ -25,4 +25,5 @@ urlpatterns = [
     path('listarCuentaEmpresa/', listarCuentaEmpresa, name='listarCuentaEmpresa'),
     path('dashboard_graph_1/', LineChartJSONView.as_view(), name='dashboard_graph_1'),
     path('balances/', balances, name='balances'),
+    path('estado_cuentas/', estado_cuentas, name='estado_cuentas'),
 ]

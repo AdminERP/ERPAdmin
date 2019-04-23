@@ -136,7 +136,7 @@ def pay_account(request):
 	else:
 		return redirect('listarPagar')
 
-# Pago de una cuenta
+# cancelar una cuenta
 @permission_required('cuentas.change_cuentapagar', raise_exception=True)
 def cancelle_account(request):
 	if request.POST:
@@ -156,13 +156,13 @@ def cancelle_account(request):
 		return redirect('listarPagar')
 
 # Ver pagos
-@permission_required('cuentas.view_payment', raise_exception=True)
+@permission_required('cuentas.view_payments', raise_exception=True)
 def payments(request):
 	payments = Payment.objects.all().order_by('id')
 	return render(request, 'cuentas/payments.html', {'payments':payments})
 
 #Ver detalles de una cuenta
-@permission_required('cuentas.view_cuentapagar', raise_exception=True)
+@permission_required('cuentas.view_cuentaspagar', raise_exception=True)
 def payment_account_details(request, pk):
 	account = get_object_or_404(CuentaPagar, pk=pk)
 	items = account.item_set.all()
@@ -177,7 +177,8 @@ def payment_account_details(request, pk):
 def payment_details(request, pk):
 	payment = get_object_or_404(Payment, pk=pk)
 	return render(request, 'cuentas/payment_details.html', {'payment':payment})
-	
+
+@permission_required('cuentas.view_cuentaspagar', raise_exception=True)	
 def listarPagar (request):
 	try:
 		categoria = CategoriaModel.objects.get(nombre="Bancos")
@@ -283,7 +284,14 @@ def listarCuentaEmpresa (request):
 
 # Graficas
 def balances(request):
-	ingresos = CuentaPagar.objects.filter(status='1').aggregate(Sum('total'))
-	egresos = CuentaCobrar.objects.filter(estado=True).aggregate(Sum('costo_total'))
+	egresos = CuentaPagar.objects.filter(status='2').aggregate(Sum('total'))
+	ingresos = CuentaCobrar.objects.filter(estado=True).aggregate(Sum('costo_total'))
 	return JsonResponse({'egresos':egresos, 'ingresos':ingresos})
+
+def estado_cuentas(request):
+	c_pagadas = len(CuentaPagar.objects.filter(status='2'))
+	c_no_pagadas = len(CuentaPagar.objects.filter(status='3'))
+	c_cobradas = len(CuentaCobrar.objects.filter(estado=True))
+	c_no_cobradas = len(CuentaCobrar.objects.filter(estado=False))
+	return JsonResponse({'c_pagadas':c_pagadas, 'c_no_pagadas':c_no_pagadas, 'c_cobradas':c_cobradas, 'c_no_cobradas':c_no_cobradas})
 
