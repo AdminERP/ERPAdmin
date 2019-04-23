@@ -7,10 +7,10 @@ from apps.compras.models import *
 from django.contrib.auth.decorators import permission_required
 from django.db import models
 
-# Create your views here.
+#Create your views here.
 @permission_required('inventario.add_entrada', raise_exception=True)
 def index (request):
-    return render(request, 'landing.html')
+    return render(request, 'usuarios/home.html')
 
 @permission_required('inventario.add_entrada', raise_exception=True)
 def entradas (request):
