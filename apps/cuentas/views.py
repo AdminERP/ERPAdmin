@@ -208,6 +208,14 @@ def crearCuentaCobro(request,pk):
 		print(form)
 		if form.is_valid():
 			cuenta = form.save()
+			order_id = cuenta.service_order_id
+			serviceOrder = get_object_or_404(OrdenServicio, pk=order_id)
+			user_id = serviceOrder.cliente_id;
+			dato_id = cuenta.cuenta_empresa_id
+			bank = get_object_or_404(DatoModel, pk=dato_id)
+			banks_values = ValorModel.objects.filter(dato_id=int(dato_id), nombre='saldo').first()
+			saldo = Decimal(banks_values.valor)
+			correo = DatoModel.objects.get(id=user_id).valormodel_set.all().get(nombre='correo').valor
 			body = render_to_string('cuentas/email_content.html', {
 	                'servicio': cuenta.servicio,
 	                'tarifa': cuenta.tarifa,
@@ -217,14 +225,18 @@ def crearCuentaCobro(request,pk):
 	        	)
 			email_message = EmailMessage(subject='Mensaje de usuario',
 				body=body,
-				to=['jhon.orobio@correounivalle.edu.co'],)
+				to=[correo],)
 			email_message.content_subtype = 'html'
 			email_message.send()
+			OrdenServicio.objects.filter(pk=order_id).update(estado='CO')
+			saldo = saldo + serviceOrder.valor
+			banks_values.valor = saldo
+			banks_values.save()
 			return redirect('listarCobrar')
 		else:
 			return render(request, 'cuentas/listserviceorder.html', {'form':form})
 	else:
-		serviceOrder = get_object_or_404(ServiceOrder, pk=pk) 
+		serviceOrder = get_object_or_404(OrdenServicio, pk=pk)
 		form = CuentaCobroForm()
 		return render(request, 'cuentas/crearCuentaCobrar.html', {'form': form, 'serviceOrder':serviceOrder})
 

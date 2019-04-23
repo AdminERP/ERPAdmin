@@ -63,6 +63,7 @@
                 <label>orden</label>
                 {{ form.service_order}}
             </div>
+
       		<input type="hidden" name="estado" value="1">
       
         <button type="submit" class="btn btn-primary" id="create_charge">Generar</button>
@@ -95,12 +96,14 @@
 $(function(){
 	$('select[name=cuenta_empresa]').addClass('form-control');
 	$('select[name=service_order]').addClass('form-control');
-	$('input[name=servicio]').val('{{serviceOrder.sold_service}}');
+	$('input[name=servicio]').val('{{serviceOrder.servicio_vendido}}');
 	$('input[name=servicio]').css('pointer-events','none');
-	$('input[name=costo_total]').val(parseFloat('{{serviceOrder.total}}'));
+	$('input[name=costo_total]').val(parseFloat('{{serviceOrder.valor}}'));
 	$('input[name=costo_total]').css('pointer-events','none');
 	$('select[name=service_order]').val('{{serviceOrder.id}}');
 	$('select[name=service_order]').css('pointer-events','none');
+
+    console.log({{serviceOrder.id}});
 	
 
 });	 
