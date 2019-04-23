@@ -71,6 +71,7 @@ def crear_orden_servicio(request):
         form = OrdenServicioForm(request.POST)
         if form.is_valid():
             form.instance.coordinador = request.user
+            form.instance.valor = int(form.instance.servicio_vendido.valormodel_set.all().get(nombre="valor").valor)
             form.save()
             messages.success(request, 'Orden de servicio creada exitosamente')
             return redirect('/ordenes_servicio/consultar_orden_servicio')
