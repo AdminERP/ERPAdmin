@@ -221,7 +221,7 @@ def createOrder(request):
 		return render(request, 'cuentas/createOrder.html', {'form': form})
 
 
-@permission_required('cuentas.add_cuentascobrar', raise_exception=True)
+
 def crearCuentaCobro(request,pk):
 	if request.POST:
 		form = CuentaCobroForm(request.POST)
@@ -260,7 +260,7 @@ def crearCuentaCobro(request,pk):
 		form = CuentaCobroForm()
 		return render(request, 'cuentas/crearCuentaCobrar.html', {'form': form, 'serviceOrder':serviceOrder})
 
-@permission_required('cuentas.delete_cuentacobrar', raise_exception=True)
+@permission_required('cuentas.change_cuentacobrar', raise_exception=True)
 def anularCuenta(request):
 	print(request.POST)
 	if request.POST:
