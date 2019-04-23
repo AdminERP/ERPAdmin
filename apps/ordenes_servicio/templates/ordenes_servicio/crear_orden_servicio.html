@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'ordenes_servicio/base.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
@@ -54,9 +54,6 @@
               <div class="col-sm-12">
                   {% bootstrap_field form.encargado %}
               </div>
-              <div class="col-sm-6">
-                  {% bootstrap_field form.valor%}
-                </div>
               <div class="col-sm-6">
                 {% bootstrap_field form.fecha_atencion%}
               </div>

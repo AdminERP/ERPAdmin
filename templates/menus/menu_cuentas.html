@@ -13,7 +13,7 @@
         {% if perms.cuentas.add_payments %}<li><a href="{% url 'payments'%}">Pagos</a></li>{% endif %}
         {% if perms.cuentas.view_cuentascobrar %}<li><a href="{% url 'listarCobrar'%}">Cuentas de Cobro</a></li>{% endif %}
         {% if perms.cuentas.view_cuentasempresa %}<li><a href="{% url 'listarCuentaEmpresa'%}">Cuentas Bancarias</a></li>{% endif %}
-        <li><a href="{% url 'createOrder'%}">Crear Ordenes</a></li>
+        <!--<li><a href="{% url 'createOrder'%}">Crear Ordenes</a></li>-->
         <li><a href="{% url 'listServiceOrder'%}">Ver Ordenes</a></li>
     </ul>
 </li>

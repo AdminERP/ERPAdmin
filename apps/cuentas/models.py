@@ -4,7 +4,7 @@ from enum import Enum
 from apps.compras.models import OrdenCompra
 from apps.inventario.models import Entrada
 from apps.datosmaestros.models import DatoModel
-
+from apps.ordenes_servicio.models import OrdenServicio
 # Create your models here.
 class CuentaEmpresa(models.Model):
     saldo = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)   
@@ -125,8 +125,10 @@ class CuentaCobrar(models.Model):
     fecha_vencimiento = models.DateField(null=False)
     estado = models.BooleanField(True)
     servicio = models.CharField(max_length=254,null=False)
-    cuenta_empresa = models.ForeignKey(CuentaEmpresa, on_delete=models.CASCADE)
-    service_order = models.ForeignKey(ServiceOrder, on_delete=models.CASCADE,null=True)
+    cuenta_empresa = models.ForeignKey(DatoModel, on_delete=models.CASCADE, blank=False, null=False,
+                                    limit_choices_to= {'categoria__nombre':"Bancos"},
+                                    related_name='banco_set', verbose_name="Banco")
+    service_order = models.ForeignKey(OrdenServicio, on_delete=models.CASCADE,null=True)
 
     class Meta:
         permissions = (

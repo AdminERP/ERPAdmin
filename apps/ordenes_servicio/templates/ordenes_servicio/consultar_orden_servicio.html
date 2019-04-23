@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'ordenes_servicio/base.html' %}
 {% load staticfiles %}
 {% load bootstrap3 %}
 
@@ -58,18 +58,18 @@
                     <td>{{ orden.comentarios }}</td>
                     <td>
                         {%  if orden.estado == 'AS' %}
-                        {%  if cargo == 'O' %}
+                        {% if perms.ordenes_servicio.execute_ordenservicio %}
                         <button type="button" class="btn btn-primary btn-xs cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_asignacion">Aceptar Orden</button>
-                        {%  elif cargo == 'C' %}
+                        {%  elif perms.ordenes_servicio.cancel_ordenservicio %}
                         <button name="{{orden.estado}}" id="cancelar_boton" type="button" class="btn btn-xs btn-danger cancelar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cancelacion">Cancelada</button>
                         {% endif %}
                         {% else %}
-                        {%  if cargo == 'O' %}
+                        
                         <div class="btn-group btn-group-xs">
-                            <button name="{{orden.estado}}" id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button>
-                            <button name="{{orden.estado}}" id="cancelar_boton" type="button" class="btn btn-danger btn-xs cancelar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cancelacion">Cancelada</button>
+                            {%  if perms.ordenes_servicio.close_ordenservicio %}<button name="{{orden.estado}}" id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button> {% endif %}
+                            {%  if perms.ordenes_servicio.cancel_ordenservicio %}<button name="{{orden.estado}}" id="cancelar_boton" type="button" class="btn btn-danger btn-xs cancelar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cancelacion">Cancelada</button>{% endif %}
                         </div>
-                        {% endif %}
+                        
                         {% endif %}
                     </td>
                 </tr>
