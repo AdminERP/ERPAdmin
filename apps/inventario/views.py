@@ -73,7 +73,7 @@ def registroEntrada(request, idOrden):
             nuevaEntrada = form.save()
 
             objeto = Inventario.objects.create(
-            articulo = orden.solicitud.articulo.nombre, cantidad = orden.solicitud.cantidad, entrada = nuevaEntrada
+            articulo = orden.cotizacion.solicitud.articulo.nombre, cantidad = orden.cotizacion.solicitud.cantidad, entrada = nuevaEntrada
             )
             objeto.save()
 
