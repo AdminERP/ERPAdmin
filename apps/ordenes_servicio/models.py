@@ -4,7 +4,9 @@ from apps.datosmaestros.models.dato import DatoModel
 from datetime import datetime
 
 class OrdenServicio(models.Model):
-    servicio_vendido = models.CharField(max_length=100) # Datos Mestros
+    servicio_vendido = models.ForeignKey(DatoModel, on_delete=models.CASCADE, blank=True, null=False,
+                                    limit_choices_to= {'categoria__nombre':"servicios"},
+                                    related_name='servicio_set', verbose_name="Servicio")# Datos Maestros
 
     coordinador = models.ForeignKey(Usuario,
                                     # Solo los coordinadores pueden crear
@@ -42,7 +44,6 @@ class OrdenServicio(models.Model):
         choices=opciones_estado,
         default=ASIGNADA,
     )
-    valor = models.PositiveIntegerField(null=False, default=0)
 
     class Meta:
         verbose_name_plural = "Ordenes de Servicio"
