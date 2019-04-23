@@ -35,6 +35,7 @@ class SolicitudCompra(models.Model):
 
     class Meta:
         permissions = (
+            ("view_solicitudcompra", "Puede ver una solicitud de compra"),
             ("autorizar_solicitud", "Puede autorizar una solicitud"),
             ("rechazar_solicitud", "Puede rechazar una solicitud"),
         )
@@ -51,7 +52,12 @@ class Cotizacion(models.Model):
 
     proveedor = models.ForeignKey(DatoModel, on_delete=models.CASCADE)
     solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
-
+    
+    class Meta:
+        permissions = (
+            ("view_cotizaciones", "Puede ver una cotizacion"),
+        )
+    
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse('compras:cotizaciones_listar', kwargs={'pk': self.solicitud.id})
@@ -77,10 +83,9 @@ class OrdenCompra(models.Model):
     estado_aprobacion = models.CharField(
         max_length=16, choices=ESTADOS, default=PENDIENTE)
     
-    
-
     class Meta:
         permissions = (
+            ("view_ordencompra", "Puede ver una orden de compra"),
             ("autorizar_orden", "Puede autorizar una orden"),
             ("rechazar_orden", "Puede rechazar una orden"),
         )
