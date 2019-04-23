@@ -34,7 +34,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <center><h2>INGRESOS</h2></center>
-                        <center><h1>$ 35.550.000</h1></center>
+                        <center><h1 id="ingresos"></h1></center>
                     </div>
                     <div class="panel-footer" style="color: #31708f; background-color: #d9edf7">
                         IVA: $ 6.754.500
@@ -45,7 +45,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <center><h2>EGRESOS</h2></center>
-                        <center><h1>$ 23.333.000</h1></center>
+                        <center><h1 id="egresos"></h1></center>
                     </div>
                     <div class="panel-footer" style="color: #8a6d3b; background-color: #fcf8e3">
                         IVA: $ 4.433.270
@@ -270,5 +270,24 @@
         var ctx1 = document.getElementById('grafica4').getContext('2d');
         new Chart(ctx1, config);
     }
+
+    $.ajax({
+        url: 'balances/',
+        success: function(respuesta) {
+            if(respuesta.ingresos.total__sum != null){
+                $("#ingresos").text("$"+respuesta.ingresos.total__sum);
+            }else{
+                $("#ingresos").text("$0");
+            }
+            if(respuesta.egresos.costo_total__sum != null){
+                $("#egresos").text("$"+respuesta.egresos.costo_total__sum);
+            }else{
+                $("#egresos").text("$0");
+            }
+        },
+        error: function() {
+            console.log("No se ha podido obtener la información");
+        }
+    });
 </script>
 {% endblock js %}

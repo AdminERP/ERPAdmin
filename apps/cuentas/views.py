@@ -16,6 +16,8 @@ from chartjs.views.lines import BaseLineChartView
 from apps.datosmaestros.models import DatoModel, ValorModel, CategoriaModel
 from apps.ordenes_servicio.models import OrdenServicio
 from decimal import Decimal
+from django.contrib.auth.decorators import permission_required, login_required
+from django.db.models import Sum
 
 
 def index(request):
@@ -36,7 +38,8 @@ class LineChartJSONView(BaseLineChartView):
         return [[75, 44, 92, 11, 44, 95, 35]]
 
 
-# Create your views here.
+# Crear cuenta por pagar
+@permission_required('cuentas.add_cuentapagar', raise_exception=True)
 def create_account (request):
 	if request.POST:
 		form = PaymentAccountForm(request.POST)
@@ -58,6 +61,8 @@ def create_account (request):
 		form = PaymentAccountForm()
 		return render(request, 'cuentas/crearCuenta.html', {'form':form})
 
+# Editar cuenta por pagar
+@permission_required('cuentas.change_cuentapagar', raise_exception=True)
 def payment_account_edit(request, pk):
 	account = get_object_or_404(CuentaPagar, pk=pk)
 	if account.status == '1' or account.status == '2':
@@ -84,6 +89,8 @@ def payment_account_edit(request, pk):
 	else:
 		return render(request, 'cuentas/payment_account_edit.html', {'form':form, 'items':items})
 
+# Pago de una cuenta
+@permission_required('cuentas.add_payment', raise_exception=True)
 def pay_account(request):
 	if request.POST:
 		# Cuentas bancarias en caso de error
@@ -129,6 +136,8 @@ def pay_account(request):
 	else:
 		return redirect('listarPagar')
 
+# Pago de una cuenta
+@permission_required('cuentas.change_cuentapagar', raise_exception=True)
 def cancelle_account(request):
 	if request.POST:
 		account = get_object_or_404(CuentaPagar, pk=request.POST.get('account_id'))
@@ -146,10 +155,14 @@ def cancelle_account(request):
 	else:
 		return redirect('listarPagar')
 
+# Ver pagos
+@permission_required('cuentas.view_payment', raise_exception=True)
 def payments(request):
 	payments = Payment.objects.all().order_by('id')
 	return render(request, 'cuentas/payments.html', {'payments':payments})
 
+#Ver detalles de una cuenta
+@permission_required('cuentas.view_cuentapagar', raise_exception=True)
 def payment_account_details(request, pk):
 	account = get_object_or_404(CuentaPagar, pk=pk)
 	items = account.item_set.all()
@@ -159,6 +172,8 @@ def payment_account_details(request, pk):
 	else:
 		return render(request, 'cuentas/payment_account_details.html', {'account':account, 'items':items})
 
+# Ver pagos
+@permission_required('cuentas.view_payment', raise_exception=True)
 def payment_details(request, pk):
 	payment = get_object_or_404(Payment, pk=pk)
 	return render(request, 'cuentas/payment_details.html', {'payment':payment})
@@ -178,10 +193,12 @@ def listarPagar (request):
 
 	return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'banks':banks})
 
+@permission_required('cuentas.view_cuentascobrar', raise_exception=True)
 def listarCobrar (request):
 	cuentas = CuentaCobrar.objects.all().order_by('id')
 	return render(request, 'cuentas/listarCuentaCobrar.html',{'cuentas':cuentas})
 
+@permission_required("cuentas.view_ordenesservicio",raise_exception=True)
 def listServiceOrder (request):
 	orders = OrdenServicio.objects.all().order_by('id')
 	form = CuentaCobroForm()
@@ -202,12 +219,22 @@ def createOrder(request):
 		form = ServiceOrderForm()
 		return render(request, 'cuentas/createOrder.html', {'form': form})
 
+
+@permission_required('cuentas.add_cuentascobrar', raise_exception=True)
 def crearCuentaCobro(request,pk):
 	if request.POST:
 		form = CuentaCobroForm(request.POST)
 		print(form)
 		if form.is_valid():
 			cuenta = form.save()
+			order_id = cuenta.service_order_id
+			serviceOrder = get_object_or_404(OrdenServicio, pk=order_id)
+			user_id = serviceOrder.cliente_id;
+			dato_id = cuenta.cuenta_empresa_id
+			bank = get_object_or_404(DatoModel, pk=dato_id)
+			banks_values = ValorModel.objects.filter(dato_id=int(dato_id), nombre='saldo').first()
+			saldo = Decimal(banks_values.valor)
+			correo = DatoModel.objects.get(id=user_id).valormodel_set.all().get(nombre='correo').valor
 			body = render_to_string('cuentas/email_content.html', {
 	                'servicio': cuenta.servicio,
 	                'tarifa': cuenta.tarifa,
@@ -217,32 +244,46 @@ def crearCuentaCobro(request,pk):
 	        	)
 			email_message = EmailMessage(subject='Mensaje de usuario',
 				body=body,
-				to=['jhon.orobio@correounivalle.edu.co'],)
+				to=[correo],)
 			email_message.content_subtype = 'html'
 			email_message.send()
+			OrdenServicio.objects.filter(pk=order_id).update(estado='CO')
+			saldo = saldo + serviceOrder.valor
+			banks_values.valor = saldo
+			banks_values.save()
 			return redirect('listarCobrar')
 		else:
 			return render(request, 'cuentas/listserviceorder.html', {'form':form})
 	else:
-		serviceOrder = get_object_or_404(ServiceOrder, pk=pk) 
+		serviceOrder = get_object_or_404(OrdenServicio, pk=pk)
 		form = CuentaCobroForm()
 		return render(request, 'cuentas/crearCuentaCobrar.html', {'form': form, 'serviceOrder':serviceOrder})
 
+@permission_required('cuentas.change_cuentascobrar', raise_exception=True)
 def anularCuenta(request):
 	print(request.POST)
 	if request.POST:
 		pk = request.POST.get('account_id')
 		CuentaCobrar.objects.filter(pk=pk).update(estado=False)
 		return redirect('listarCobrar')
+
 def listarCuentaEmpresa (request):
 	try:
 		categoria = CategoriaModel.objects.get(nombre="Bancos")
 	except CategoriaModel.DoesNotExist:
 		categoria = None
-		
+
 	if categoria != None:
 		banks = DatoModel.objects.filter(categoria=categoria)
 	else:
 		banks = None
 	cuentas = CuentaEmpresa.objects.all().order_by('id')
 	return render(request, 'cuentas/listarCuentasEmpresa.html',{'cuentas':cuentas, 'banks':banks})
+
+
+# Graficas
+def balances(request):
+	ingresos = CuentaPagar.objects.filter(status='1').aggregate(Sum('total'))
+	egresos = CuentaCobrar.objects.filter(estado=True).aggregate(Sum('costo_total'))
+	return JsonResponse({'egresos':egresos, 'ingresos':ingresos})
+

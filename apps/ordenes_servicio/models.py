@@ -33,6 +33,7 @@ class OrdenServicio(models.Model):
     TRAMITE = 'TR'
     CANCELADA = 'CA'
     CERRADA = 'CE'
+    COBRADA = 'CO'
     # Fin Constantes
 
     opciones_estado = (
@@ -40,6 +41,7 @@ class OrdenServicio(models.Model):
         (TRAMITE, 'Tramite'),
         (CANCELADA, 'Cancelada'),
         (CERRADA, 'Cerrada'),
+        (COBRADA,'Cobrada')
     )
     estado = models.CharField(
         max_length=2,

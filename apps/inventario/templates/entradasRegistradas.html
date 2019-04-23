@@ -21,6 +21,9 @@ h4 {
 {% block titulo %} Entradas Registradas{% endblock titulo %}
 {% block titulo_pagina %}Entradas Registradas{% endblock titulo_pagina %}
 
+{% block titulo_panel %}
+<a href="{% url 'inventario:entradas' %}" type="button" class="btn bg-purple margin">Entradas<div class="ripple-container"></div></a>
+ {% endblock titulo_panel %}
 {% block miga_pan %}
 
   <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>

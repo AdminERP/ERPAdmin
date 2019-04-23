@@ -41,7 +41,7 @@
           <tbody>
 
           {% for orden in ordenes %}
-              {% if orden.estado_aprobacion == 'APROBADO_GERENTE'  %}
+              {% if orden.estado_aprobacion == 'aprobado_gerente'  %}
           <tr role="row" class="even">
               <td class="sorting_1 text-center" tabindex="0">{{ orden.id }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.solicitud.articulo }}</td>

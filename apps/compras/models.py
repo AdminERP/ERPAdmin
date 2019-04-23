@@ -5,9 +5,30 @@ from django.db import models
 from apps.datosmaestros.models import DatoModel
 from apps.usuarios.models import Usuario
 from apps.inventario.models import Entrada
+
+# # TODO: Integrar con modulo de datos maestros y traer esta info de alli
+# class Proveedor(models.Model):
+#     nombre = models.CharField(max_length=50)
+#     direccion = models.CharField(max_length=50)
+#     telefono = models.CharField(max_length=10)
+#     email = models.EmailField()
+
+#     def __str__(self):
+#         return '%s' % (self.nombre)
+
+# # TODO: Integrar con modulo de datos maestros y traer esta info de alli
+# class Articulo(models.Model):
+#     nombre = models.CharField(max_length=50)
+#     descripcion = models.CharField(max_length=150)
+
+#     def __str__(self):
+#         return '%s' % (self.nombre)
+
+from apps.datosmaestros.models import DatoModel
+from apps.usuarios.models import Usuario
 from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
-
+from apps.inventario.models import Entrada
 class SolicitudCompra(models.Model):
 
     PENDIENTE = 'pendiente'
