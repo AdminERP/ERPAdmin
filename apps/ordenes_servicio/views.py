@@ -100,7 +100,7 @@ def aceptar_orden_servicio(request):
                 messages.success(request, 'Orden de Servicio Aceptada')
                 return JsonResponse({'success': True})
             else:
-                messages.error(request, 'No estas autorizado para realizar esta acción')
+                messages.error(request, 'No eres el asignado para esta orden de servicio')
                 return JsonResponse({'success': False})
         except:
             return JsonResponse({'orden_id': 0})
