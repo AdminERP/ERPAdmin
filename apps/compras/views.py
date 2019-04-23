@@ -201,11 +201,11 @@ def rechazarOrden(request, pk):
 def send_aprov_notification(orden):
         #cuenta: servicioalcliente.compraserp@gmail.com
         #pass: compras123
-        # TODO generar pdf con la informacion de la orden
+        
 
         dato = orden.cotizacion.proveedor 
         valor_email_proveedor = ValorModel.objects.filter(dato=dato , nombre = 'email').get().valor
-
+        #Crear el email para el proveedor
         email_proveedor = EmailMessage( 
             subject = 'Aprobación de Compra',
             body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
@@ -217,6 +217,7 @@ def send_aprov_notification(orden):
         email_proveedor.attach('cotización.pdf', send_pdf , 'application/pdf')
         email_proveedor.send()
 
+        #Crear el email para el solicitando
         email_solicitante = EmailMessage(
             subject = 'Aprobación de Compra',
             body = 'Su solicitud de compra fue aprobada bajo la cotización adjunta.',
@@ -229,9 +230,11 @@ def send_aprov_notification(orden):
 
 # TODO Adjuntar información de la solicitud
 def send_reject_notification(solicitud): 
+    #Crear el email para el solicitante y su jefe inmediato
     email = EmailMessage( 
         subject = 'Aprobación de Compra',
-        body = 'Su solicitud de compra no fue aprobada. ',
+        body = 'La solicitud de compra de {} {}(s), realizada el {} no fue aprobada. '.format(
+            solicitud.cantidad, solicitud.articulo, solicitud.fecha_realizada),
         from_email = settings.EMAIL_HOST_USER,
         to = [solicitud.solicitante.email, 
                 solicitud.solicitante.jefe.email, ],
@@ -239,38 +242,25 @@ def send_reject_notification(solicitud):
     email.send()
 
 
-def create_pdf(dato): 
+
+def create_pdf(cotizacion): 
     from django.utils import timezone
 
     context = {
         'date': timezone.now(),
-        'dato': dato,
+        'cot': cotizacion,
+        'total': float(cotizacion.total) * float(cotizacion.solicitud.cantidad),
         'test': 'hola'
 
     }
     return render_to_pdf(
         'compras/send.html',
-        {'context': context},
+        context,
 )
 
 
 
-def render_pdf(url_template, context={}):
-    ##Renderiza un template Django a un documento PDF
 
-    template = get_template(url_template)
-    html =template.render(context)
-    result = BytesIO()
-    pdf= pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result) 
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type = "application/pdf")
-    return none
-
-class PdfPrueba(View): 
-    
-    def get (self, request, *args, **kwargs): 
-        pdf = render_pdf('compras/send.html')
-        return HttpResponse(pdf, content_type='application/pdf')
 
 ######---DELETES---######
 

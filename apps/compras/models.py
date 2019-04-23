@@ -46,7 +46,7 @@ class SolicitudCompra(models.Model):
 
 class Cotizacion(models.Model):
 
-    # Representa desde 0,00 hasta (10E15)-1,99 en pesos.
+     Representa desde 0,00 hasta (10E15)-1,99 en pesos.
     total = models.DecimalField(max_digits=17, decimal_places=2)
     fecha_realizada = models.DateField()
 

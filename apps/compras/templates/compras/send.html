@@ -1,19 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cotización </title>
 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style> 
+        p{
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        h1 {
+            font-size: 16px;
+        }
+    </style>
+
+    <title>Cotización </title>
 </head>
 <body>
-
+    
+    
 
     <br><br><br> 
-        <h1 align= "right" id= "date">time {{test}} </h1>
-    <br><br><br><br>
+        <h1 align= "right" > {{date}} </h1>
 
-    <h2>JavaScript in Body</h2>
 
-    <p id="demo">demo</p>
+    <br>
+    <h1 style= "font-size: 22px; " >E.R.P Compras</h1>
+    <br><br>
+    <p>FECHA DE COTIZACIÓN</p>
+    <h1>{{cot.fecha_realizada}}</h1>
+
+    <br><br>
+    <p>ARTÍCULO</p>
+    <h1>{{cot.solicitud.articulo}}</h1>
+
+
+    <br><br>
+    <p>VALOR UNITARIO</p>
+    <h1> ${{cot.total}}</h1>
+    
+    <br><br>
+    <p>CANTIDAD</p>
+    <h1>{{cot.solicitud.cantidad}}</h1>
+
+    <br><br><br>
+    <p>TOTAL:   ${{total}}</p>
+  
+
+
+    
 
 
     
