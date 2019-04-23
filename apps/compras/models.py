@@ -5,30 +5,9 @@ from django.db import models
 from apps.datosmaestros.models import DatoModel
 from apps.usuarios.models import Usuario
 from apps.inventario.models import Entrada
-
-# # TODO: Integrar con modulo de datos maestros y traer esta info de alli
-# class Proveedor(models.Model):
-#     nombre = models.CharField(max_length=50)
-#     direccion = models.CharField(max_length=50)
-#     telefono = models.CharField(max_length=10)
-#     email = models.EmailField()
-
-#     def __str__(self):
-#         return '%s' % (self.nombre)
-
-# # TODO: Integrar con modulo de datos maestros y traer esta info de alli
-# class Articulo(models.Model):
-#     nombre = models.CharField(max_length=50)
-#     descripcion = models.CharField(max_length=150)
-
-#     def __str__(self):
-#         return '%s' % (self.nombre)
-
-from apps.datosmaestros.models import DatoModel
-from apps.usuarios.models import Usuario
 from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
-from apps.inventario.models import Entrada
+
 class SolicitudCompra(models.Model):
 
     PENDIENTE = 'pendiente'
@@ -56,6 +35,7 @@ class SolicitudCompra(models.Model):
 
     class Meta:
         permissions = (
+            ("view_solicitudcompra", "Puede ver una solicitud de compra"),
             ("autorizar_solicitud", "Puede autorizar una solicitud"),
             ("rechazar_solicitud", "Puede rechazar una solicitud"),
         )
@@ -72,6 +52,11 @@ class Cotizacion(models.Model):
 
     proveedor = models.ForeignKey(DatoModel, on_delete=models.CASCADE)
     solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
+
+    class Meta:
+        permissions = (
+            ("view_cotizaciones", "Puede ver una cotizacion"),
+        )
 
     def get_absolute_url(self):
         from django.urls import reverse
@@ -98,6 +83,7 @@ class OrdenCompra(models.Model):
 
     estado_aprobacion = models.CharField(
         max_length=16, choices=ESTADOS, default=PENDIENTE)
+
 
     @staticmethod
     def listarAtendidas():
@@ -127,6 +113,7 @@ class OrdenCompra(models.Model):
 
     class Meta:
         permissions = (
+            ("view_ordencompra", "Puede ver una orden de compra"),
             ("autorizar_orden", "Puede autorizar una orden"),
             ("rechazar_orden", "Puede rechazar una orden"),
         )
