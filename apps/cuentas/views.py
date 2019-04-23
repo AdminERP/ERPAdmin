@@ -276,4 +276,4 @@ def listarCuentaEmpresa (request):
 
 # Graficas
 def ingresos(request):
-	return JsonResponse({'value':'1000000'}, content_type="application/json")
+	return JsonResponse({'value':'1000000'})

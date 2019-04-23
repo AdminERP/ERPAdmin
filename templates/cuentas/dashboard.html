@@ -273,15 +273,11 @@
 
     $.ajax({
         url: 'ingresos/',
-        datatype: 'json',
-        type: 'GET',
-        sucess: function(data) {
-            $("#ingresos").text(data.value);
-            // $.each(data, function(index, element) {
-            //     $('body').append($('<div>', {
-            //         text: element.name
-            //     }));
-            // });
+        success: function(respuesta) {
+            $("#ingresos").text("$"+respuesta.value);
+        },
+        error: function() {
+            console.log("No se ha podido obtener la información");
         }
     });
 </script>
