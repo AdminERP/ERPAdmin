@@ -26,6 +26,8 @@ class OrdenServicio(models.Model):
     comentarios = models.TextField(max_length=255)
     fecha_creacion = models.DateTimeField(default=datetime.now, blank=True, verbose_name="Fecha de Creación")
     fecha_atencion = models.DateTimeField(null=True, verbose_name="Fecha de Atención")
+    valor = models.PositiveIntegerField(null=False, default=0)
+
     # Constantes para OrdenServicio
     ASIGNADA = 'AS'
     TRAMITE = 'TR'
