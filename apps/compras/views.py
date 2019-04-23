@@ -1,12 +1,17 @@
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView, View
 from django.shortcuts import redirect  
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import  EmailMessage
 from django.conf import settings
 from easy_pdf.rendering import render_to_pdf
-
+from apps.datosmaestros.models import ValorModel
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template.loader import get_template
+from io import BytesIO
+from xhtml2pdf import pisa
 from apps.datosmaestros.models import ValorModel
 from apps.usuarios.models import Usuario
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
@@ -174,6 +179,7 @@ def rechazarSolicitud(request, pk):
     solicitud = SolicitudCompra.objects.get(pk=pk)
     solicitud.estado_aprobacion = 'rechazada'
     solicitud.save()
+    send_reject_notification(solicitud)
     return redirect('compras:solicitudes')
 
 @permission_required('compras.autorizar_orden')
@@ -189,42 +195,88 @@ def rechazarOrden(request, pk):
     orden = OrdenCompra.objects.get(pk=pk)
     orden.estado_aprobacion = 'rechazada'
     orden.save()
-    send_reject_notification()
+    send_reject_notification(orden.cotizacion.solicitud)
     return redirect('compras:orden_listar')
 
 def send_aprov_notification(orden):
         #cuenta: servicioalcliente.compraserp@gmail.com
         #pass: compras123
-        # TODO generar pdf con la informacion de la orden y considerar proveedor como dato maestro
+        # TODO generar pdf con la informacion de la orden
 
         dato = orden.cotizacion.proveedor 
-        valor_email = ValorModel.objects.filter(dato=dato , nombre = 'email').get().valor
+        valor_email_proveedor = ValorModel.objects.filter(dato=dato , nombre = 'email').get().valor
 
-        email = EmailMessage( 
+        #solicitante= orden.solicitante.email
+
+        email_proveedor = EmailMessage( 
             subject = 'Aprobación de Compra',
             body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
             from_email = settings.EMAIL_HOST_USER,
-            to = [valor_email],
+            to = [valor_email_proveedor,  ],
         )
-        send_pdf = render_to_pdf(
+        # send_pdf = render_to_pdf(
+        # 'compras/send.html',
+        # {'cotizacion': orden.cotizacion ,},
+        # )
+
+        send_pdf = create_pdf(orden.cotizacion)
+        email_proveedor.attach('cotización.pdf', send_pdf , 'application/pdf')
+        email_proveedor.send()
+
+        email_solicitante = EmailMessage(
+            subject = 'Aprobación de Compra',
+            body = 'Su solicitud de compra fue aprobada bajo la cotización adjunta.',
+            from_email = settings.EMAIL_HOST_USER,
+            to = [orden.cotizacion.solicitud.solicitante.email, ],
+        )
+        email_solicitante.attach('cotizacion', send_pdf, 'application/pdf')
+        email_solicitante.send()
+
+
+# TODO Adjuntar información de la solicitud
+def send_reject_notification(solicitud): 
+    email = EmailMessage( 
+        subject = 'Aprobación de Compra',
+        body = 'Su solicitud de compra no fue aprobada. ',
+        from_email = settings.EMAIL_HOST_USER,
+        to = [solicitud.solicitante.email, 
+                solicitud.solicitante.jefe.email, ],
+    )
+    email.send()
+
+
+def create_pdf(dato): 
+    from django.utils import timezone
+
+    context = {
+        'date': timezone.now(),
+        'dato': dato,
+        'test': 'hola'
+
+    }
+    return render_to_pdf(
         'compras/send.html',
-        {'cotizacion': orden.cotizacion ,},
-        )
-        email.attach('cotización.pdf', send_pdf , 'application/pdf')
-        email.send()
-
-# TODO enviar correo al solicitante y al jefe de compras informando que se rechazo
-def send_reject_notification(): 
-    pass
+        {'context': context},
+)
 
 
-# def create_pdf(): 
-#     return render_to_pdf(
-#         'compras/send.html',
-#         {'any_context_item_to_pass_to_the_template': context_value,},
-# )
-...
-    #.attach('file.pdf', post_pdf, 'application/pdf')
+
+def render_pdf(url_template, context={}):
+    ##Renderiza un template Django a un documento PDF
+
+    template = get_template(url_template)
+    html =template.render(context)
+    result = BytesIO()
+    pdf= pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result) 
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type = "application/pdf")
+    return none
+
+class PdfPrueba(View): 
+    
+    def get (self, request, *args, **kwargs): 
+        pdf = render_pdf('compras/send.html')
+        return HttpResponse(pdf, content_type='application/pdf')
 
 ######---DELETES---######
 

@@ -3,7 +3,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import permission_required
 
-from .views import SolicitudList, index, SolicitudCreate, SolicitudUpdate, SolicitudDelete, autorizarSolicitud, rechazarSolicitud, CotizacionList, CotizacionCreate, OrdenCreate, OrdenList, autorizarOrden, rechazarOrden
+from .views import SolicitudList, index, SolicitudCreate, SolicitudUpdate, SolicitudDelete, autorizarSolicitud, rechazarSolicitud, CotizacionList, CotizacionCreate, OrdenCreate, OrdenList, autorizarOrden, rechazarOrden, PdfPrueba
 
 urlpatterns = [
     path('', index.as_view(), name='index'),
@@ -20,4 +20,5 @@ urlpatterns = [
     path('orden/listar', permission_required('compras.view_ordencompra')(OrdenList.as_view()), name='orden_listar'),
     path('orden/autorizar/<int:pk>', autorizarOrden, name='autorizar_orden'),
     path('orden/rechazar/<int:pk>', rechazarOrden, name='rechazar_orden'),
+    path('cotizacion/send/', PdfPrueba.as_view() , name='sendpdf' ),
 ]
