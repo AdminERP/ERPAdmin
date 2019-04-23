@@ -44,8 +44,8 @@
               {% if orden.estado_aprobacion == 'aprobado_gerente'  %}
           <tr role="row" class="even">
               <td class="sorting_1 text-center" tabindex="0">{{ orden.id }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.solicitud.articulo }}</td>
-              <td class="sorting_1 text-center" tabindex="0">{{ orden.solicitud.cantidad }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.solicitud.articulo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.solicitud.cantidad }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.proveedor }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.total }}</td>
               <td class="sorting_1 text-center" tabindex="0">{{ orden.fecha_esperada }}</td>
