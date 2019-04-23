@@ -1,0 +1,36 @@
+{% load static %}
+{% if perms.ordenes_servicio %}
+	<div class="col-md-4">
+
+		<div class="box box-widget widget-user-2">
+			<div class="widget-user-header bg-aqua-active">
+                <div class="widget-user-image">
+                    <img class="img-circle" src="{% static '/dist/img/user8-128x128.jpg' %}" alt="User Avatar">
+                </div>
+				<h3 class="widget-user-username">Módulo de Ordenes de Servicio</h3>
+				<h5 class="widget-user-desc">Gestión de Ordenes</h5>
+			</div>
+
+			<div class="box-footer no-padding">
+				<ul class="nav nav-stacked">
+					<li><a href="{% url 'ordenes_servicio:Welcome' %}">
+                            Dashboard
+                        <span class="pull-right badge bg-blue"><i class="fa fa-dashboard"></i></span>
+                        </a></li>
+                        {% if perms.ordenes_servicio.add_ordenservicio %}
+                            <li><a href="{% url 'ordenes_servicio:crear_orden_servicio' %}">
+                                Crear Orden de Servicio
+                                <span class="pull-right badge bg-blue"><i class="fa fa-plus-circle"></i></span>
+                            </a></li>
+                        {% endif %}
+                        {% if perms.ordenes_servicio.view_ordenservicio %}
+                            <li><a href="{% url 'ordenes_servicio:consultar_orden_servicio' %}">
+                                Consultar Ordenes de Servicio
+                                <span class="pull-right badge bg-blue"><i class="fa fa-list"></i></span>
+                            </a></li>
+                        {% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endif %}

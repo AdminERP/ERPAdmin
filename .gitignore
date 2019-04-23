@@ -8,8 +8,10 @@ media/
 .idea
 db.sqlite3
 .env/
+<<<<<<< HEAD
 venv/
 myenv/
 .vscode/
 ERPAdmin/settings.py
+apps/ordenes_servicio/fixtures/*
 

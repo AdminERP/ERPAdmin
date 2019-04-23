@@ -30,7 +30,7 @@ class OrdenServicioForm(forms.ModelForm):
         }))
     class Meta:
         model = OrdenServicio
-        fields = ('servicio_vendido', 'comentarios', 'cliente', 'encargado', 'valor', 'fecha_atencion',)
+        fields = ('servicio_vendido', 'comentarios', 'cliente', 'encargado', 'fecha_atencion',)
         widgets = {
             'cliente': forms.HiddenInput(),
             'encargado': forms.HiddenInput(),

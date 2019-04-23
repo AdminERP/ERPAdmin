@@ -8,10 +8,27 @@
 {% endblock miga_pan %}
 
 {% block contenido %}
-
-	<div class="row">
-		{% include 'usuarios/modulos/usuarios.html' %}
-        {% include 'usuarios/modulos/inventario.html' %}
-	</div>
+    <div class="row">
+        {% include 'usuarios/modulos/usuarios.html' %}
+        {% include 'ordenes_servicio/modulos/ordenes.html' %}
+        {% if user.is_superuser %}
+        {% else %}
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">Permisos asignados</h3>
+                        <div class="ripple-container"></div>
+                    </div>
+                    <div class="box-body">
+                        <ul>
+                            {% for permiso in user.cargo.permissions.all %}
+                                <li>{{ permiso.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 
 {% endblock contenido %}
