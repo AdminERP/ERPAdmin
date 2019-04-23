@@ -30,7 +30,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Listado de cuentas por cobrar</h3>
+                        <h3 class="box-title">Cuentas de la compañía</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -38,14 +38,16 @@
                             <thead>
                             <tr>
                             <th># Cuenta</th>
+                            <th>Banco</th>
                             <th>Saldo</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for cuenta in cuentas%}
+                            {% for bank in banks %}
                                 <tr>
-                                    <td style="text-align: center;">{{cuenta.id}}</td>
-                                    <td>{{cuenta.saldo}}</td>
+                                    {% for value in bank.valormodel_set.all%}
+                                        <td style="text-align: center;">{{value.valor}}</td>
+                                    {% endfor %}
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -60,8 +62,6 @@
         <!-- /.row -->
     </div>    
     <!-- /.container -->
-
-
 {% endblock contenido %}
 
 {% block js %}

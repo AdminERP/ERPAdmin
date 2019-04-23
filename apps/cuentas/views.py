@@ -13,6 +13,8 @@ from django.core.mail import EmailMessage
 from random import randint
 from django.views.generic import TemplateView
 from chartjs.views.lines import BaseLineChartView
+from apps.datosmaestros.models import DatoModel, ValorModel, CategoriaModel
+from decimal import Decimal
 
 
 def index(request):
@@ -83,30 +85,46 @@ def payment_account_edit(request, pk):
 
 def pay_account(request):
 	if request.POST:
-		bank = get_object_or_404(CuentaEmpresa, pk=1)
+		# Cuentas bancarias en caso de error
+		categoria = CategoriaModel.objects.get(nombre="Bancos")
+		banks = DatoModel.objects.filter(categoria=categoria)
+
 		account = get_object_or_404(CuentaPagar, pk=request.POST.get('account_id'))
+
 		#si está paga
 		if account.status == '2':
 			cuentas = CuentaPagar.objects.all().order_by('id')
-			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'PAYD', 'order':account.order_id})
+			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'PAYD', 'order':account.order_id, 'banks':banks})
 		# si está cancelada
 		if account.status == '1':
 			cuentas = CuentaPagar.objects.all().order_by('id')
-			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'CANCELLED', 'order':account.order_id})
-		if bank.saldo >= account.total:
-			payment = Payment()
-			payment.bank = bank
-			payment.account = account
-			payment.total = account.total
-			saved = payment.save()
-			bank.saldo = bank.saldo - payment.total
-			bank.save()
-			account.status = '2'
-			account.save()
-		else:
+			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'CANCELLED', 'order':account.order_id, 'banks':banks})
+		
+		dato_id = request.POST.get('dato_id_bank')
+		if int(dato_id) == 0:
 			cuentas = CuentaPagar.objects.all().order_by('id')
-			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'NOCREDIT', 'order':account.order_id})
-		return redirect('listarPagar')
+			return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'NOBANK', 'order':account.order_id, 'banks':banks})
+		try:
+			bank = get_object_or_404(DatoModel, pk=dato_id)
+			banks_values = ValorModel.objects.filter(dato_id=int(dato_id), nombre='saldo').first()
+			saldo = Decimal(banks_values.valor)
+			if saldo >= account.total:
+				payment = Payment()
+				payment.bank = bank
+				payment.account = account
+				payment.total = account.total
+				saved = payment.save()
+				saldo = saldo - payment.total
+				banks_values.valor = saldo
+				banks_values.save()
+				account.status = '2'
+				account.save()
+			else:
+				cuentas = CuentaPagar.objects.all().order_by('id')
+				return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'error':'NOCREDIT', 'order':account.order_id})
+			return redirect('listarPagar')
+		except (bank.DoesNotExist):
+			pass
 	else:
 		return redirect('listarPagar')
 
@@ -146,7 +164,9 @@ def payment_details(request, pk):
 	
 def listarPagar (request):
 	cuentas = CuentaPagar.objects.all().order_by('id')
-	return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas})
+	categoria = CategoriaModel.objects.get(nombre="Bancos")
+	banks = DatoModel.objects.filter(categoria=categoria)
+	return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'banks':banks})
 
 def listarCobrar (request):
 	cuentas = CuentaCobrar.objects.all().order_by('id')
@@ -205,5 +225,7 @@ def anularCuenta(request):
 		CuentaCobrar.objects.filter(pk=pk).update(estado=False)
 		return redirect('listarCobrar')
 def listarCuentaEmpresa (request):
+	categoria = CategoriaModel.objects.get(nombre="Bancos")
+	banks = DatoModel.objects.filter(categoria=categoria)
 	cuentas = CuentaEmpresa.objects.all().order_by('id')
-	return render(request, 'cuentas/listarCuentasEmpresa.html',{'cuentas':cuentas})
+	return render(request, 'cuentas/listarCuentasEmpresa.html',{'cuentas':cuentas, 'banks':banks})

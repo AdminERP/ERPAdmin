@@ -14,13 +14,8 @@ class PaymentAccountForm(forms.ModelForm):
 
         categoria = CategoriaModel.objects.get(nombre="Proveedores")
         orders = CuentaPagar.ordenesParaContabilizar()
-        suppliers = DatoModel.objects.filter(categoria=categoria)
-        suppliers_ids = []
-        for supplier in suppliers:
-            suppliers_ids.append(supplier.id)
-        suppliers_values = ValorModel.objects.filter(dato_id__in=suppliers_ids, nombre='nombre')
-        
-        self.fields['supplier'].queryset = suppliers_values
+        suppliers = DatoModel.objects.filter(categoria=categoria).order_by('id')
+        self.fields['supplier'].queryset = suppliers
         self.fields['order'].queryset = orders
 
         if instance and instance.pk:

@@ -10,6 +10,8 @@ class CuentaEmpresa(models.Model):
     saldo = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)   
     def __str__(self):
         return str(self.id)
+
+
 class ServiceOrder(models.Model):
     status = models.CharField(max_length=254, null=False)
     sold_service = models.CharField(max_length=254, null=False)
@@ -104,7 +106,8 @@ class Item(models.Model):
 
 class Payment(models.Model):
     account = models.ForeignKey(CuentaPagar, on_delete=models.CASCADE)
-    bank = models.ForeignKey(CuentaEmpresa, on_delete=models.CASCADE)
+    #bank = models.ForeignKey(CuentaEmpresa, on_delete=models.CASCADE)
+    bank = models.ForeignKey(DatoModel, null=False, blank=False, on_delete=models.CASCADE)
     total = models.DecimalField(null=False, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

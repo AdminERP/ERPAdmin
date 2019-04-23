@@ -119,6 +119,15 @@
                         <!-- Token -->
                         {% csrf_token %}
                         <input type="hidden" name="account_id" id="form-account-id">
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" name="dato_id_bank">
+                                <option value="0">--------------</option>
+                                {% for bank in banks %}
+                                <option value="{{bank.id}}">{{bank.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </form>
                 </div>
 
@@ -132,7 +141,6 @@
         </div>
     </div>
     <!-- /The Modal -->
-
     <!-- The Modal -->
     <div class="modal" id="cancelle-account-modal">
         <div class="modal-dialog">
@@ -164,6 +172,11 @@
         </div>
     </div>
     <!-- /The Modal -->
+
+{% for cuenta in cuentas%}
+    {{cuenta.payment_set.all}}
+{% endfor %}
+
 {% endblock contenido %}
 
 {% block js %}

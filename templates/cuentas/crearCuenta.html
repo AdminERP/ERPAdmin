@@ -51,43 +51,6 @@
                             <strong>{{ form.order.errors }}</strong>
                         </span>
                     </div>
-                    <!--<div class="form-group">
-                        <label>Proveedor</label>
-                        <select 
-
-                            name="supplier_id"
-                            class="form-control {% if form.supplier_id.errors %} is-invalid {% endif %}">
-                            <option value="0">Seleccione --</option>
-                            <option 
-                                value="1" 
-                                {% if form.supplier_id.value == "1"%} selected {% endif %}>
-                                Proveedor 1
-                            </option>
-                            <option 
-                                value="2"
-                                {% if form.supplier_id.value == "2"%} selected {% endif %}>
-                                Proveedor 2
-                            </option>
-                            <option 
-                                value="3"
-                                {% if form.supplier_id.value == "3"%} selected {% endif %}>
-                                Proveedor 3
-                            </option>
-                            <option 
-                                value="4"
-                                {% if form.supplier_id.value == "4"%} selected {% endif %}>
-                                Proveedor 4
-                            </option>
-                            <option 
-                                value="5"
-                                {% if form.supplier_id.value == "5"%} selected {% endif %}>
-                                Proveedor 5
-                            </option>
-                        </select>
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ form.supplier_id.errors }}</strong>
-                        </span>
-                    </div>-->
                     <div class="form-group">
                         <label>Proveedor</label>
                         <select 
@@ -96,9 +59,9 @@
                             <option value="">----------</option>
                             {% for supplier in form.fields.supplier.queryset %}    
                             <option 
-                            value = "{{ supplier.dato_id }}"
+                            value = "{{ supplier.id }}"
                             {% if form.supplier.value == supplier.id %} selected {% endif %}>
-                            {{supplier.valor}}
+                            {{supplier.nombre}}
                             </option>
                             {% endfor %}
                         </select>
@@ -239,7 +202,7 @@
                                             style="pointer-events: none" 
                                             type="text" 
                                             class="form-control {% if form.total.errors %} is-invalid {% endif %} total "
-                                            value="{{ form.total.value|default_if_none:'' }}"
+                                            value="{{ form.total.value|default_if_none:'' }}">
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ form.total.errors }}</strong>
                                             </span>
@@ -278,6 +241,7 @@
     </div>
     <!-- /Error messaging -->
 {% endif %}
+
 {% endblock contenido_panel %}
 
 {% block js %}
