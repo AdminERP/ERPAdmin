@@ -85,6 +85,7 @@ class CuentaPagar(models.Model):
             ('view_cuentaspagar', 'Puede ver las cuentas por pagar'),
             ('add_cuentaspagar', 'Puede agregar cuentas por pagar'),
             ('change_cuentaspagar', 'Puede actualizar cuentas por pagar'),
+            ('delete_cuentaspagar', 'Puede anular cuentas por pagar'),
         )
 
 class Item(models.Model):
@@ -135,5 +136,6 @@ class CuentaCobrar(models.Model):
             ('view_cuentascobrar', 'Puede ver las cuentas por cobrar'),
             ('add_cuentascobrar', 'Puede agregar cuentas por cobrar'),
             ('change_cuentascobrar', 'Puede actualizar cuentas por cobrar'),
+            ('delete_cuentascobrar', 'Puede anular cuentas por cobrar'),
             ('view_ordenesservicio', 'Puede ver las ordenes de servicio en el area de cuentas'),
         )

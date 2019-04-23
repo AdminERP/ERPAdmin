@@ -137,7 +137,7 @@ def pay_account(request):
 		return redirect('listarPagar')
 
 # cancelar una cuenta
-@permission_required('cuentas.change_cuentapagar', raise_exception=True)
+@permission_required('cuentas.delete_cuentapagar', raise_exception=True)
 def cancelle_account(request):
 	if request.POST:
 		account = get_object_or_404(CuentaPagar, pk=request.POST.get('account_id'))
@@ -260,7 +260,7 @@ def crearCuentaCobro(request,pk):
 		form = CuentaCobroForm()
 		return render(request, 'cuentas/crearCuentaCobrar.html', {'form': form, 'serviceOrder':serviceOrder})
 
-@permission_required('cuentas.change_cuentascobrar', raise_exception=True)
+@permission_required('cuentas.delete_cuentacobrar', raise_exception=True)
 def anularCuenta(request):
 	print(request.POST)
 	if request.POST:
