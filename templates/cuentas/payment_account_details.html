@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% load humanize %}
+
+{% block titulo %} Crear Cuenta{% endblock titulo %}
+
+{% block css %}
+
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+{% endblock css %}
+
+{% block titulo_pagina %} Detalle de Cuenta Por Pagar {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Pagar</a></li>
+<li class="active">Crear Cuenta</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Datos de Factura</small>{% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h2>Detalles de la Orden</h2>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 col-md-4" style="text-align: right;">
+                        Orden:
+                    </label>
+                    <label class="col-12 col-md-8">
+                        Orden {{account.order_id}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 col-md-4" style="text-align: right;">
+                        Proveedor:
+                    </label>
+                    <label class="col-12 col-md-8">
+                        Proveedor {{account.supplier_id}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 col-md-4" style="text-align: right;">
+                        Fecha de la factura:
+                    </label>
+                    <label class="col-12 col-md-8">
+                        {{account.invoice_date}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 col-md-4" style="text-align: right;">
+                        Plazo hasta:
+                    </label>
+                    <label class="col-12 col-md-8">
+                        {{account.term_date}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 col-md-4" style="text-align: right;">
+                        Estado:
+                    </label>
+                    <label class="col-12 col-md-8">
+                        {% if account.status == '1' %}
+                            Anulada
+                        {% elif account.status == '2' %}
+                            Pagada - 
+                            {% if payment %}
+                                {{ payment.created_at }}
+                            {% endif %}
+                        {% elif account.status == '3' %}
+                            Pendiente
+                        {% else %}
+                            Vencida
+                        {% endif %}                        
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Items Asociados a la Orden</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="table-accounts" class="table table-bordered table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Itme</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td>{{item.name}}</td>
+                                <td>{{item.value}}</td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-12 col-md-4" style="text-align: right;">
+                        <h1><strong>Total:</strong></h1>
+                    </label>
+                    <label class="col-12 col-md-8">
+                        <h1><strong>{{account.total}}</strong></h1>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido_panel %}
+
+{% block js %}
+<!--Editable Table-->
+<script src="{% static 'dist/js/editable-table.js' %}"></script>
+<!-- Date Picker-->
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+{% endblock js %}

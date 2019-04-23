@@ -1,0 +1,276 @@
+{% extends 'ordenes_servicio/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block miga_pan %}
+<ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Ordenes de Servicio </a></li>
+    <li class="active">Listado</li>
+</ol>
+{% endblock miga_pan %}
+
+{% block titulo %}Orden de Servicio{% endblock titulo %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+
+{% endblock css %}
+
+{% block contenido %}
+<div class="col-md-12">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Ordenes de Servicio</h3>
+        </div>
+        <div class="box-body table-responsive">
+            <table id="tabla_ordenes" class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Estado</th>
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Valor</th>
+                    <th>Encargado</th>
+                    <th>Comentarios</th>
+                    <th>Cambiar Estado a</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for orden in ordenes %}
+                <tr>
+                    <td>{{ orden.id }}</td>
+                    <td id="estado">
+                        {%  if orden.estado == 'AS' %}
+                        <span class="label label-warning">Asignada</span>
+                        {% elif orden.estado == 'TR' %}
+                        <span class="label label-primary">En trámite</span>
+                        {% elif orden.estado == 'CA' %}
+                        <span class="label label-danger">Cancelada</span>
+                        {% elif orden.estado == 'CE' %}
+                        <span class="label label-success">Cerrada</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ orden.cliente }}</td>
+                    <td>{{ orden.servicio_vendido }}</td>
+                    <td>{{ orden.valor }}</td>
+                    <td>{{ orden.encargado }}</td>
+                    <td>{{ orden.comentarios }}</td>
+                    <td>
+                        {%  if orden.estado == 'AS' %}
+                        {% if perms.ordenes_servicio.execute_ordenservicio %}
+                        <button type="button" class="btn btn-primary btn-xs cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_asignacion">Aceptar Orden</button>
+                        {%  elif perms.ordenes_servicio.cancel_ordenservicio %}
+                        <button name="{{orden.estado}}" id="cancelar_boton" type="button" class="btn btn-xs btn-danger cancelar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cancelacion">Cancelada</button>
+                        {% endif %}
+                        {% else %}
+                        
+                        <div class="btn-group btn-group-xs">
+                            {%  if perms.ordenes_servicio.close_ordenservicio %}<button name="{{orden.estado}}" id="cerrar_boton" type="button" class="btn btn-success cerrar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cerrada">Cerrada</button> {% endif %}
+                            {%  if perms.ordenes_servicio.cancel_ordenservicio %}<button name="{{orden.estado}}" id="cancelar_boton" type="button" class="btn btn-danger btn-xs cancelar_orden" data-toggle="modal" data-id={{orden.id}} data-target="#confirmar_cancelacion">Cancelada</button>{% endif %}
+                        </div>
+                        
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="confirmar_cerrada">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cerrar Orden de Servicio</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea cerrar la orden de servicio No.
+                    <b id="my_orden_id"></b>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
+                <button onclick="cerrar_orden_servicio()" type="button" class="btn btn-primary">Si</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<!-- Modal para confirmar asignacion -->
+<div class="modal fade" id="confirmar_asignacion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Aceptar Orden de Servicio</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea aceptar la orden de servicio No.
+                    <b id="my_orden_id"></b>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
+                <button onclick="aceptar_orden_servicio()" type="button" class="btn btn-primary">Si</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<!-- Modal para confirmar cancelacion -->
+<div class="modal fade" id="confirmar_cancelacion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cancelar Orden de Servicio</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro que desea cancelar la orden de servicio No.
+                    <b id="my_orden_id"></b>?</p>
+                    <form>
+                        <div class="form-group">
+                          <label for="">Comentarios sobre la cancelacion:</label>
+                          <input type="text" class="form-control" id="comentarios_cancelacion">
+                        </div>
+                    </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
+                <button onclick="cancelar_orden_servicio()" type="button" class="btn btn-danger">Si</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock contenido %}
+
+{% block js %}
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery-3.3.1.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" language="javascript" src="{% static 'dist/js/dataTables.bootstrap4.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('#tabla_ordenes').DataTable( {
+            columnDefs: [ {
+                targets: [ 0 ],
+                orderData: [ 0, 1 ]
+            }, {
+                targets: [ 1 ],
+                orderData: [ 1, 0 ]
+            }, {
+                targets: [ 4 ],
+                orderData: [ 4, 0 ]
+            } ]
+        } );
+    } );
+    $(document).ready(function() {
+        var botones_cerrar = document.getElementsByName('CE');
+        var botones_cancelar = document.getElementsByName('CA');
+        botones_cancelar.disabled = true;
+        botones_cerrar.disabled = true;
+        for (var i = 0; i < botones_cancelar.length; i++) {
+            var item = botones_cancelar[i];
+            item.disabled = true;
+        }
+        for (var i = 0; i < botones_cerrar.length; i++) {
+            var item = botones_cerrar[i];
+            item.disabled = true;
+        }
+    });
+    //activar modal en cerrar orden
+    $('.cerrar_orden').click(function(){
+        var orden_id = $(this).data('id');
+        $(".modal-body #my_orden_id").text(orden_id);
+    });
+    //activar modal en aceptar orden
+    $('.aceptar_orden').click(function(){
+        var orden_id = $(this).data('id');
+        $(".modal-body #my_orden_id").text(orden_id);
+    });
+    //activar modal en cancelar orden
+    $('.cancelar_orden').click(function(){
+        var orden_id = $(this).data('id');
+        $(".modal-body #my_orden_id").text(orden_id);
+    });
+    //cuando se da click en SI en cerrar orden
+    function cerrar_orden_servicio(){
+        var orden_id = document.getElementById('my_orden_id').innerText;
+        console.log(orden_id);
+        $.ajax({
+            type: "GET",
+            url: '{% url "ordenes_servicio:cerrar_orden_servicio" %}',
+            data: {
+                'orden_id': orden_id
+            },
+            dataType: 'json',
+            success: function(data){
+                //if(data.success == true){ // if true (1)
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 100);
+                //}
+            }
+        });
+    }
+    //cuando se da click en SI en aceptar orden
+    function aceptar_orden_servicio(){
+        var orden_id = document.getElementById('my_orden_id').innerText;
+        console.log(orden_id);
+        $.ajax({
+            type: "GET",
+            url: '{% url "ordenes_servicio:aceptar_orden_servicio" %}',
+            data: {
+                'orden_id': orden_id
+            },
+            dataType: 'json',
+            success: function(data){
+                //if(data.success == true){ // if true (1)
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 100);
+                //}
+            }
+        });
+    }
+    //cuando se da click en SI en cancelar orden
+    function cancelar_orden_servicio(){
+        var orden_id = document.getElementById('my_orden_id').innerText;
+        var comentarios = document.getElementById("comentarios_cancelacion").value; //cambiar
+        console.log(orden_id);
+        $.ajax({
+            type: "GET",
+            url: '{% url "ordenes_servicio:cancelar_orden_servicio" %}',
+            data: {
+                'orden_id': orden_id,
+                'comentarios' : comentarios
+            },
+            dataType: 'json',
+            success: function(data){
+                //if(data.success == true){ // if true (1)
+                    setTimeout(function(){// wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 100);
+                //}
+            }
+        });
+    }
+
+
+</script>
+{% endblock js %}

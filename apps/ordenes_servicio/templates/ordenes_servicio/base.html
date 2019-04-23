@@ -1,0 +1,160 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block titulo %} {% endblock titulo %}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'bower_components/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{% static 'bower_components/Ionicons/css/ionicons.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/AdminLTE.min.css' %}">
+    <!-- Material Design -->
+    <link rel="stylesheet" href="{% static 'dist/css/bootstrap-material-design.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/ripples.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/MaterialAdminLTE.min.css' %}">
+    <!-- AdminLTE Skin -->
+    <link rel="stylesheet" href="{% static 'dist/css/skins/all-md-skins.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+    <!-- Google Font -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    {{ form.media.css }}
+    {% block css %}{% endblock css %}
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="/" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini">E<b>R</b>P</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">ERP<b>Admin</b></span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <!-- Navbar Right Menu -->
+            {% include 'ordenes_servicio/header_options.html' %}
+        </nav>
+    </header>
+
+    {% include 'menu.html' %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                {% block titulo_pagina %}{% endblock titulo_pagina %}
+                <small>{% block descripcion_pagina %}{% endblock descripcion_pagina %}</small>
+            </h1>
+
+
+            <ol class="breadcrumb">
+                {% block miga_pan %}
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+                    <li class="active">Here</li>
+                {% endblock miga_pan %}
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+            {% block contenido %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title"></h3>
+                            </div>
+                            <div class="box-body">
+                                {% block contenido_panel %}{% endblock contenido_panel %}
+                            </div>
+                            <div class="box-footer">
+                                {% block pie_panel %}{% endblock pie_panel %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock contenido %}
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            Universidad del Valle
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2018 <a href="#">ERPAdmin</a>.</strong> Todos los derechos reservados.
+    </footer>
+
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 3 -->
+<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- Material Design -->
+<script src="{% static 'dist/js/material.min.js' %}"></script>
+<script src="{% static 'dist/js/ripples.min.js' %}"></script>
+<script>
+    $.material.init();
+</script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+<script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+{{ form.media.js }}
+
+<script>
+    {% for msg in messages %}
+        $(document).ready(function () {
+            setTimeout(function () {
+                toastr.options = {
+                    "closeButtons": true,
+                    "progressBar": true,
+                    "preventDuplicates": true,
+                    "showEasing": "swing",
+                    "extendedTimeOut": 30000,
+                    "timeOut": 4000,
+                    "positionClass": "toast-bottom-right"
+                }
+                toastr["{{ msg.tags }}"]("{{ msg }}")
+            }, 500);
+        });
+    {% endfor %}
+</script>
+
+{% block js %}{% endblock js %}
+
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+Both of these plugins are recommended to enhance the
+user experience. -->
+</body>
+</html>

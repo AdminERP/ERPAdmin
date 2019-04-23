@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Listar Ordenes {% endblock titulo %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+{% endblock css %}
+
+{% block titulo_pagina %} Ordenes {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Cobrar</a></li>
+<li class="active">Ver Cuentas</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Información de ordenes</small>{% endblock titulo_panel %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Listado de ordenes</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                            <th>#</th>
+                            <th>Servicio prestado</th>
+                            <th>Comentarios</th>
+                            <th>Costo total</th>
+                            <th>Estado</th>
+                            <th>Fecha de Generacion</th>
+                            <th>Generar Cobro</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                           {% for order in orders%}
+                                <tr>
+                                    <td style="text-align: center;">{{order.id}}</td>
+                                    <td>{{order.servicio_vendido}}</td>
+                                    <td>{{order.comentarios}}</td>
+                                    <td>{{order.valor}}</td>
+                                    {% if order.estado == 'CE' %}
+                                        <td><label style="color: red">{{order.estado}}</label></td>
+                                       
+                                    {% else %}
+                                        <td><label style="color: green">{{order.estado}}</label></td>
+                                    {% endif %}
+                                    <td>{{order.fecha_creacion}}</td>
+                                    {% if order.estado == 'CE' %}
+                                    <td style="text-align: center;">
+                                        <a href="/cuentas/crearCuentaCobro/{{order.id}}" style="color: green;">
+                                                <i class="far fa-money-bill-alt fa-2x"></i>
+                                            </a>
+                                    </td>
+                                    {% else %}
+                                        <td style="text-align: center;">
+                                        <a href="#" style="color: gray; pointer-events: none">
+                                                <i class="far fa-money-bill-alt fa-2x"></i>
+                                            </a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>    
+    <!-- /.container -->
+<div class="modal" tabindex="-1" role="dialog" id="cobrar">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" style="display: inline-block;">Generar Cuenta de Cobro</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Desea generar la cuanta de cobro de esta orden de sericio?</p>
+       
+      </div>
+      <div class="modal-footer">
+        <a href="" type="button" class="btn btn-primary" >Generar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{% endblock contenido %}
+
+{% block js %}
+
+<!-- DataTables -->
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<!-- page script -->
+<script>
+   
+        $(function () {
+          $('#example1').DataTable()
+          $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+          })
+        })
+</script>
+<script type="text/javascript">
+    
+</script>
+{% endblock js %}

@@ -1,5 +1,5 @@
 # ERPAdmin
-Sistema de planificación de recursos empresariales
+..Sistema de planificación de recursos empresariales
 
 
 [![Django Version](https://img.shields.io/badge/django-2.0.1-yellow.svg)](https://docs.djangoproject.com/en/2.1/releases/2.0.1/) [![python version](https://img.shields.io/badge/python-3.5.2-blue.svg)](https://www.python.org/downloads/release/python-350/)

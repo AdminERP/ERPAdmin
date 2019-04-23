@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Listar cuenta {% endblock titulo %}
+
+{% block css %}
+
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+{% endblock css %}
+
+{% block titulo_pagina %} Ver cuentas {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Cobrar</a></li>
+<li class="active">Ver Cuentas</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Información de cuentas</small>{% endblock titulo_panel %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Listado de cuentas por cobrar</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                            <th># Cuenta</th>
+                            <th>Servicio prestado</th>
+                            <th>Tarifa</th>
+                            <th>Costo total</th>
+                            <th>Fecha de vencimiento</th>
+                            <th>Cuenta Recaudo</th>
+                            <th>Orden Servicio</th>
+                            <th>Estado</th>
+                            <th>Anular Cuenta</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for cuenta in cuentas%}
+                                <tr>
+                                    <td style="text-align: center;">{{cuenta.id}}</td>
+                                    <td>{{cuenta.servicio}}</td>
+                                    <td>{{cuenta.tarifa}}</td>
+                                    <td>{{cuenta.costo_total}}</td>
+                                    <td>{{cuenta.fecha_vencimiento}}</td>
+                                    <td>{{cuenta.cuenta_empresa}}</td>
+                                    <td>{{cuenta.service_order}}</td>
+                                    {% if cuenta.estado == True %}
+                                    <td>Activa</td>
+                                    {% else %}
+                                    <td>Anulada</td>
+                                    {% endif %}
+                                    {% if cuenta.estado == True %}
+                                    <td style="text-align: center;">
+                                        <a href="#" style="color: red;" onclick="cancellModal('{{cuenta.id}}')">
+                                                <i class="fas fa-ban fa-2x"></i>
+                                            </a>
+                                    </td>
+                                    {% else %}
+                                        <td style="text-align: center;">
+                                        <a href="#" style="color: gray; pointer-events: none">
+                                                <i class="fas fa-ban fa-2x"></i>
+                                            </a>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>    
+    <!-- /.container -->
+ <div class="modal" id="cancelle-account-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h2 class="modal-title" style="display: inline-block;">Confirme anulación de cuenta!</h2>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <h3 id="modal-title-cancelle"></h3>  
+                    <form method="POST" action="{% url 'anularCuenta' %}" id="cancelle-account-form">
+                        <!-- Token -->
+                        {% csrf_token %}
+                        <input type="hidden" name="account_id" id="form-account-id-1">
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" form="cancelle-account-form">Anular Cuenta</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock contenido %}
+
+{% block js %}
+
+<!-- DataTables -->
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
+
+<!-- page script -->
+<script>
+        $(function () {
+          $('#example1').DataTable()
+          $('#example2').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : true,
+            'info'        : true,
+            'autoWidth'   : false
+          })
+        })
+         function cancellModal(account_id){
+        $("#modal-title-cancelle").text("Desea Anular esta cuenta?");
+        $("#form-account-id-1").val(account_id);
+        $("#cancelle-account-modal").modal("show");
+    }
+
+        function nullInvoice(id){
+            $.ajax({
+                 type:"POST",
+                 url:"/cuentas/anularCuenta/",
+                 data: {id:id, 'csrfmiddlewaretoken':'{{ csrf_token }}'},
+                 success: function(){
+                    location.reload();
+                    
+                }
+            });
+        }
+</script>
+{% endblock js %}

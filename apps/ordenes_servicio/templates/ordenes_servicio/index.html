@@ -1,0 +1,91 @@
+{% extends 'ordenes_servicio/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block miga_pan %}
+{% endblock miga_pan %}
+
+{% block titulo %}Ordenes de Servicio{% endblock titulo %}
+
+{% block titulo_pagina %}Bienvenido! {{ request.user.get_full_name}}{% endblock titulo_pagina %}
+
+{% block css %}
+    <style media="screen">
+    </style>
+{% endblock css %}
+
+{% block contenido %}
+
+    <div class="row">
+        {% for box in boxes %}
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box {{ box.color }}">
+                    <div class="inner">
+                        <h3>{{ box.value }}</h3>
+
+                        <p>{{ box.title }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion {{ box.icon }}"></i>
+                    </div>
+                    <a href="{% url 'ordenes_servicio:consultar_orden_servicio' %}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="timeline">
+                {% for orden in ordenes_timeline %}
+                  <!-- timeline time label -->
+                    <li class="time-label">
+                        <span class="bg-olive-active">
+                            {{ orden.fecha_creacion.date }}
+                        </span>
+                    </li>
+                    <!-- /.timeline-label -->
+
+                    <!-- timeline item -->
+                    <li>
+                        <!-- timeline icon -->
+                        <i class="fa fa-envelope bg-blue"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> {{ orden.fecha_creacion.time }}</span>
+
+                            <h3 class="timeline-header"><a href="{% url 'ordenes_servicio:consultar_orden_servicio' %}">{{ orden.servicio_vendido }}</a>
+                                {% if orden.estado == 'AS' %}
+                                    <span class="label label-info pull-right">Por Atender</span>
+                                {% endif %}
+                                {% if orden.estado == 'TR' %}
+                                    <span class="label label-primary pull-right">En Trámite</span>
+                                {% endif %}
+                            </h3>
+
+                            <div class="timeline-body">
+                                {{ orden.comentarios }}
+                            </div>
+                            <div class="timeline-footer bg-gray-light">
+                                {% if orden.estado == 'CA' %}
+                                    Esta orden fue: <span class="label label-danger">Cancelada</span>
+                                {% elif orden.estado == 'CE' %}
+                                    Esta orden fue: <span class="label label-success">Cerrada</span>
+                                {% else %}
+                                {% if orden.fecha_atencion is not None %}
+                                    La orden debe de realizarse el: <span class="label label-warning">{{ orden.fecha_atencion }}</span>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+{% endblock contenido %}
+
+{% block js %}
+
+{% endblock js %}

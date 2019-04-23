@@ -1,3 +1,4 @@
+ERPAdmin/settings.py
 apps/*/migrations/
 **/__pycache__/
 *.log
@@ -6,9 +7,12 @@ apps/*/migrations/
 media/
 .idea
 db.sqlite3
+.env/
+<<<<<<< HEAD
 venv/
 myenv/
 .vscode/
-
-.env/
+ERPAdmin/settings.py
+apps/ordenes_servicio/fixtures/*
 ERPAdmin/settings*
+

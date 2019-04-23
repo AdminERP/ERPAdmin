@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Listar cuentas {% endblock titulo %}
+
+{% block css %}
+
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+
+
+{% endblock css %}
+
+{% block titulo_pagina %} {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Pagar</a></li>
+<li class="active">Ver Cuentas</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Información de cuentas</small>{% endblock titulo_panel %}
+
+{% block contenido %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Listado de cuentas por pagar</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="table-accounts" class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th># Órden</th>
+                                    <th>Proveedor</th>
+                                    <th>Factura</th>
+                                    <th>Fecha de factura</th>
+                                    <th>Total</th>
+                                    <th>Plazo</th>
+                                    <th>Estado</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cuenta in cuentas%}
+                                    <tr>
+                                        <td style="text-align: center;">{{cuenta.order_id}}</td>
+                                        <td style="text-align: center;">{{cuenta.supplier_id}}</td>
+                                        <td>{{cuenta.invoice}}</td>
+                                        <td>{{cuenta.invoice_date}}</td>
+                                        <td>{{cuenta.total}}</td>
+                                        <td>{{cuenta.term_date}}</td>
+                                        {% if cuenta.status == '1' %}
+                                            <td><label style="color: gray">Anulada</label></td>
+                                        {% elif cuenta.status == '2' %}
+                                            <td><label style="color: green">Pagada</label></td>
+                                        {% elif cuenta.status == '3' %}
+                                            <td><label style="color: orange">Pendiente</label></td>
+                                        {% else %}
+                                            <td><label style="color: red">Vencida</label></td>
+                                        {% endif %} 
+
+                                        <td>
+                                            {% if cuenta.status != '1' and cuenta.status != '2'%}
+                                            <a href="{% url 'payment_account_edit' pk=cuenta.pk %}" style="color: orange;">
+                                                <i class="far fa-edit fa-2x"></i>
+                                            </a>
+                                            <a href="#" style="color: green;" onclick="paymentModal('{{cuenta.order_id}}', '{{cuenta.pk}}')">
+                                                <i class="far fa-money-bill-alt fa-2x"></i>
+                                            </a>
+                                            <a href="#" style="color: red;" onclick="cancellModal('{{cuenta.order_id}}', '{{cuenta.pk}}')">
+                                                <i class="fas fa-ban fa-2x"></i>
+                                            </a>
+                                            {% endif %}
+                                            <a href="{% url 'payment_account_details' pk=cuenta.pk %}" style="color: gray;">
+                                                <i class="far fa-list-alt fa-2x"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>    
+    <!-- /.container -->
+
+    <!-- The Modal -->
+    <div class="modal" id="pay-account-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirmación de pago!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <h3 id="modal-title"></h3>  
+                    <form method="POST" action="{% url 'pay_account' %}" id="pay-account-form">
+                        <!-- Token -->
+                        {% csrf_token %}
+                        <input type="hidden" name="account_id" id="form-account-id">
+                        <div class="form-group">
+                            <label>Banco</label>
+                            <select class="form-control" name="dato_id_bank">
+                                <option value="0">--------------</option>
+                                {% for bank in banks %}
+                                <option value="{{bank.id}}">{{bank.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" form="pay-account-form">Pagar Cuenta</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /The Modal -->
+    <!-- The Modal -->
+    <div class="modal" id="cancelle-account-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirme anulación de cuenta!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <h3 id="modal-title-cancelle"></h3>  
+                    <form method="POST" action="{% url 'cancelle_account' %}" id="cancelle-account-form">
+                        <!-- Token -->
+                        {% csrf_token %}
+                        <input type="hidden" name="account_id" id="form-account-id-1">
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger" form="cancelle-account-form">Anular Cuenta</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /The Modal -->
+
+{% for cuenta in cuentas%}
+    {{cuenta.payment_set.all}}
+{% endfor %}
+
+{% endblock contenido %}
+
+{% block js %}
+
+<!-- DataTables -->
+<script src="{% static 'dist/js/editable-table.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<!-- page script -->
+<script>
+    {% if error %}
+        {% if error == 'NOCREDIT' %}
+            toastr.error('El saldo es insuficiente para pagar la cuenta asociada a la orden '+'{{order}}', 'Error pagar la cuenta');
+        {% elif error == 'PAYD' %}
+            toastr.error('La cuenta asociada a la orden '+'{{order}}'+' ya está paga', 'Error pagar la cuenta');
+        {% elif error == 'CANCELLED' %}
+            toastr.error('La cuenta asociada a la orden '+'{{order}}'+' ya está anulada', 'Error pagar la cuenta');
+        {% endif %}
+    {% endif %}
+    $('#table-accounts').DataTable({
+        'paging'      : true,
+        'lengthChange': false,
+        'searching'   : true,
+        'ordering'    : true,
+        'info'        : true,
+        'autoWidth'   : false,
+        "language": {
+            "url":"//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json",
+        },
+        "columnDefs": [
+            { "orderable": true, "targets": [ 0,1,2,3,4,5,6 ] },
+            { "orderable": false, "targets": [ 7 ] },
+            { "className": "text-center", "targets": [0,1,2,4,5,6,7] },
+            { "className": "text-right", "targets": [3] },
+        ],
+    });
+
+    function paymentModal(order_id, account_id){
+        $("#modal-title").text("Desea Pagar la cuenta asociada a la orden "+order_id+"?");
+        $("#form-account-id").val(account_id);
+        $("#pay-account-modal").modal("show");
+    }
+
+    function cancellModal(order_id, account_id){
+        $("#modal-title-cancelle").text("Desea Anular la cuenta asociada a la orden "+order_id+"?");
+        $("#form-account-id-1").val(account_id);
+        $("#cancelle-account-modal").modal("show");
+    }
+</script>
+{% endblock js %}
