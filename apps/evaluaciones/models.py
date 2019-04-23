@@ -15,6 +15,7 @@ class Question(models.Model):
 
     class Meta:
         permissions = (
+            ('view_questions', 'Puede consultar las preguntas'),
             ('activate_question', 'Puede activar/desactivar preguntas'),
         )
 
@@ -30,6 +31,7 @@ class EmployeeEvaluation(models.Model):
 
     class Meta:
         permissions = (
+            ('view_employeeevaluation', 'Puede consultar las evaluaciones de empleados'),
             ('activate_employeeevaluation', 'Puede activar/desactivar evaluaciones de empleados'),
         )
 
