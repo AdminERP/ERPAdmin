@@ -15,6 +15,7 @@ from django.views.generic import TemplateView
 from chartjs.views.lines import BaseLineChartView
 from apps.datosmaestros.models import DatoModel, ValorModel, CategoriaModel
 from decimal import Decimal
+from django.contrib.auth.decorators import permission_required, login_required
 
 
 def index(request):
@@ -35,7 +36,8 @@ class LineChartJSONView(BaseLineChartView):
         return [[75, 44, 92, 11, 44, 95, 35]]
 
 
-# Create your views here.
+# Crear cuenta por pagar
+@permission_required('cuentas.add_cuentapagar', raise_exception=True)
 def create_account (request):
 	if request.POST:
 		form = PaymentAccountForm(request.POST)
@@ -57,6 +59,8 @@ def create_account (request):
 		form = PaymentAccountForm()
 		return render(request, 'cuentas/crearCuenta.html', {'form':form})
 
+# Editar cuenta por pagar
+@permission_required('cuentas.change_cuentapagar', raise_exception=True)
 def payment_account_edit(request, pk):
 	account = get_object_or_404(CuentaPagar, pk=pk)
 	if account.status == '1' or account.status == '2':
@@ -83,6 +87,8 @@ def payment_account_edit(request, pk):
 	else:
 		return render(request, 'cuentas/payment_account_edit.html', {'form':form, 'items':items})
 
+# Pago de una cuenta
+@permission_required('cuentas.add_payment', raise_exception=True)
 def pay_account(request):
 	if request.POST:
 		# Cuentas bancarias en caso de error
@@ -128,6 +134,8 @@ def pay_account(request):
 	else:
 		return redirect('listarPagar')
 
+# Pago de una cuenta
+@permission_required('cuentas.change_cuentapagar', raise_exception=True)
 def cancelle_account(request):
 	if request.POST:
 		account = get_object_or_404(CuentaPagar, pk=request.POST.get('account_id'))
@@ -145,10 +153,14 @@ def cancelle_account(request):
 	else:
 		return redirect('listarPagar')
 
+# Ver pagos
+@permission_required('cuentas.view_payment', raise_exception=True)
 def payments(request):
 	payments = Payment.objects.all().order_by('id')
 	return render(request, 'cuentas/payments.html', {'payments':payments})
 
+#Ver detalles de una cuenta
+@permission_required('cuentas.view_cuentapagar', raise_exception=True)
 def payment_account_details(request, pk):
 	account = get_object_or_404(CuentaPagar, pk=pk)
 	items = account.item_set.all()
@@ -158,6 +170,8 @@ def payment_account_details(request, pk):
 	else:
 		return render(request, 'cuentas/payment_account_details.html', {'account':account, 'items':items})
 
+# Ver pagos
+@permission_required('cuentas.view_payment', raise_exception=True)
 def payment_details(request, pk):
 	payment = get_object_or_404(Payment, pk=pk)
 	return render(request, 'cuentas/payment_details.html', {'payment':payment})
@@ -238,7 +252,7 @@ def listarCuentaEmpresa (request):
 		categoria = CategoriaModel.objects.get(nombre="Bancos")
 	except CategoriaModel.DoesNotExist:
 		categoria = None
-		
+
 	if categoria != None:
 		banks = DatoModel.objects.filter(categoria=categoria)
 	else:

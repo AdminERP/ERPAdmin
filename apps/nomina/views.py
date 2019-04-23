@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
+from apps.datosmaestros.models import CategoriaModel, DatoModel, ValorModel
 from ..usuarios.models import Usuario, Cargo
 from apps.nomina.models import EmployeePayroll, Payroll
 from django.contrib.auth.decorators import permission_required, login_required
@@ -10,6 +11,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.conf import settings
+from decimal import Decimal
 
 # Create your views here.
 @login_required()
@@ -27,34 +29,60 @@ def create_payroll(request):
     payroll_registry.save()
     sum_payroll = 0
     total_error_not_payment = 0
-    for employee in active_employees:
-        try:
-            email_to, gross_salary, tax, net_salary = register_payroll_individual(employee, payroll_registry)
-        except Exception as e:
-            print(e)
-            print("Hubo un error con registro de nomina de " + employee.get_full_name())
-            total_error_not_payment = total_error_not_payment + 1
-        else:
-            try:
-                email(email_to=email_to, name=employee.get_full_name(), id_type=employee.id_type, id_number=employee.cedula,
-                      gross_salary=gross_salary, tax=tax, net_salary=net_salary, bank=employee.bank, eps=employee.eps,
-                      pension_fund=employee.pension_fund, severance_fund=employee.severance_fund,
-                      date_payment=payroll_registry.date)
-                sum_payroll = sum_payroll + employee.salary
-            except OSError as e:
-                print("Hubo un error al conectar con la red para enviar correo")
-                total_error_not_payment = total_error_not_payment + 1
 
-    if total_error_not_payment == 0:
-        send_data = {
-            'message': "La nomina ha sido registrada correctamente para cada colaborador.",
-            'type': 'success'
-        }
-    else:
-        send_data = {
-            'message': "Hubo un error al enviar "+ str(total_error_not_payment) + " de " + str(len(active_employees)),
-            'type': 'error'
-        }
+    for employee in active_employees:
+        sum_payroll = sum_payroll + employee.salary
+
+    categoria = CategoriaModel.objects.get(nombre="Bancos")
+    banks = DatoModel.objects.filter(categoria=categoria)
+
+    try:
+        bank = get_object_or_404(DatoModel, nombre="Banco 1")
+        banks_values = ValorModel.objects.filter(dato_id=bank.id, nombre='saldo').first()
+        saldo = Decimal(banks_values.valor)
+
+        if saldo >= sum_payroll:
+            for employee in active_employees:
+                try:
+                    email_to, gross_salary, tax, net_salary = register_payroll_individual(employee, payroll_registry)
+                except Exception as e:
+                    print(e)
+                    print("Hubo un error con registro de nomina de " + employee.get_full_name())
+                    total_error_not_payment = total_error_not_payment + 1
+                else:
+                    try:
+                        email(email_to=email_to, name=employee.get_full_name(), id_type=employee.id_type, id_number=employee.cedula,
+                              gross_salary=gross_salary, tax=tax, net_salary=net_salary, bank=employee.bank, eps=employee.eps,
+                              pension_fund=employee.pension_fund, severance_fund=employee.severance_fund,
+                              date_payment=payroll_registry.date)
+                    except OSError as e:
+                        print("Hubo un error al conectar con la red para enviar correo")
+                        total_error_not_payment = total_error_not_payment + 1
+
+            if total_error_not_payment == 0:
+
+                saldo = saldo - sum_payroll
+                banks_values.valor = saldo
+                banks_values.save()
+
+                send_data = {
+                    'message': "La nomina ha sido registrada correctamente para cada colaborador.",
+                    'type': 'success'
+                }
+            else:
+                send_data = {
+                    'message': "Hubo un error al enviar " + str(total_error_not_payment) + " de " + str(
+                        len(active_employees)),
+                    'type': 'error'
+                }
+        else:
+            send_data = {
+                'message': "Hubo un error al realizar el pago de la nomina, saldo insuficiente en la cuenta",
+                'type': 'error'
+            }
+
+    except (bank.DoesNotExist):
+        pass
 
     return JsonResponse(send_data)
 

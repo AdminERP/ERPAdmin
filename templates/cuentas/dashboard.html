@@ -270,5 +270,19 @@
         var ctx1 = document.getElementById('grafica4').getContext('2d');
         new Chart(ctx1, config);
     }
+
+    $.ajax({
+        url: 'getEvents/',
+        datatype: 'json',
+        type: 'GET',
+        sucess: function(data) {
+            console.log(data);
+            // $.each(data, function(index, element) {
+            //     $('body').append($('<div>', {
+            //         text: element.name
+            //     }));
+            // });
+        }
+    });
 </script>
 {% endblock js %}
