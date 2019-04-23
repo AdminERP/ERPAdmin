@@ -163,9 +163,18 @@ def payment_details(request, pk):
 	return render(request, 'cuentas/payment_details.html', {'payment':payment})
 	
 def listarPagar (request):
+	try:
+		categoria = CategoriaModel.objects.get(nombre="Bancos")
+	except CategoriaModel.DoesNotExist:
+		categoria = None
+
 	cuentas = CuentaPagar.objects.all().order_by('id')
-	categoria = CategoriaModel.objects.get(nombre="Bancos")
-	banks = DatoModel.objects.filter(categoria=categoria)
+
+	if categoria != None:
+		banks = DatoModel.objects.filter(categoria=categoria)
+	else:
+		banks = None
+
 	return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'banks':banks})
 
 def listarCobrar (request):
@@ -225,7 +234,14 @@ def anularCuenta(request):
 		CuentaCobrar.objects.filter(pk=pk).update(estado=False)
 		return redirect('listarCobrar')
 def listarCuentaEmpresa (request):
-	categoria = CategoriaModel.objects.get(nombre="Bancos")
-	banks = DatoModel.objects.filter(categoria=categoria)
+	try:
+		categoria = CategoriaModel.objects.get(nombre="Bancos")
+	except CategoriaModel.DoesNotExist:
+		categoria = None
+		
+	if categoria != None:
+		banks = DatoModel.objects.filter(categoria=categoria)
+	else:
+		banks = None
 	cuentas = CuentaEmpresa.objects.all().order_by('id')
 	return render(request, 'cuentas/listarCuentasEmpresa.html',{'cuentas':cuentas, 'banks':banks})

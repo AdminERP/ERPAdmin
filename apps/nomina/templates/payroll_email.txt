@@ -1,0 +1,11 @@
+Cancelación de nómina
+Nombre:....................{{ name }}
+Documento:.................{{ id_type }} {{ id_number}}
+Salario bruto:.............{{ gross_salary }}
+Impuestos:.................{{ tax }}
+Salario neto:..............{{ net_salary }}
+Banco:.....................{{ bank }}
+EPS:.......................{{ eps }}
+Fondo de pensiones:........{{ pension_fund }}
+Fonde de cesantías:........{{ severance_fund }}
+Fecha de generación:.......{{ date_payment }}

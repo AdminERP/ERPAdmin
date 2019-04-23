@@ -24,6 +24,8 @@ from apps.inventario.models import Entrada
 #     def __str__(self):
 #         return '%s' % (self.nombre)
 
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
 
 class SolicitudCompra(models.Model):
 
@@ -119,13 +121,7 @@ class OrdenCompra(models.Model):
         except OrdenCompra.DoesNotExist:
             return None
     
-    def send_notification(self):
-        if self.estado_aprobacion == 'aprobado_gerente':
-            # TODO generar pdf con la informacion de la orden y enviarla por email
-            pass
-        elif self.estado_aprobacion == 'rechazada':
-            # TODO enviar correo al solicitante y al jefe de compras informando que se rechazo
-            pass
+    
 
     class Meta:
         permissions = (

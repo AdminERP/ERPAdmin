@@ -31,11 +31,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <!--datatable-->
     <link rel="stylesheet" type="text/css" href="{% static 'plugins/DataTables/datatables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'dist/css/personalised_css.css' %}">
     {{ form.media.css }}
     {% block css %}{% endblock css %}
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-mini"> <!-- sidebar-collapse -->
 <div class="wrapper">
 
     <!-- Main Header -->

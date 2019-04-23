@@ -11,10 +11,15 @@ class PaymentAccountForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PaymentAccountForm, self).__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
-
-        categoria = CategoriaModel.objects.get(nombre="Proveedores")
+        try:
+            categoria = CategoriaModel.objects.get(nombre="Proveedores")
+        except CategoriaModel.DoesNotExist:
+            categoria = None
         orders = CuentaPagar.ordenesParaContabilizar()
-        suppliers = DatoModel.objects.filter(categoria=categoria).order_by('id')
+        if categoria != None:
+            suppliers = DatoModel.objects.filter(categoria=categoria).order_by('id')
+        else:
+            suppliers = None
         self.fields['supplier'].queryset = suppliers
         self.fields['order'].queryset = orders
 
