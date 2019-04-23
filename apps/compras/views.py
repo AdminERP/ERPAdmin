@@ -80,8 +80,7 @@ class SolicitudList(LoginRequiredMixin, ListView) :
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
 
-        if usuario.cargo.name != "empleado" and usuario.cargo.name != "gerente":
-            #TODO: consultar los empleados a cargo para filtrar las solicitudes
+        if usuario.cargo.name != "operario" and usuario.cargo.name != "gerente":
             subordinados = []
             sub_query = Usuario.consultar_subordinados(usuario.id)
             for sub in sub_query:
