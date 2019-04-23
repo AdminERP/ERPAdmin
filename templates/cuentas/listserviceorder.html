@@ -46,17 +46,17 @@
                            {% for order in orders%}
                                 <tr>
                                     <td style="text-align: center;">{{order.id}}</td>
-                                    <td>{{order.sold_service}}</td>
-                                    <td>{{order.comments}}</td>
-                                    <td>{{order.total}}</td>
-                                    {% if order.status == 'cerrada' %}
-                                        <td><label style="color: red">{{order.status}}</label></td>
+                                    <td>{{order.servicio_vendido}}</td>
+                                    <td>{{order.comentarios}}</td>
+                                    <td>{{order.valor}}</td>
+                                    {% if order.estado == 'CE' %}
+                                        <td><label style="color: red">{{order.estado}}</label></td>
                                        
                                     {% else %}
-                                        <td><label style="color: green">{{order.status}}</label></td>
+                                        <td><label style="color: green">{{order.estado}}</label></td>
                                     {% endif %}
-                                    <td>{{order.created_at}}</td>
-                                    {% if order.status == 'cerrada' %}
+                                    <td>{{order.fecha_creacion}}</td>
+                                    {% if order.estado == 'CE' %}
                                     <td style="text-align: center;">
                                         <a href="/cuentas/crearCuentaCobro/{{order.id}}" style="color: green;">
                                                 <i class="far fa-money-bill-alt fa-2x"></i>

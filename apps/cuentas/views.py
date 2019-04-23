@@ -14,6 +14,7 @@ from random import randint
 from django.views.generic import TemplateView
 from chartjs.views.lines import BaseLineChartView
 from apps.datosmaestros.models import DatoModel, ValorModel, CategoriaModel
+from apps.ordenes_servicio.models import OrdenServicio
 from decimal import Decimal
 
 
@@ -173,7 +174,7 @@ def listarCobrar (request):
 	return render(request, 'cuentas/listarCuentaCobrar.html',{'cuentas':cuentas})
 
 def listServiceOrder (request):
-	orders = ServiceOrder.objects.all().order_by('id')
+	orders = OrdenServicio.objects.all().order_by('id')
 	form = CuentaCobroForm()
 	return render(request, 'cuentas/listserviceorder.html', {'orders':orders,'form': form})
 
