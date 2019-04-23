@@ -206,18 +206,12 @@ def send_aprov_notification(orden):
         dato = orden.cotizacion.proveedor 
         valor_email_proveedor = ValorModel.objects.filter(dato=dato , nombre = 'email').get().valor
 
-        #solicitante= orden.solicitante.email
-
         email_proveedor = EmailMessage( 
             subject = 'Aprobación de Compra',
             body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
             from_email = settings.EMAIL_HOST_USER,
             to = [valor_email_proveedor,  ],
         )
-        # send_pdf = render_to_pdf(
-        # 'compras/send.html',
-        # {'cotizacion': orden.cotizacion ,},
-        # )
 
         send_pdf = create_pdf(orden.cotizacion)
         email_proveedor.attach('cotización.pdf', send_pdf , 'application/pdf')
