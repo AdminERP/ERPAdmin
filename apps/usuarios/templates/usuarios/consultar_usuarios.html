@@ -39,7 +39,9 @@
 						<th>Correo</th>
 						<th>Tel.</th>
 						<th>Estado</th>
+                        {% if action == 'list' %}
 						<th>Acciones</th>
+                        {% endif %}
 					</tr>
 					</thead>
 					<tbody>
@@ -57,6 +59,7 @@
 								{% else %} <span class="badge bg-red">Inactivo</span>
 								{% endif %}
 							</td>
+                        {% if action == 'list' %}
 							<td>
 								{% if perms.usuarios.change_usuario %}
 									<div class="input-group-btn">
@@ -78,6 +81,10 @@
 												<li><a href="{% url 'usuarios:reestablecer_password' usuario.id %}">Reestablecer
 													Password</a></li>
 											{% endif %}
+                                            {% if perms.evaluaciones.add_employeeevaluation %}
+                                                <li><a href="{% url 'evaluaciones:crear_evaluacion' usuario.id %}">
+                                                    Evaluar Usuario</a></li>
+                                            {% endif %}
 											<li class="divider"></li>
 											{% if perms.usuarios.activate_usuario %}
 												<li><a href="#" class="activate_user"
@@ -93,12 +100,21 @@
 									</div>
 								{% endif %}
 							</td>
+                        {% endif %}
 						</tr>
 					{% endfor %}
 					</tbody>
 				</table>
 			</div>
 		</div>
+
+        {% if action == 'payroll' %}
+            <div class="payroll" data-url="{% url 'nomina:creacion_nomina' %}">
+                <button type="button" class="btn btn-block btn-success btn-lg"
+                        data-toggle="modal" data-target="#payroll-modal" href="#">GENERAR NOMINA
+                </button>
+            </div>
+        {% endif %}
 	</div>
 
 	<!--modal-confirmacion-->
@@ -123,10 +139,38 @@
 		</div>
 	</div>
 	<!--modal-confirmacion-->
+
+    <!--modal-payroll-->
+    <div class="modal fade" id="payroll-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Generar nómina</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Generar nómina?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    <button id="generate-payroll" type="button" class="btn btn-primary" onclick="payPayroll()">Generar
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
 {% endblock contenido %}
 
 
 {% block js %}
+
+    <script src='{% static 'plugins/blockUI/blockUI.js' %}'></script>
 	<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
 	<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
 
@@ -224,5 +268,43 @@
         });
 
 	</script>
+
+    <script type="text/javascript">
+
+        var payroll_url = "";
+
+        $(document).ready(function () {
+            $('.payroll').click(function () {
+                payroll_url = $(this).attr('data-url');
+            });
+        });
+
+        function payPayroll() {
+            $.blockUI({
+                message: '<h4><i class="fa fa-spinner fa-spin"></i> Generando nómina</h4>',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#0d8aee',
+                    opacity: 1,
+                    color: '#ffffff',
+                    font: 'Roboto,Helvetica,Arial,sans-serif'
+                }
+            });
+            $.ajax({
+                url: payroll_url,
+                data: {},
+                dataType: 'json'
+            }).done(function (data) {
+                toastr["" + data.type]("" + data.message);
+            }).always(function () {
+                $.unblockUI();
+            });
+
+            $("#payroll-modal").modal('hide');
+        }
+
+    </script>
+
 	{{ form.media.js }}
 {% endblock js %}

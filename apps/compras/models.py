@@ -1,28 +1,12 @@
 """ Modelos propios modulo Compras """
 
 from django.db import models
+
+from apps.datosmaestros.models import DatoModel
 from apps.usuarios.models import Usuario
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
 from apps.inventario.models import Entrada
-
-# TODO: Integrar con modulo de datos maestros y traer esta info de alli
-class Proveedor(models.Model):
-    nombre = models.CharField(max_length=50)
-    direccion = models.CharField(max_length=50)
-    telefono = models.CharField(max_length=10)
-    email = models.EmailField()
-
-    def __str__(self):
-        return '%s' % (self.nombre)
-
-# TODO: Integrar con modulo de datos maestros y traer esta info de alli
-class Articulo(models.Model):
-    nombre = models.CharField(max_length=50)
-    descripcion = models.CharField(max_length=150)
-
-    def __str__(self):
-        return '%s' % (self.nombre)
-
-
 class SolicitudCompra(models.Model):
 
     PENDIENTE = 'pendiente'
@@ -46,7 +30,7 @@ class SolicitudCompra(models.Model):
 
     solicitante = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     cantidad = models.SmallIntegerField()
-    articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
+    articulo = models.ForeignKey(DatoModel, on_delete=models.CASCADE)
 
     class Meta:
         permissions = (
@@ -64,7 +48,7 @@ class Cotizacion(models.Model):
     total = models.DecimalField(max_digits=17, decimal_places=2)
     fecha_realizada = models.DateField()
 
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    proveedor = models.ForeignKey(DatoModel, on_delete=models.CASCADE)
     solicitud = models.ForeignKey(SolicitudCompra, on_delete=models.CASCADE)
 
     def get_absolute_url(self):

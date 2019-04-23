@@ -1,4 +1,3 @@
-ERPAdmin/settings.py
 apps/*/migrations/
 **/__pycache__/
 *.log
@@ -11,3 +10,5 @@ venv/
 myenv/
 .vscode/
 
+.env/
+ERPAdmin/settings*
