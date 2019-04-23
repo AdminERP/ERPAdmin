@@ -63,8 +63,8 @@ h4 {
               <td class="sorting_1 text-center" tabindex="0">{{ orden.fecha_esperada }}</td>
               <td class="sorting_1 text-center" tabindex="0">{% if entrada.condicion %} <span style="color: green;">Buena</span> {% else %} <span style="color: red;">Mala</span> {% endif %}</td>
               <td class="sorting_1 text-center" tabindex="0">
-                  <a class="btn btn-info" href="#modal-datos" data-toggle="modal" data-id="{{ orden.id }}" data-articulo="{{ orden.solicitud.articulo }}"
-                  data-cantidad="{{ orden.solicitud.cantidad }}" data-condicion="{% if entrada.condicion %} Buena {% else %} Mala {% endif %}" data-comentario="{{ entrada.comentario }}">
+                  <a class="btn btn-info" href="#modal-datos" data-toggle="modal" data-id="{{ orden.id }}" data-articulo="{{ orden.cotizacion.solicitud.articulo }}"
+                  data-cantidad="{{ orden.cotizacion.solicitud.cantidad }}" data-condicion="{% if entrada.condicion %} Buena {% else %} Mala {% endif %}" data-comentario="{{ entrada.comentario }}">
                       Comentario
                   </a>
               </td>
