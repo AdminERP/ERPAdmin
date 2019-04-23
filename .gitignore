@@ -12,7 +12,6 @@ db.sqlite3
 venv/
 myenv/
 .vscode/
-<<<<<<< HEAD
 ERPAdmin/settings.py
 apps/ordenes_servicio/fixtures/*
 ERPAdmin/settings*
