@@ -259,3 +259,8 @@ def listarCuentaEmpresa (request):
 		banks = None
 	cuentas = CuentaEmpresa.objects.all().order_by('id')
 	return render(request, 'cuentas/listarCuentasEmpresa.html',{'cuentas':cuentas, 'banks':banks})
+
+
+# Graficas
+def ingresos(request):
+	return JsonResponse({'value':'1000000'}, content_type="application/json")

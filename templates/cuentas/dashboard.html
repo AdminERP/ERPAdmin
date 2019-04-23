@@ -34,7 +34,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <center><h2>INGRESOS</h2></center>
-                        <center><h1>$ 35.550.000</h1></center>
+                        <center><h1 id="ingresos">$ 35.550.000</h1></center>
                     </div>
                     <div class="panel-footer" style="color: #31708f; background-color: #d9edf7">
                         IVA: $ 6.754.500
@@ -272,11 +272,11 @@
     }
 
     $.ajax({
-        url: 'getEvents/',
+        url: 'ingresos/',
         datatype: 'json',
         type: 'GET',
         sucess: function(data) {
-            console.log(data);
+            $("#ingresos").text(data.value);
             // $.each(data, function(index, element) {
             //     $('body').append($('<div>', {
             //         text: element.name
