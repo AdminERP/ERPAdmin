@@ -50,8 +50,8 @@
                 {% for nomina in lista_nomina %}
                     <tr>
                         <td>{{ nomina.payroll.date }}</td>
-                        <td>{{ nomina.employee.identification }}</td>
-                        <td>{{ nomina.employee.name }}</td>
+                        <td>{{ nomina.employee.cedula }}</td>
+                        <td>{{ nomina.employee.first_name }}</td>
                         <td>{{ nomina.gross_salary }}</td>
                         <td>{{ nomina.tax }}</td>
                         <td>{{ nomina.net_salary }}</td>

@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'apps.evaluaciones',
     'apps.nomina',
-    'apps.usuarios'
+    'apps.usuarios',
+    'apps.datosmaestros'
 ]
 dependencies = [
     ('ook', '__first__'),
