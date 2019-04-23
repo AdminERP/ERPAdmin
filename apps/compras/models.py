@@ -24,9 +24,11 @@ from apps.inventario.models import Entrada
 #     def __str__(self):
 #         return '%s' % (self.nombre)
 
+from apps.datosmaestros.models import DatoModel
+from apps.usuarios.models import Usuario
 from django.core.mail import send_mail, EmailMessage
 from django.conf import settings
-
+from apps.inventario.models import Entrada
 class SolicitudCompra(models.Model):
 
     PENDIENTE = 'pendiente'
@@ -126,7 +128,8 @@ class OrdenCompra(models.Model):
             return ordenes
         except OrdenCompra.DoesNotExist:
             return None
-    
+
+
     class Meta:
         permissions = (
             ("view_ordencompra", "Puede ver una orden de compra"),

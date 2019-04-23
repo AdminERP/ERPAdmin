@@ -1,0 +1,15 @@
+{% if perms.inventario %}
+<li class="treeview">
+    <a href="#"><i class="fa fa-archive"></i> <span>Inventario</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+    </a>
+    <ul class="treeview-menu">
+        {% if perms.inventario.add_entrada %}<li><a href="{% url 'inventario:entradas' %}">Entradas</a></li>{% endif %}
+        {% if perms.inventario.add_entrada %}<li><a href="{% url 'inventario:entradasRegistradas' %}">Entradas registradas</a></li>{% endif %}
+        {% if perms.inventario.add_entrada %}<li><a href="{% url 'inventario:inventario' %}">Inventario</a></li>{% endif %}
+        {% if perms.inventario.add_entrada %}<li><a href="{% url 'inventario:salidas' %}">Salidas</a></li>{% endif %}
+    </ul>
+</li>
+{% endif %}

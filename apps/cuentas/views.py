@@ -17,6 +17,7 @@ from apps.datosmaestros.models import DatoModel, ValorModel, CategoriaModel
 from apps.ordenes_servicio.models import OrdenServicio
 from decimal import Decimal
 from django.contrib.auth.decorators import permission_required, login_required
+from django.db.models import Sum
 
 
 def index(request):
@@ -275,5 +276,8 @@ def listarCuentaEmpresa (request):
 
 
 # Graficas
-def ingresos(request):
-	return JsonResponse({'value':'1000000'})
+def balances(request):
+	ingresos = CuentaPagar.objects.filter(status='1').aggregate(Sum('total'))
+	egresos = CuentaCobrar.objects.filter(estado=True).aggregate(Sum('costo_total'))
+	return JsonResponse({'egresos':egresos, 'ingresos':ingresos})
+
