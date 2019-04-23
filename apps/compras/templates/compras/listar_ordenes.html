@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
+{% block css %}
+<style>
+  #flotante {
+    position: absolute;
+    display: none;
+    font-family: Arial;
+    font-size: 0.8em;
+    width: 280px;
+    border: 1px solid #808080;
+    background-color: #f1f1f1;
+    padding: 5px;
+  }
+
+  ul {
+    list-style: none;
+  }
+</style>
+{% endblock css %}
+
+
 {% block miga_pan %}
 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 <li><a href="{% url 'compras:index' %}">Compras</a></li>
@@ -14,7 +34,7 @@ Ordenes de Compra
 {% block titulo %}Gestión de Ordenes de compra {% endblock titulo %}
 
 {% block contenido %}
-<div class="content-wrapper">
+<div class="content-wrapper" style="margin-left:0 !important">
   <!-- Main content -->
   <section class="box">
     <div class="col-md-12">
@@ -39,11 +59,11 @@ Ordenes de Compra
                             Orden de Compra #{{orden.id}}
                           </a>
                           {% if orden.estado_aprobacion == 'pendiente' %}
-                          <i class="fa fa-circle text-grey"></i> <!-- cambia color con el estado_aprobacion -->
+                          <i onmouseout="quitM(event)" onmouseover="mensaje(event)" class="fa fa-circle text-grey"></i> <!-- cambia color con el estado_aprobacion -->
                           {% elif orden.estado_aprobacion == 'rechazada' %}
-                          <i class="fa fa-circle text-red"></i> <!-- cambia color con el estado -->
+                          <i onmouseout="quitM(event)" onmouseover="mensaje(event)" class="fa fa-circle text-red"></i> <!-- cambia color con el estado -->
                           {% elif orden.estado_aprobacion == 'aprobado_gerente' %}
-                          <i class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
+                          <i onmouseout="quitM(event)" onmouseover="mensaje(event)" class="fa fa-circle text-green"></i> <!-- cambia color con el estado -->
                           {% endif %}
                           {% if usuario.cargo.name == 'gerente' and orden.estado_aprobacion == 'pendiente' %}
                           <a style="display: inline" href="{% url 'compras:autorizar_orden' orden.id %}" class="btn btn-primary">Aprobar Orden</a>
@@ -126,5 +146,51 @@ Ordenes de Compra
   </section>
   <!-- /.content -->
 </div>
+<div id="flotante">
+  <h4>Estados: </h4>
+  <ul>
+    <li>
+      <i class="fa fa-circle text-grey"></i>Pendiente Aprobación
+    </li>
+    <li>
+      <i class="fa fa-circle text-red"></i>Rechazado
+    </li>
+    <li>
+      <i class="fa fa-circle text-green"></i>Aprobado Gerente
+    </li>
+  </ul>
+</div>
 <!-- /.content-wrapper -->
 {% endblock contenido %}
+
+{% block js %}
+<script>
+  function mensaje(event) {
+    margin = 5;
+
+    var tempX = 0;
+    var tempY = 0;
+
+    document.captureEvents(Event.MOUSEMOVE);
+    tempX = event.pageX;
+    tempY = event.pageY;
+
+    if (tempX < 0) {
+      tempX = 0;
+    }
+    if (tempY < 0) {
+      tempY = 0;
+    }
+
+    // Posicionamos la capa flotante
+    document.getElementById('flotante').style.top = (tempY + margin) + "px";
+    document.getElementById('flotante').style.left = (tempX + margin) + "px";
+    document.getElementById('flotante').style.display = 'block';
+    return;
+  }
+
+  function quitM(event) {
+    $("#flotante").hide()
+  }
+</script>
+{% endblock js %}

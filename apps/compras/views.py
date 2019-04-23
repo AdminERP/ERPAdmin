@@ -3,8 +3,12 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, T
 from django.shortcuts import redirect  
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import permission_required
+from django.core.mail import send_mail, EmailMessage
+from django.conf import settings
+from easy_pdf.rendering import render_to_pdf
 
-
+from apps.datosmaestros.models import ValorModel
+from apps.usuarios.models import Usuario
 from .models import Cotizacion, SolicitudCompra, OrdenCompra
 from .forms import OrdenCompraForm, SolicitudCompraForm, CotizacionForm
 # Create your views here.
@@ -71,9 +75,14 @@ class SolicitudList(LoginRequiredMixin, ListView) :
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
 
-        if usuario.cargo.name != "operario" and usuario.cargo.name != "gerente":
+        if usuario.cargo.name != "empleado" and usuario.cargo.name != "gerente":
             #TODO: consultar los empleados a cargo para filtrar las solicitudes
-            solicitudes_autorizar = SolicitudCompra.objects.filter(estado_aprobacion='pendiente')
+            subordinados = []
+            sub_query = Usuario.consultar_subordinados(usuario.id)
+            for sub in sub_query:
+                subordinados.append(sub.id)
+
+            solicitudes_autorizar = SolicitudCompra.objects.filter(estado_aprobacion='pendiente', solicitante_id__in=subordinados)
             context['solicitudes_autorizar'] = solicitudes_autorizar
 
             if usuario.cargo.name == 'jefecompras':
@@ -101,10 +110,22 @@ class CotizacionList(LoginRequiredMixin, ListView) :
         context = super().get_context_data(**kwargs)
         usuario = self.request.user
         solicitud = SolicitudCompra.objects.get(pk=self.kwargs['pk'])
-        cantidad = Cotizacion.objects.filter(solicitud=solicitud).count()
+        query_cotizaciones = Cotizacion.objects.filter(solicitud=solicitud)
+        cotizaciones = []
+        for cot in query_cotizaciones:
+            cotizaciones.append(cot.id)
+        orden = False
+        try:
+            ordenes = OrdenCompra.objects.filter(cotizacion_id__in=cotizaciones)
+            if ordenes:
+                orden = True
+        except OrdenCompra.DoesNotExist:
+            pass
+        cantidad = query_cotizaciones.count()
         context['usuario'] = usuario
         context['solicitud'] = solicitud
         context['cantidad'] = cantidad
+        context['orden'] = orden
         return context
 
 class OrdenList(LoginRequiredMixin, ListView) : 
@@ -160,6 +181,7 @@ def autorizarOrden(request, pk):
     orden = OrdenCompra.objects.get(pk=pk)
     orden.estado_aprobacion = 'aprobado_gerente'
     orden.save()
+    send_aprov_notification(orden) 
     return redirect('compras:orden_listar')
 
 @permission_required('compras.rechazar_orden')
@@ -167,7 +189,43 @@ def rechazarOrden(request, pk):
     orden = OrdenCompra.objects.get(pk=pk)
     orden.estado_aprobacion = 'rechazada'
     orden.save()
+    send_reject_notification()
     return redirect('compras:orden_listar')
+
+def send_aprov_notification(orden):
+        #cuenta: servicioalcliente.compraserp@gmail.com
+        #pass: compras123
+        # TODO generar pdf con la informacion de la orden y considerar proveedor como dato maestro
+
+        dato = orden.cotizacion.proveedor 
+        valor_email = ValorModel.objects.filter(dato=dato , nombre = 'email').get().valor
+
+        email = EmailMessage( 
+            subject = 'Aprobación de Compra',
+            body = 'Su cotización fue seleccionada y aprobada para compra. \n\n\n Gracias por sus servicios',
+            from_email = settings.EMAIL_HOST_USER,
+            to = [valor_email],
+        )
+        send_pdf = render_to_pdf(
+        'compras/send.html',
+        {'cotizacion': orden.cotizacion ,},
+        )
+        email.attach('cotización.pdf', send_pdf , 'application/pdf')
+        email.send()
+
+# TODO enviar correo al solicitante y al jefe de compras informando que se rechazo
+def send_reject_notification(): 
+    pass
+
+
+# def create_pdf(): 
+#     return render_to_pdf(
+#         'compras/send.html',
+#         {'any_context_item_to_pass_to_the_template': context_value,},
+# )
+...
+    #.attach('file.pdf', post_pdf, 'application/pdf')
+
 ######---DELETES---######
 
 class SolicitudDelete(LoginRequiredMixin, DeleteView):

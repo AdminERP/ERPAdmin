@@ -1,0 +1,30 @@
+<li class="header">NOMINA</li>
+{% if perms.nomina %}
+    <li class="treeview">
+        <a href="#">
+            <span class="glyphicon glyphicon-usd"></span><span>Nomina</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            {% if perms.nomina.add_payroll %}<li><a href="{% url 'nomina:modulo_nomina' %}"><span class="glyphicon glyphicon-pencil"></span><span>Generar nomina</span></a></li>{% endif %}
+            {% if perms.nomina.change_payroll %}<li><a href="{% url 'nomina:consultar_nomina' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Consultar nomina</span></a></li>{% endif %}
+        </ul>
+    </li>
+{% endif %}
+<li class="header">EVALUACIONES</li>
+{% if perms.evaluaciones %}
+    <li class="treeview">
+        <a href="#">
+              <span class="glyphicon glyphicon-check"></span><span>Evaluación</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+        <ul class="treeview-menu">
+            {% if perms.evaluaciones.add_question %}<li><a href="{% url 'evaluaciones:registrar_pregunta' %}"><span class="glyphicon glyphicon-pencil"></span><span>Registrar pregunta</span></a></li>{% endif %}
+            {% if perms.evaluaciones.change_question %}<li><a href="{% url 'evaluaciones:consultar_pregunta' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Consultar pregunta</span></a></li>{% endif %}
+            {% if perms.evaluaciones.change_employeeevaluation %}<li><a href="{% url 'evaluaciones:consultar_evaluacion' %}"><span class="glyphicon glyphicon-list-alt"></span><span>Consultar evaluación</span></a></li>{% endif %}        </ul>
+    </li>
+{% endif %}

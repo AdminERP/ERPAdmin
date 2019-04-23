@@ -52,14 +52,23 @@
 		</div>
 	</div>
 
-	<div class="row">
+    <div class="row">
+        <div class="col-sm-4">
+			{% bootstrap_field form.estado_civil %}
+		</div>
 		<div class="col-sm-4">
 			{% bootstrap_field form.cargo %}
 		</div>
-		<div class="col-sm-4">
+        <div class="col-sm-4">
+            {% bootstrap_field form.jefe %}
+        </div>
+    </div>
+
+	<div class="row">
+		<div class="col-sm-6">
 			{% bootstrap_field form.email %}
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-6">
 			{% bootstrap_field form.fecha_nacimiento %}
 			{% if form.fecha_nacimiento.errors %}
 				<div class="alert alert-danger">
@@ -69,6 +78,30 @@
 		</div>
 	</div>
 
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.eps %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.pension_fund %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.severance_fund %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.bank %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.account_number %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.salary %}
+        </div>
+    </div>
+
 	<div class="row">
 		<div class="col-sm-4">
 			{% bootstrap_field form.telefono %}
@@ -76,9 +109,7 @@
 		<div class="col-sm-4">
 			{% bootstrap_field form.direccion %}
 		</div>
-		<div class="col-sm-4">
-			{% bootstrap_field form.estado_civil %}
-		</div>
+
 	</div>
 
 	<div class="row">
