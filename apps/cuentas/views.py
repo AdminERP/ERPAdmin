@@ -193,10 +193,12 @@ def listarPagar (request):
 
 	return render(request, 'cuentas/listarCuentaPagar.html', {'cuentas':cuentas, 'banks':banks})
 
+@permission_required('cuentas.view_cuentascobrar', raise_exception=True)
 def listarCobrar (request):
 	cuentas = CuentaCobrar.objects.all().order_by('id')
 	return render(request, 'cuentas/listarCuentaCobrar.html',{'cuentas':cuentas})
 
+@permission_required("cuentas.view_ordenesservicio",raise_exception=True)
 def listServiceOrder (request):
 	orders = OrdenServicio.objects.all().order_by('id')
 	form = CuentaCobroForm()
@@ -217,6 +219,8 @@ def createOrder(request):
 		form = ServiceOrderForm()
 		return render(request, 'cuentas/createOrder.html', {'form': form})
 
+
+@permission_required('cuentas.add_cuentascobrar', raise_exception=True)
 def crearCuentaCobro(request,pk):
 	if request.POST:
 		form = CuentaCobroForm(request.POST)
@@ -255,12 +259,14 @@ def crearCuentaCobro(request,pk):
 		form = CuentaCobroForm()
 		return render(request, 'cuentas/crearCuentaCobrar.html', {'form': form, 'serviceOrder':serviceOrder})
 
+@permission_required('cuentas.change_cuentascobrar', raise_exception=True)
 def anularCuenta(request):
 	print(request.POST)
 	if request.POST:
 		pk = request.POST.get('account_id')
 		CuentaCobrar.objects.filter(pk=pk).update(estado=False)
 		return redirect('listarCobrar')
+
 def listarCuentaEmpresa (request):
 	try:
 		categoria = CategoriaModel.objects.get(nombre="Bancos")

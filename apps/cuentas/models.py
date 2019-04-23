@@ -135,4 +135,5 @@ class CuentaCobrar(models.Model):
             ('view_cuentascobrar', 'Puede ver las cuentas por cobrar'),
             ('add_cuentascobrar', 'Puede agregar cuentas por cobrar'),
             ('change_cuentascobrar', 'Puede actualizar cuentas por cobrar'),
+            ('view_ordenesservicio', 'Puede ver las ordenes de servicio en el area de cuentas'),
         )
