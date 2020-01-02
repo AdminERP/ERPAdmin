@@ -4,6 +4,13 @@ apps/*/migrations/
 *.log
 *.pot
 *.pyc
-media
+media/
 .idea
 db.sqlite3
+.env/
+venv/
+myenv/
+.vscode/
+apps/ordenes_servicio/fixtures/*
+ERPAdmin/settings*
+

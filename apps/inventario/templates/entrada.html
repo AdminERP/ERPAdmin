@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block css %}
+<style>
+ .btn {border:1px solid transparent; margin: 0px; border-color:#00acd6; padding: 5px;}
+ .bg-purple {
+    background-color: #2196f3 !important;
+}
+</style>
+
+{% endblock css %}
+
+{% block titulo %} Entradas{% endblock titulo %}
+{% block titulo_pagina %}Entradas{% endblock titulo_pagina %}
+
+{% block miga_pan %}
+
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+  <li class="active">Entradas</li>
+
+{% endblock miga_pan %}
+
+{% block titulo_panel %}
+<a href="{% url 'inventario:entradasRegistradas' %}" type="button" class="btn bg-purple margin">Entradas Registradas<div class="ripple-container"></div></a>
+ {% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<table id="tabla" cellspacing="0" width="100%" style="width: 100%;" aria-describedby="demo-dt-basic_info" class="table table-striped table-bordered dataTable no-footer dtr-inline">
+          <thead>
+            <tr>
+              <th class="text-center">ID</th>
+              <th class="text-center">Articulo</th>
+              <th class="text-center">Cantidad</th>
+                <th class="text-center">Proeevedor</th>
+                <th class="text-center">Total</th>
+                <th class="text-center">Fecha de llegada</th>
+                <th class="text-center">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for orden in ordenes %}
+              {% if orden.estado_aprobacion == 'aprobado_gerente'  %}
+          <tr role="row" class="even">
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.id }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.solicitud.articulo }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.solicitud.cantidad }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.proveedor }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.cotizacion.total }}</td>
+              <td class="sorting_1 text-center" tabindex="0">{{ orden.fecha_esperada }}</td>
+              <td class="sorting_1 text-center" tabindex="0"> <a href="{% url 'inventario:registroEntrada' orden.id %}" type="button" class="btn btn-block btn-info">Generar Entrada</a>
+{% endif %}
+
+    {% endfor %}
+                    </tbody>
+
+        </table>
+{% endblock contenido_panel %}
+
+{% block pie_panel %}
+
+{% endblock pie_panel %}
+{% block js %}
+<script>
+  $(function () {
+    $('#tabla').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : true
+    })
+  })
+</script>
+{% endblock js %}

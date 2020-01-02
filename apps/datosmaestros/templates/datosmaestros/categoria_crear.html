@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %}
+Datos Maestros
+{% endblock titulo %}
+
+{% block titulo_pagina %}
+Crear categoria
+{% endblock titulo_pagina %}
+
+{% block descripcion_pagina %}
+Crear categoria de Datos Maestros
+{% endblock descripcion_pagina %}
+
+{% block miga_pan %}
+<li><a><i class="fa fa-dashboard"></i> Dashboard</a></li>
+<li><a href="{% url 'datosmaestros:listar_categorias' %}">Gestionar categorias</a></li>
+<li class="active">Crear categoria</li>
+{% endblock miga_pan %}
+
+{% block contenido %}
+<div class="row">
+  <div class="col-md-offset-3 col-md-6">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">
+          Crear categoria
+        </h3>
+      </div>
+      <div class="box-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="col-md-12">
+            {% bootstrap_form form %}
+          </div>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-success btn-flat">Crear</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock contenido %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+
+{% block titulo %} Registro de entrada{% endblock titulo %}
+{% block titulo_pagina %}Registro de entrada{% endblock titulo_pagina %}
+
+{% block css %}
+
+<style>
+ .form-group .checkbox label, .form-group .radio label, .form-group label {color: black;}
+</style>
+
+{% endblock css %}
+
+{% block miga_pan %}
+
+  <li><a href="/inventario"><i class="fa fa-dashboard"></i> Dashboard Inventario</a></li>
+  <li><a href="/inventario/entradas"><i class="fa fa-dashboard"></i> Entradas</a></li>
+  <li class="active">Registrar Entrada</li>
+
+{% endblock miga_pan %}
+
+{% block titulo_panel %} Orden de Compra #{{ orden.id }} {% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<div class="col-md-8">
+<div class="box-body table-responsive no-padding">
+              <table class="table table-bordered table-striped">
+                <tbody><tr>
+                  <th>Articulo</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Proveedor</th>
+                  <th>Tiempo</th>
+                </tr>
+                <tr>
+                  <td>{{ orden.cotizacion.solicitud.articulo }}</td>
+                  <td>{{ orden.cotizacion.total }}</td>
+                  <td>{{ orden.cotizacion.solicitud.cantidad }}</td>
+                  <td>{{ orden.cotizacion.proveedor }}</td>
+                  <td>{{ orden.fecha_esperada }}</td>
+                </tr>
+              </tbody></table>
+            </div>
+            </div>
+
+ <form method="post">
+    {% csrf_token %}
+      <div class="col-md-12">
+          {% bootstrap_field form.condicion %}
+      </div>
+      <div class="col-md-12">
+          {% bootstrap_field form.comentario %}
+      </div>
+
+      <input type="hidden" id="ordenCompra" name="ordenCompra" value="{{ orden.id }}">
+
+      <div class="col-md-12">
+          <button type="submit" class="btn btn-success">Registrar</button>
+          <a href="{% url 'inventario:entradas' %}" type="button" class="btn btn-danger">Cancelar</a>
+      </div>
+</form>
+
+{% endblock contenido_panel %}
+
+{% block pie_panel %}
+
+{% endblock pie_panel %}

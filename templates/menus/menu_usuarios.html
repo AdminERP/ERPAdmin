@@ -1,0 +1,19 @@
+<li class="header">USUARIOS</li>
+
+{% if perms.usuarios %}
+<li class="treeview">
+    <a href="#"><i class="fa fa-users"></i> <span>USUARIOS</span>
+        <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+    </a>
+    <ul class="treeview-menu">
+        {% if perms.usuarios.add_usuario %}<li><a href="{% url 'usuarios:crear_usuario' %}">Crear Usuario</a></li>{% endif %}
+        {% if perms.usuarios.change_usuario %}<li><a href="{% url 'usuarios:consultar_usuarios' %}">Consultar Usuarios</a></li>{% endif %}
+        {% if perms.usuarios.add_cargo %}<li><a href="{% url 'usuarios:crear_cargo' %}">Crear Cargo</a></li>{% endif %}
+        {% if perms.usuarios.change_cargo %}<li><a href="{% url 'usuarios:consultar_cargos' %}">Consultar Cargos</a></li>{% endif %}
+    </ul>
+</li>
+{% endif %}
+<li class="header">CUENTA</li>
+<li class="active"><a href="{% url 'usuarios:editar_password' %}"><i class="fa fa-key"></i> <span>Editar Contraseña</span></a></li>

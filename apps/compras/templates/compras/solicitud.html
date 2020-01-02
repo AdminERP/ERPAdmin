@@ -1,0 +1,63 @@
+<div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-parent="#acordion" href="#collapse{{solicitud.id}}">
+                Solucitud #{{solicitud.id}}
+              </a>
+              {% include 'compras/estados_solicitud.html' %}
+
+              {% if solicitud.estado_aprobacion == 'pendiente' %}
+              <a style="display: inline" href="{% url 'compras:solicitud_edit' solicitud.id %}" class="btn btn-primary">Modificar Solicitud</a>
+              <a style="display: inline" href="{% url 'compras:solicitud_delete' solicitud.id %}" class="btn btn-danger">Eliminar Solicitud</a>
+              {% endif %}
+
+            </h3>
+
+          </div>
+
+          <div id="collapse{{solicitud.id}}" class="panel-collapse collapse">
+            <div class="form-group row">
+              <div class="col-xs-6">
+                <label for="inputNombre">Nombre Solicitante</label>
+                <input type="text" class="form-control" id="inputNombre" disabled value="{{solicitud.solicitante.get_full_name}}">
+              </div>
+
+              <div class="col-xs-3">
+                <label for="inputId">Identificacion</label>
+                <input type="text" class="form-control" id="inputId" disabled placeholder={{solicitud.solicitante}}>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-xs-6">
+                <label for="inputElemento">Articulo requerido</label>
+                <ul>
+                  <li> {{solicitud.articulo.nombre}} - x{{solicitud.cantidad}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class=" col-xs-6">
+                <label for="exampleInputFile">Fecha esperada</label>
+                <!-- Date -->
+                <input disabled class="form-control pull-right datepicker" value="{{ solicitud.fecha_esperada}}"
+                  autocomplete="off">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class=" col-xs-6">
+                <label for="inputJust">Justificacion</label>
+                <textarea id="inputJust" class="form-control pull-right" name="inputJust" rows="1" cols="50"
+                  readonly>
+                {{solicitud.justificacion}}
+              </textarea>
+              </div>
+            </div>
+            <!-- collapse -->
+          </div>
+        </div>
+      </div>

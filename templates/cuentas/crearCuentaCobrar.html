@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% block titulo %} Crear Cuenta de Cobro{% endblock titulo %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+{% endblock css %}
+
+{% block titulo_pagina %} Nueva Cuenta de Cobro {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Orden de Servicio</a></li>
+<li class="active">Crear Orden</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Datos de Cuenta</small>{% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<div class="container-fluid col-md-6">
+	
+	 <form method="POST" >
+        {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Servicio</label>
+                {{ form.servicio}}
+            </div>
+            <div class="form-group">
+                <label>Tarifa</label>
+                {{ form.tarifa}}
+            </div>
+            <div class="form-group">
+                <label>Costo Total</label>
+                {{ form.costo_total}}
+            </div>
+            <div class="form-group">
+                <label>Recaudar en</label>
+                {{ form.cuenta_empresa}}
+            </div>
+           
+            <div class="form-group">
+             <div class="input-group date">
+                <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input 
+                    name="fecha_vencimiento" 
+                    class="form-control pull-right datepicker "
+                    id="invoice_date"
+                    value=""
+                    autocomplete="off">
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ form.invoice_date.errors }}</strong>
+                </span>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label>orden</label>
+                {{ form.service_order}}
+            </div>
+
+      		<input type="hidden" name="estado" value="1">
+      
+        <button type="submit" class="btn btn-primary" id="create_charge">Generar</button>
+
+      
+      </form>
+	
+</div>
+
+
+{% endblock contenido_panel %}
+
+{% block js %}
+<!--datatable-->
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+	 $(function() {
+        //Date picker
+        $('.datepicker').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        })
+    })
+
+
+$(function(){
+	$('select[name=cuenta_empresa]').addClass('form-control');
+	$('select[name=service_order]').addClass('form-control');
+	$('input[name=servicio]').val('{{serviceOrder.servicio_vendido}}');
+	$('input[name=servicio]').css('pointer-events','none');
+	$('input[name=costo_total]').val(parseFloat('{{serviceOrder.valor}}'));
+	$('input[name=costo_total]').css('pointer-events','none');
+	$('select[name=service_order]').val('{{serviceOrder.id}}');
+	$('select[name=service_order]').css('pointer-events','none');
+
+    console.log({{serviceOrder.id}});
+	
+
+});	 
+</script>
+{% endblock js %}

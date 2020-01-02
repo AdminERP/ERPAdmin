@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %} Crear Cuenta{% endblock titulo %}
+
+{% block css %}
+
+<!--Editable Table-->
+<link rel="stylesheet" href="{% static 'dist/css/editable-table.css' %}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}">
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+{% endblock css %}
+
+{% block titulo_pagina %} Nueva Cuenta Por Pagar {% endblock titulo_pagina %}
+
+{% block miga_pan %}
+<li><a href="#">Cuentas por Pagar</a></li>
+<li class="active">Crear Cuenta</li>
+{% endblock miga_pan %}
+
+{% block titulo_panel %}<small>Datos de Factura</small>{% endblock titulo_panel %}
+
+{% block contenido_panel %}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Columna Izquierda -->
+        <div class="col-md-5">
+            <div class="box-body">
+                <form role="form" method="POST" id="create-account-form">
+                    <!-- Token -->
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Orden de compra</label>
+                        <select 
+                        name="order"
+                        class="form-control {% if form.order.errors %} is-invalid {% endif %}">
+                            <option value="">-----------</option>
+                            {% for order in form.fields.order.queryset %}    
+                            <option 
+                            value = "{{ order.id }}"
+                            {% if form.order.value == order.id %} selected {% endif %}>
+                            Orden {{order.id}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.order.errors }}</strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Proveedor</label>
+                        <select 
+                            name="supplier"
+                            class="form-control {% if form.supplier_id.errors %} is-invalid {% endif %}">
+                            <option value="">----------</option>
+                            {% for supplier in form.fields.supplier.queryset %}    
+                            <option 
+                            value = "{{ supplier.id }}"
+                            {% if form.supplier.value == supplier.id %} selected {% endif %}>
+                            {{supplier.nombre}}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.supplier.errors }}</strong>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label>Factura</label>
+                        <input 
+                            name="invoice" 
+                            class="form-control {% if form.invoice.errors %} is-invalid {% endif %}"
+                            id="invoice"
+                            value="{{ form.invoice.value|default_if_none:'' }}"
+                            autocomplete="off">
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ form.invoice.errors }}</strong>
+                        </span>
+                        <!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha de Factura</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input 
+                                name="invoice_date" 
+                                class="form-control pull-right datepicker {% if form.invoice_date.errors %} is-invalid {% endif %}"
+                                id="invoice_date"
+                                value="{{ form.invoice_date.value|default_if_none:'' }}"
+                                autocomplete="off">
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ form.invoice_date.errors }}</strong>
+                            </span>
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <div class="form-group">
+                        <label>Plazo hasta</label>
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input 
+                                name="term_date" 
+                                class="form-control pull-right datepicker {% if form.term_date.errors %} is-invalid {% endif %}"
+                                id="term_date"
+                                value="{{ form.term_date.value|default_if_none:'' }}"
+                                autocomplete="off">
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ form.term_date.errors }}</strong>
+                            </span>
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                    <input type="hidden" name="status" value="3">
+                    <input type="hidden" name="allitems" id="allitems" value="{{ form.allitems.value|default_if_none:'' }}">
+                    <input type="hidden" name="total" class="total" value="{{ form.total.value|default_if_none:'' }}">
+                </form>
+            </div>
+        </div>
+        <!-- Columna Derecha -->
+        <div class="col-md-5 col-md-offset-1">
+            <!-- Editable table -->
+            <div class="card">
+                <div style="margin-top: 3rem; margin-bottom: 3rem">
+                    <h4 class="card-tittle text-muted text-center py-4">
+                        Detalle de Cobros
+                    </h4>
+                    <div class="col-md-4 col-md-offset-8">
+                        <span class="table-add float-left mb-5 mr-2">
+                            <a 
+                                class="text-success"
+                                onclick="addItem();"
+                                style="cursor: pointer;">
+                                <i class="fa fa-plus " aria-hidden="false"></i> Agregar Item 
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="table">
+                        <table class="table table-bordered table-responsive-md text-center">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 40%">Item</th>
+                                    <th class="text-center" style="width: 30%">Valor</th>
+                                    <th class="text-center" style="width: 30%">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pt-3-half">
+                                        <div class="form-group">
+                                        <input
+                                            name="items[]" 
+                                            class="form-control" 
+                                            type="text" 
+                                            placeholder="Item" 
+                                            style="text-align: center">
+                                        </div>
+                                    </td>
+                                    <td class="pt-3-half">
+                                        <div class="form-group">
+                                        <input 
+                                            name="values[]"
+                                            class="form-control item-value" 
+                                            type="number"
+                                            step="0.1" 
+                                            placeholder="0" 
+                                            min="0" 
+                                            style="text-align: center">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="table-remove">
+                                            <button 
+                                                type="button" 
+                                                class="btn btn-info btn-rounded btn-sm my-0 "
+                                                onclick="removeRow(this)">
+                                                Borrar 
+                                            </button>
+                                        </span>
+                                    </td>
+                                </tr> 
+                            </tbody>                      
+                        </table>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label style="margin-top: 2rem; text-align: center ">Cobro Total</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input 
+                                            name="total" 
+                                            style="pointer-events: none" 
+                                            type="text" 
+                                            class="form-control {% if form.total.errors %} is-invalid {% endif %} total "
+                                            value="{{ form.total.value|default_if_none:'' }}">
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ form.total.errors }}</strong>
+                                            </span>
+                                        </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Fin Editable table -->
+            <div class="form-group">
+                <button 
+                    type="submit" 
+                    class="btn btn-block btn-primary"
+                    form="create-account-form"> 
+                    Registrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% if form.errors %}
+    <!-- Error messaging -->
+    <div id="errors">
+        <div class="inner">
+            <p>There were some errors in the information you entered. Please correct the following:</p>
+            {{ form.non_field_errors }}
+            <ul>
+                {% for field in form %}
+                    {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <!-- /Error messaging -->
+{% endif %}
+
+{% endblock contenido_panel %}
+
+{% block js %}
+<!--Editable Table-->
+<script src="{% static 'dist/js/editable-table.js' %}"></script>
+<!-- Date Picker-->
+<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    //Funciones para realizar acciones a partir de eventos
+    removeItem();
+    evenValues();
+
+    //Formato para campos de fechas
+    $(function() {
+        //Date picker
+        $('.datepicker').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+        })
+    })
+
+    //Agregar una fila para un item
+    function addItem(){
+        var html =  '<tr> '+
+                        '<td class="pt-3-half"> '+
+                            '<div class="form-group"> '+
+                                '<input '+
+                                    'name="items[]" '+
+                                    'class="form-control" '+
+                                    'type="text" '+
+                                    'placeholder="Item" '+
+                                    'style="text-align: center"> '+
+                            '</div> '+
+                        '</td> '+
+                        '<td class="pt-3-half"> '+
+                            '<div class="form-group"> '+
+                                '<input '+
+                                    'name="values[]" '+
+                                    'class="form-control item-value" '+
+                                    'type="number" '+
+                                    'min="0" '+
+                                    'step = "0.1" '+
+                                    'placeholder="0" '+
+                                    'style="text-align: center"> '+
+                            '</div> '+
+                        '</td> '+
+                        '<td> '+
+                            '<span class="table-remove"> '+
+                                '<button '+
+                                    'type="button" '+
+                                    'class="btn btn-info btn-rounded btn-sm my-0 remove">'+
+                                    'Borrar '+
+                                '</button> ' +
+                            '</span> '+
+                        '</td> '+
+                    '</tr> ';
+        $("#table tbody").append(html);
+        removeItem();
+        evenValues();
+    }
+
+    //Eliminar una fila
+    function removeItem(){
+        $(".remove").click(function(){
+            $(this).parent().parent().parent().remove();
+        });
+    }
+
+    function evenValues(){
+        $(".item-value").keyup(function(){
+            sumValues();
+        });
+        $(".item-value").change(function(){
+            sumValues();
+        });
+    }
+
+    function sumValues(){
+        var rows = $("#table tbody tr");
+        var total = 0;
+        for(var i=0; i<rows.length; i++){
+            $("input [name=total]").val(0);
+            var value = $(rows[i])
+                        .children("td").eq(1)
+                        .children("div").eq(0)
+                        .children("input").eq(0).val();
+            if(!isNaN(Number.parseFloat(value))){ 
+                total = total + Number.parseFloat(value);          
+            }
+        }
+        $(".total").val(total);
+    }
+
+    $("#create-account-form").submit(function(e){
+        var fecha_factura = $("#invoice_date").datepicker("getDate");
+        var fecha_plazo = $("#term_date").datepicker("getDate");
+        var rows = $("#table tbody tr");
+        $("#allitems").val("");
+        var items = $("#allitems");
+        if(fecha_factura == null || fecha_plazo == null){
+            e.preventDefault();
+            toastr.error("Complete las fechas de factura y plazo", "Error en Fechas");
+        }
+        if (fecha_plazo < fecha_factura) {
+            e.preventDefault();
+            toastr.error("La fecha de plazo debe ser superior o igual a la fecha de la factura", "Error en Fechas");
+        }
+        if(rows.length <= 0){
+            e.preventDefault();
+            toastr.error("Debe agregar mínimo un item a la cuenta", "Error en Items");
+        }
+        for(var i=0; i<rows.length; i++){
+            var item =  $(rows[i])
+                        .children("td").eq(0)
+                        .children("div").eq(0)
+                        .children("input").eq(0).val();
+            var value = $(rows[i])
+                        .children("td").eq(1)
+                        .children("div").eq(0)
+                        .children("input").eq(0).val();
+            if(item == ""){
+                e.preventDefault();
+                toastr.error("El campo item debe ser completado", "Error en Item");
+                return false;
+            }else if(value <= 0){
+                e.preventDefault();
+                toastr.error("Debe especificar un valor para cada item", "Error en Item");
+                return false;
+            }
+            if(items.val() == "" ){
+                items.val(item+"~|~"+value);
+            }else{
+                items.val(items.val()+"~||~"+item+"~|~"+value);
+            }
+        }
+    });
+    var borrar = 0;
+</script>
+{% endblock js %}

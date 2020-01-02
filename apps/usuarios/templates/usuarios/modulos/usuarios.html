@@ -1,0 +1,37 @@
+{% if perms.usuarios %}
+	<div class="col-md-4">
+
+		<div class="box box-widget widget-user-2">
+
+			<div class="widget-user-header bg-yellow">
+				<h3 class="widget-user-username">Módulo de usuarios</h3>
+				<h5 class="widget-user-desc">Gestión de usuarios</h5>
+			</div>
+
+			<div class="box-footer no-padding">
+				<ul class="nav nav-stacked">
+
+					{% if perms.usuarios.add_usuario %}
+						<li><a href="{% url 'usuarios:crear_usuario' %}">Crear usuario <span
+								class="pull-right badge bg-blue"><i class="fa fa-user-plus"></i></span></a></li>
+					{% endif %}
+
+					{% if 'usuarios.change_usuario' in perms %}
+						<li><a href="{% url 'usuarios:consultar_usuarios' %}">Consultar usuarios <span
+								class="pull-right badge bg-green"><i class="fa fa-search"></i></span></a></li>
+					{% endif %}
+
+					{% if perms.usuarios.add_cargo %}
+						<li><a href="{% url 'usuarios:crear_cargo' %}">Crear cargo <span
+								class="pull-right badge bg-blue"><i class="fa fa-users"></i></span></a></li>
+					{% endif %}
+
+					{% if perms.usuarios.view_cargos %}
+						<li><a href="{% url 'usuarios:consultar_cargos' %}">Consultar cargos <span
+								class="pull-right badge bg-green"><i class="fa fa-search"></i></span></a></li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+{% endif %}

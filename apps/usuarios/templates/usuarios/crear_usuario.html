@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo_pagina %}Crear Usuarios{% endblock titulo_pagina %}
+{% block titulo %}Gestión de Usuarios{% endblock titulo %}
+{% block descripcion_pagina %} Gestiona los usuarios de ERPAdmin {% endblock descripcion_pagina %}
+{% block miga_pan %}
+	<li><a href="{% url 'usuarios:home' %}"><i class="fa fa-dashboard"></i> DASHBOARD</a></li>
+	<li><a href="{% url 'usuarios:consultar_usuarios' %}"><i class="fa fa-dashboard"></i> GESTIÓN USUARIOS</a></li>
+	<li class="active">CREAR USUARIOS</li>
+{% endblock miga_pan %}
+
+{% block css %}
+	<link rel="stylesheet"
+	      href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+
+	{{ form.media.css }}
+	<style media="screen">
+		.select2-container {
+			width: 100% !important;
+		}
+	</style>
+{% endblock css %}
+
+{% block contenido_panel %}
+
+	<form method="post" role="form" onsubmit="return validacion()">
+	{% csrf_token %}
+
+	<div class="row">
+		<div class="col-sm-4">
+			{% bootstrap_field form.first_name %}
+		</div>
+		<div class="col-sm-4">
+			{% bootstrap_field form.last_name %}
+		</div>
+		<div class="col-sm-4">
+			{% bootstrap_field form.cedula %}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-4">
+			{% bootstrap_field form.username %}
+		</div>
+		<div class="col-sm-4">
+			{% bootstrap_field form.password1 %}
+		</div>
+		<div class="col-sm-4">
+			{% bootstrap_field form.password2 %}
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-sm-4">
+			{% bootstrap_field form.estado_civil %}
+		</div>
+		<div class="col-sm-4">
+			{% bootstrap_field form.cargo %}
+		</div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.jefe %}
+        </div>
+    </div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			{% bootstrap_field form.email %}
+		</div>
+		<div class="col-sm-6">
+			{% bootstrap_field form.fecha_nacimiento %}
+			{% if form.fecha_nacimiento.errors %}
+				<div class="alert alert-danger">
+					{{ form.fecha_nacimiento.errors }}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.eps %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.pension_fund %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.severance_fund %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            {% bootstrap_field form.bank %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.account_number %}
+        </div>
+        <div class="col-sm-4">
+            {% bootstrap_field form.salary %}
+        </div>
+    </div>
+
+	<div class="row">
+		<div class="col-sm-4">
+			{% bootstrap_field form.telefono %}
+		</div>
+		<div class="col-sm-4">
+			{% bootstrap_field form.direccion %}
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-sm-4">
+			{% bootstrap_field form.is_active %}
+		</div>
+	</div>
+
+{% endblock contenido_panel %}
+{% block pie_panel %}
+	<button type="submit" class="btn btn-raised btn-success">Crear Usuario</button>
+	</form>
+{% endblock pie_panel %}
+
+{% block js %}
+
+	<script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+	<script src="{% static 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.es.min.js' %}"></script>
+
+	<script>
+
+        //Date picker
+        $('#id_fecha_nacimiento').datepicker({
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            endDate: '-18y', // Validar fecha escogida
+            language: 'es'
+        })
+	</script>
+	{{ form.media.js }}
+	<script src="{% static 'dist/js/validacion_crear_usuario.js' %}"></script>
+{% endblock js %}

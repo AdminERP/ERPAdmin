@@ -1,5 +1,5 @@
 # ERPAdmin
-Sistema de planificación de recursos empresariales
+..Sistema de planificación de recursos empresariales
 
 
 [![Django Version](https://img.shields.io/badge/django-2.0.1-yellow.svg)](https://docs.djangoproject.com/en/2.1/releases/2.0.1/) [![python version](https://img.shields.io/badge/python-3.5.2-blue.svg)](https://www.python.org/downloads/release/python-350/)
@@ -36,14 +36,29 @@ Ademas de **psql (PostgreSQL) 9.5.14**
 
 **templates**: Se encuentra el archivo base.html
 
+**templates en las apps**:
+```
+.
+├── apps
+│   ├── mi_app
+│   │   ├── templates
+│   │   │   └── mi_app
+│   │   │       ├── editar.html
+│   │   │       ├── crear.html
+│   │   │       ├── eliminar.html
+│   │   │       ├── consultar.html
+```
+
+
 ## Módulos del proyecto
 
  1. Compras
- 2. Datos maestros, perfles, roles e Inventario
- 3. Cuntas por Pagar
+ 2. Datos maestros, perfiles, roles e Inventario
+ 3. Cuentas por Pagar
  4. Cuentas por Cobrar
  5. Gestión de cuentas contables
  6. Recursos humanos
+ 7. Ordenes de servicio
 
 ## Construido con
 

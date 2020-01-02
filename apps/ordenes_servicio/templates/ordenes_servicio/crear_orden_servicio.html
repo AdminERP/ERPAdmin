@@ -1,0 +1,111 @@
+{% extends 'ordenes_servicio/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block miga_pan %}
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Orden de Servicio </a></li>
+        <li class="active">Crear</li>
+    </ol>
+{% endblock miga_pan %}
+
+{% block titulo %}Orden Servicio{% endblock titulo %}
+
+{% block css %}
+<style media="screen">
+    input[name=cliente_seleccionado_texto] {
+    pointer-events: none;
+   }
+
+   input[name=encargado_seleccionado_texto] {
+    pointer-events: none;
+   }
+</style>
+{% endblock css %}
+
+{% block contenido %}
+
+<div class="col-md-12">
+  <div class="box box-primary">
+        <div style="padding-bottom: 0" class="box-header">
+            <h3 class="box-title">Crear Orden de Servicio</h3>
+        </div>
+      <div style="padding-top: 0" class="box-body">
+        <form style="padding-top: 0" method="POST" id="formulario"> {% csrf_token %}
+          <div class="row">
+              <div class="col-sm-12">
+                {% bootstrap_field form.servicio_vendido%}
+              </div>
+              <div class="col-sm-6">
+                {% bootstrap_field form.cliente_select %}
+              </div>
+              <div class="col-sm-6">
+                  {% bootstrap_field form.cliente_seleccionado_texto %}
+              </div>
+              <div class="col-sm-12">
+                  {% bootstrap_field form.cliente %}
+              </div>
+              <div class="col-sm-6">
+                {% bootstrap_field form.encargado_select %}
+              </div>
+              <div class="col-sm-6">
+                  {% bootstrap_field form.encargado_seleccionado_texto  %}
+              </div>
+              <div class="col-sm-12">
+                  {% bootstrap_field form.encargado %}
+              </div>
+              <div class="col-sm-6">
+                {% bootstrap_field form.fecha_atencion%}
+              </div>
+          </div>
+            <div class="row">
+                <div class="col-md-12">
+                    {% bootstrap_field form.comentarios%}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success bg-olive-active pull-right">Registrar</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+
+{% endblock contenido %}
+
+{% block js %}
+<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/3de7ad37/dist/latest/bootstrap-autocomplete.js"></script>
+<script>
+    $('.basicAutoSelectEncargado').autoComplete(
+        {minLength: 1}
+    );
+    $('.basicAutoSelectEncargado').on('autocomplete.select', function (evt, item) {
+      //doc: https://gitcdn.link/cdn/xcash/bootstrap-autocomplete/4192ba1848802880b288985fc4332478f9a8699a/dist/latest/index.html
+      document.getElementById("id_encargado").value = item["id"];
+      document.getElementById("id_encargado_seleccionado_texto").value = item["text"];
+      document.getElementById("id_encargado_select").value = "";
+    });
+
+    $('.basicAutoSelectEncargado').keypress(function() {
+      document.getElementById("id_encargado_seleccionado_texto").value = "";
+      document.getElementById("id_encargado").value = "";
+    });
+
+    $('.basicAutoSelectCliente').autoComplete(
+        {minLength: 1}
+    );
+    $('.basicAutoSelectCliente').on('autocomplete.select', function (evt, item) {
+      document.getElementById("id_cliente").value = item["id"];
+      document.getElementById("id_cliente_seleccionado_texto").value = item["text"];
+      document.getElementById("id_cliente_select").value = "";
+    });
+
+    $('.basicAutoSelectCliente').keypress(function() {
+      document.getElementById("id_cliente_seleccionado_texto").value = "";
+      document.getElementById("id_cliente").value = "";
+    });
+</script>
+{% endblock js %}

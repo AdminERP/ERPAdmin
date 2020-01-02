@@ -21,22 +21,29 @@
     <!-- AdminLTE Skin -->
     <link rel="stylesheet" href="{% static 'dist/css/skins/all-md-skins.min.css' %}">
 
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+    <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{% static 'bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+
     <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!--datatable-->
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/DataTables/datatables.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'dist/css/personalised_css.css' %}">
     {{ form.media.css }}
     {% block css %}{% endblock css %}
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-mini"> <!-- sidebar-collapse -->
 <div class="wrapper">
 
     <!-- Main Header -->
     <header class="main-header">
 
         <!-- Logo -->
-        <a href="index2.html" class="logo">
+        <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini">E<b>R</b>P</span>
             <!-- logo for regular state and mobile devices -->
@@ -82,8 +89,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="box box-primary">
-                            <div class="box-header">
-                                <h3 class="box-title"></h3>
+                            <div class="box-header with-border">
+                                <h2 class="box-title">
+                                    {% block titulo_panel %}{% endblock titulo_panel %}
+                                </h2>
                             </div>
                             <div class="box-body">
                                 {% block contenido_panel %}{% endblock contenido_panel %}
@@ -135,6 +144,8 @@
 <!-- AdminLTE App -->
 <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
 <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+<!--datatable-->
+<script type="text/javascript" src="{% static 'plugins/DataTables/datatables.min.js' %}"></script>
 {{ form.media.js }}
 
 <script>

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block titulo %}Dashboard{% endblock titulo %}
+{% block titulo_pagina %}Dashboard{% endblock titulo_pagina %}
+{% block miga_pan %}
+{% endblock miga_pan %}
+
+{% block contenido %}
+
+
+	<div class="row">
+		{% include 'usuarios/modulos/usuarios.html' %}
+        {% include 'usuarios/modulos/inventario.html' %}
+	</div>
+
+{% endblock contenido %}
